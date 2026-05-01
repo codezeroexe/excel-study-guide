@@ -18,9 +18,10 @@ const plotH = H - PAD.top - PAD.bottom;
 
 export default function ComplexityGrapher() {
   const [active, setActive] = useState<Record<string, boolean>>({
-    O1: true, OlogN: true, ON: true, ONlogN: true, ON2: false,
+    O1: true, OlogN: true, ON: true, ONlogN: true, ON2: true,
   });
   const [maxN, setMaxN] = useState(100);
+  const [logScale, setLogScale] = useState(true);
 
   const toggle = (key: string) => setActive(prev => ({ ...prev, [key]: !prev[key] }));
 
@@ -33,22 +34,31 @@ export default function ComplexityGrapher() {
         if (val > max) max = val;
       }
     }
-    return Math.ceil(max / 10) * 10; // round up to nearest 10
+    return max;
   }, [active, maxN]);
 
+  const logMaxY = Math.ceil(Math.log10(Math.max(maxY, 10)));
+
   const scaleX = (n: number) => PAD.left + (n / maxN) * plotW;
-  const scaleY = (v: number) => PAD.top + plotH - (v / maxY) * plotH;
+
+  const scaleY = (v: number) => {
+    if (logScale) {
+      const logV = Math.log10(Math.max(v, 0.5));
+      return PAD.top + plotH - (logV / logMaxY) * plotH;
+    }
+    return PAD.top + plotH - (v / maxY) * plotH;
+  };
 
   // Generate path data for each active curve
   const paths = useMemo(() => {
     const result: Record<string, string> = {};
-    const steps = Math.min(maxN, 200);
+    const steps = Math.min(maxN, 300);
     for (const [key, { fn }] of Object.entries(complexityFns)) {
       if (!active[key]) continue;
       let d = '';
       for (let i = 0; i <= steps; i++) {
-        const n = (i / steps) * maxN;
-        const v = Math.min(fn(n), maxY);
+        const n = Math.max((i / steps) * maxN, 0.5);
+        const v = fn(n);
         const x = scaleX(n);
         const y = scaleY(v);
         d += (i === 0 ? 'M' : 'L') + `${x},${y}`;
@@ -56,15 +66,22 @@ export default function ComplexityGrapher() {
       result[key] = d;
     }
     return result;
-  }, [active, maxN, maxY]);
+  }, [active, maxN, maxY, logScale, logMaxY]);
 
   // Y-axis ticks
   const yTicks = useMemo(() => {
+    if (logScale) {
+      const ticks: number[] = [];
+      for (let p = 0; p <= logMaxY; p++) {
+        ticks.push(Math.pow(10, p));
+      }
+      return ticks;
+    }
     const ticks: number[] = [];
     const step = maxY <= 50 ? 10 : maxY <= 500 ? 50 : maxY <= 5000 ? 500 : 5000;
     for (let t = 0; t <= maxY; t += step) ticks.push(t);
     return ticks;
-  }, [maxY]);
+  }, [maxY, logScale, logMaxY]);
 
   // X-axis ticks
   const xTicks = useMemo(() => {
@@ -73,6 +90,13 @@ export default function ComplexityGrapher() {
     for (let t = 0; t <= maxN; t += step) ticks.push(t);
     return ticks;
   }, [maxN]);
+
+  const formatY = (v: number) => {
+    if (logScale && v >= 1000) return `10^${Math.round(Math.log10(v))}`;
+    if (v >= 1000000) return `${(v / 1000000).toFixed(0)}M`;
+    if (v >= 1000) return `${(v / 1000).toFixed(0)}K`;
+    return v.toFixed(0);
+  };
 
   return (
     <div className="space-y-4">
@@ -92,13 +116,26 @@ export default function ComplexityGrapher() {
         ))}
       </div>
 
-      {/* N slider */}
-      <div>
-        <label className="text-xs font-medium text-gray-500 mb-1 block">
-          Max N: <span className="font-mono font-bold text-gray-700 dark:text-gray-300">{maxN}</span>
-        </label>
-        <input type="range" min="10" max="500" step="10" value={maxN} onChange={e => setMaxN(Number(e.target.value))} className="w-full accent-purple-600" />
-        <div className="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>10</span><span>250</span><span>500</span></div>
+      {/* Controls */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <label className="text-xs font-medium text-gray-500 mb-1 block">
+            Max N: <span className="font-mono font-bold text-gray-700 dark:text-gray-300">{maxN}</span>
+          </label>
+          <input type="range" min="10" max="500" step="10" value={maxN} onChange={e => setMaxN(Number(e.target.value))} className="w-full accent-purple-600" />
+        </div>
+        <div className="flex items-end">
+          <button
+            onClick={() => setLogScale(prev => !prev)}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
+              logScale
+                ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 border-gray-200 dark:border-gray-700'
+            }`}
+          >
+            {logScale ? '📊 Log Scale' : '📈 Linear Scale'}
+          </button>
+        </div>
       </div>
 
       {/* SVG Chart */}
@@ -108,7 +145,7 @@ export default function ComplexityGrapher() {
           {yTicks.map(t => (
             <g key={`y-${t}`}>
               <line x1={PAD.left} y1={scaleY(t)} x2={W - PAD.right} y2={scaleY(t)} stroke="#e5e7eb" strokeWidth={0.5} strokeDasharray="3 3" />
-              <text x={PAD.left - 8} y={scaleY(t) + 4} textAnchor="end" fontSize={10} fill="#9ca3af">{t}</text>
+              <text x={PAD.left - 8} y={scaleY(t) + 4} textAnchor="end" fontSize={9} fill="#9ca3af">{formatY(t)}</text>
             </g>
           ))}
           {xTicks.map(t => (
@@ -120,7 +157,9 @@ export default function ComplexityGrapher() {
 
           {/* Axis labels */}
           <text x={W / 2} y={H - 4} textAnchor="middle" fontSize={10} fill="#6b7280">Input Size (n)</text>
-          <text x={12} y={H / 2} textAnchor="middle" fontSize={10} fill="#6b7280" transform={`rotate(-90, 12, ${H / 2})`}>Operations</text>
+          <text x={12} y={H / 2} textAnchor="middle" fontSize={10} fill="#6b7280" transform={`rotate(-90, 12, ${H / 2})`}>
+            Operations {logScale ? '(log scale)' : ''}
+          </text>
 
           {/* Curves */}
           {Object.entries(paths).map(([key, d]) => (
@@ -142,7 +181,10 @@ export default function ComplexityGrapher() {
       </div>
 
       <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
-        📈 Toggle curves to compare growth rates. Notice how O(n²) explodes while O(log n) stays flat.
+        {logScale
+          ? '📊 Log scale shows ALL curves clearly. Toggle to linear to see how O(n²) dwarfs everything.'
+          : '📈 Linear scale — O(n²) dominates. Toggle curves off to see smaller ones.'
+        }
       </div>
     </div>
   );
