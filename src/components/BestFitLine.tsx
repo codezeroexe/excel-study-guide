@@ -1,10 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import {
-  ScatterChart, Scatter, LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Cell, ComposedChart,
-} from 'recharts';
 
 const sampleData = [
   { x: 1, y: 26 },
@@ -16,6 +12,19 @@ const sampleData = [
   { x: 7, y: 58 },
   { x: 8, y: 62 },
 ];
+
+const W = 500;
+const H = 280;
+const PAD = { top: 20, right: 20, bottom: 40, left: 50 };
+const plotW = W - PAD.left - PAD.right;
+const plotH = H - PAD.top - PAD.bottom;
+
+function scaleX(v: number) {
+  return PAD.left + ((v - 0) / (10 - 0)) * plotW;
+}
+function scaleY(v: number) {
+  return PAD.top + plotH - ((v - 0) / (80 - 0)) * plotH;
+}
 
 export default function BestFitLine() {
   const [b1, setB1] = useState(5);
@@ -39,7 +48,6 @@ export default function BestFitLine() {
     return (absErrors.reduce((a, b) => a + b, 0) / absErrors.length).toFixed(1);
   }, [chartData]);
 
-  // Calculate optimal line for comparison
   const optimal = useMemo(() => {
     const n = sampleData.length;
     const sumX = sampleData.reduce((s, d) => s + d.x, 0);
@@ -51,6 +59,14 @@ export default function BestFitLine() {
     return { b1: optB1.toFixed(2), b0: optB0.toFixed(2) };
   }, []);
 
+  // Build line points for prediction line (from x=0 to x=10)
+  const lineStart = { x: 0, predicted: b1 * 0 + b0 };
+  const lineEnd = { x: 10, predicted: b1 * 10 + b0 };
+
+  // Grid lines
+  const xTicks = [0, 2, 4, 6, 8, 10];
+  const yTicks = [0, 10, 20, 30, 40, 50, 60, 70, 80];
+
   return (
     <div className="space-y-4">
       {/* Sliders */}
@@ -59,35 +75,15 @@ export default function BestFitLine() {
           <label className="text-xs font-medium text-gray-500 mb-1 block">
             Slope (b₁): <span className="font-mono font-bold text-blue-600">{b1}</span>
           </label>
-          <input
-            type="range"
-            min="0"
-            max="15"
-            step="0.5"
-            value={b1}
-            onChange={e => setB1(Number(e.target.value))}
-            className="w-full accent-blue-600"
-          />
-          <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
-            <span>0</span><span>7.5</span><span>15</span>
-          </div>
+          <input type="range" min="0" max="15" step="0.5" value={b1} onChange={e => setB1(Number(e.target.value))} className="w-full accent-blue-600" />
+          <div className="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>0</span><span>7.5</span><span>15</span></div>
         </div>
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1 block">
             Intercept (b₀): <span className="font-mono font-bold text-green-600">{b0}</span>
           </label>
-          <input
-            type="range"
-            min="0"
-            max="40"
-            step="1"
-            value={b0}
-            onChange={e => setB0(Number(e.target.value))}
-            className="w-full accent-green-600"
-          />
-          <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
-            <span>0</span><span>20</span><span>40</span>
-          </div>
+          <input type="range" min="0" max="40" step="1" value={b0} onChange={e => setB0(Number(e.target.value))} className="w-full accent-green-600" />
+          <div className="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>0</span><span>20</span><span>40</span></div>
         </div>
       </div>
 
@@ -106,47 +102,56 @@ export default function BestFitLine() {
         </div>
       </div>
 
-      {/* Chart */}
-      <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis
-            dataKey="x"
-            type="number"
-            domain={[0, 10]}
-            tick={{ fontSize: 11 }}
-            label={{ value: 'Experience (years)', position: 'insideBottom', offset: -5, fontSize: 10 }}
+      {/* SVG Chart */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-2">
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
+          {/* Grid */}
+          {yTicks.map(t => (
+            <g key={`y-${t}`}>
+              <line x1={PAD.left} y1={scaleY(t)} x2={W - PAD.right} y2={scaleY(t)} stroke="#e5e7eb" strokeWidth={0.5} strokeDasharray="3 3" />
+              <text x={PAD.left - 8} y={scaleY(t) + 4} textAnchor="end" fontSize={10} fill="#9ca3af">{t}</text>
+            </g>
+          ))}
+          {xTicks.map(t => (
+            <g key={`x-${t}`}>
+              <line x1={scaleX(t)} y1={PAD.top} x2={scaleX(t)} y2={H - PAD.bottom} stroke="#e5e7eb" strokeWidth={0.5} strokeDasharray="3 3" />
+              <text x={scaleX(t)} y={H - PAD.bottom + 16} textAnchor="middle" fontSize={10} fill="#9ca3af">{t}</text>
+            </g>
+          ))}
+
+          {/* Axis labels */}
+          <text x={W / 2} y={H - 4} textAnchor="middle" fontSize={10} fill="#6b7280">Experience (years)</text>
+          <text x={12} y={H / 2} textAnchor="middle" fontSize={10} fill="#6b7280" transform={`rotate(-90, 12, ${H / 2})`}>Salary ($K)</text>
+
+          {/* Prediction line */}
+          <line
+            x1={scaleX(lineStart.x)} y1={scaleY(Math.min(Math.max(lineStart.predicted, 0), 80))}
+            x2={scaleX(lineEnd.x)} y2={scaleY(Math.min(Math.max(lineEnd.predicted, 0), 80))}
+            stroke="#ef4444" strokeWidth={2.5}
           />
-          <YAxis
-            domain={[0, 80]}
-            tick={{ fontSize: 11 }}
-            label={{ value: 'Salary ($K)', angle: -90, position: 'insideLeft', fontSize: 10 }}
-          />
-          <Tooltip
-            formatter={(value, name) => {
-              const v = typeof value === 'number' ? value : 0;
-              const n = typeof name === 'string' ? name : '';
-              if (n === 'Actual') return [`${v}K`, 'Actual Salary'] as const;
-              if (n === 'Predicted') return [`${v}K`, 'Predicted'] as const;
-              return [value, name] as const;
-            }}
-          />
-          <Scatter name="Actual" data={chartData} fill="#3b82f6">
-            {chartData.map((d, i) => (
-              <Cell key={`cell-${i}`} fill={Math.abs(d.error) > 5 ? '#ef4444' : '#3b82f6'} />
-            ))}
-          </Scatter>
-          <Line
-            type="monotone"
-            name="Predicted"
-            dataKey="predicted"
-            stroke="#ef4444"
-            strokeWidth={2.5}
-            dot={false}
-            connectNulls
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
+
+          {/* Data points */}
+          {chartData.map((d, i) => {
+            const isError = Math.abs(d.error) > 5;
+            return (
+              <g key={i}>
+                {/* Error line */}
+                <line
+                  x1={scaleX(d.x)} y1={scaleY(d.y)}
+                  x2={scaleX(d.x)} y2={scaleY(Math.min(Math.max(d.predicted, 0), 80))}
+                  stroke={isError ? '#ef4444' : '#93c5fd'} strokeWidth={1} strokeDasharray="2 2" opacity={0.6}
+                />
+                {/* Point */}
+                <circle
+                  cx={scaleX(d.x)} cy={scaleY(d.y)} r={5}
+                  fill={isError ? '#ef4444' : '#3b82f6'}
+                  stroke={isError ? '#dc2626' : '#2563eb'} strokeWidth={1.5}
+                />
+              </g>
+            );
+          })}
+        </svg>
+      </div>
 
       {/* Error breakdown */}
       <div className="overflow-x-auto">

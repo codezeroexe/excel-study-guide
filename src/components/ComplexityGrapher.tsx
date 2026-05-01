@@ -1,11 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
-} from 'recharts';
 
-const complexityFunctions: Record<string, { label: string; color: string; fn: (n: number) => number }> = {
+const complexityFns: Record<string, { label: string; color: string; fn: (n: number) => number }> = {
   O1: { label: 'O(1)', color: '#22c55e', fn: () => 1 },
   OlogN: { label: 'O(log n)', color: '#3b82f6', fn: (n) => Math.log2(n) },
   ON: { label: 'O(n)', color: '#f59e0b', fn: (n) => n },
@@ -13,40 +10,80 @@ const complexityFunctions: Record<string, { label: string; color: string; fn: (n
   ON2: { label: 'O(n²)', color: '#ef4444', fn: (n) => n * n },
 };
 
+const W = 520;
+const H = 300;
+const PAD = { top: 20, right: 20, bottom: 40, left: 55 };
+const plotW = W - PAD.left - PAD.right;
+const plotH = H - PAD.top - PAD.bottom;
+
 export default function ComplexityGrapher() {
   const [active, setActive] = useState<Record<string, boolean>>({
     O1: true, OlogN: true, ON: true, ONlogN: true, ON2: false,
   });
   const [maxN, setMaxN] = useState(100);
 
-  const chartData = useMemo(() => {
-    const data = [];
-    for (let n = 1; n <= maxN; n += Math.max(1, Math.floor(maxN / 50))) {
-      const point: Record<string, number | string> = { n };
-      for (const [key, { fn }] of Object.entries(complexityFunctions)) {
-        if (active[key]) {
-          point[key] = Math.min(fn(n), maxN * 10); // cap for visibility
-        }
+  const toggle = (key: string) => setActive(prev => ({ ...prev, [key]: !prev[key] }));
+
+  // Compute max Y for scaling
+  const maxY = useMemo(() => {
+    let max = 1;
+    for (const [key, { fn }] of Object.entries(complexityFns)) {
+      if (active[key]) {
+        const val = fn(maxN);
+        if (val > max) max = val;
       }
-      data.push(point);
     }
-    return data;
+    return Math.ceil(max / 10) * 10; // round up to nearest 10
   }, [active, maxN]);
 
-  const toggle = (key: string) => setActive(prev => ({ ...prev, [key]: !prev[key] }));
+  const scaleX = (n: number) => PAD.left + (n / maxN) * plotW;
+  const scaleY = (v: number) => PAD.top + plotH - (v / maxY) * plotH;
+
+  // Generate path data for each active curve
+  const paths = useMemo(() => {
+    const result: Record<string, string> = {};
+    const steps = Math.min(maxN, 200);
+    for (const [key, { fn }] of Object.entries(complexityFns)) {
+      if (!active[key]) continue;
+      let d = '';
+      for (let i = 0; i <= steps; i++) {
+        const n = (i / steps) * maxN;
+        const v = Math.min(fn(n), maxY);
+        const x = scaleX(n);
+        const y = scaleY(v);
+        d += (i === 0 ? 'M' : 'L') + `${x},${y}`;
+      }
+      result[key] = d;
+    }
+    return result;
+  }, [active, maxN, maxY]);
+
+  // Y-axis ticks
+  const yTicks = useMemo(() => {
+    const ticks: number[] = [];
+    const step = maxY <= 50 ? 10 : maxY <= 500 ? 50 : maxY <= 5000 ? 500 : 5000;
+    for (let t = 0; t <= maxY; t += step) ticks.push(t);
+    return ticks;
+  }, [maxY]);
+
+  // X-axis ticks
+  const xTicks = useMemo(() => {
+    const ticks: number[] = [];
+    const step = maxN <= 50 ? 10 : maxN <= 200 ? 50 : 100;
+    for (let t = 0; t <= maxN; t += step) ticks.push(t);
+    return ticks;
+  }, [maxN]);
 
   return (
     <div className="space-y-4">
       {/* Toggle buttons */}
       <div className="flex flex-wrap gap-2">
-        {Object.entries(complexityFunctions).map(([key, { label, color }]) => (
+        {Object.entries(complexityFns).map(([key, { label, color }]) => (
           <button
             key={key}
             onClick={() => toggle(key)}
             className={`px-3 py-1.5 text-xs font-mono font-bold rounded-full border-2 transition-all ${
-              active[key]
-                ? 'border-current text-white shadow-sm'
-                : 'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500'
+              active[key] ? 'text-white shadow-sm' : 'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500'
             }`}
             style={active[key] ? { backgroundColor: color, borderColor: color } : {}}
           >
@@ -60,38 +97,49 @@ export default function ComplexityGrapher() {
         <label className="text-xs font-medium text-gray-500 mb-1 block">
           Max N: <span className="font-mono font-bold text-gray-700 dark:text-gray-300">{maxN}</span>
         </label>
-        <input
-          type="range"
-          min="10"
-          max="500"
-          step="10"
-          value={maxN}
-          onChange={e => setMaxN(Number(e.target.value))}
-          className="w-full accent-purple-600"
-        />
-        <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
-          <span>10</span><span>250</span><span>500</span>
-        </div>
+        <input type="range" min="10" max="500" step="10" value={maxN} onChange={e => setMaxN(Number(e.target.value))} className="w-full accent-purple-600" />
+        <div className="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>10</span><span>250</span><span>500</span></div>
       </div>
 
-      {/* Chart */}
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis dataKey="n" tick={{ fontSize: 11 }} label={{ value: 'Input Size (n)', position: 'insideBottom', offset: -5, fontSize: 10 }} />
-          <YAxis tick={{ fontSize: 11 }} label={{ value: 'Operations', angle: -90, position: 'insideLeft', fontSize: 10 }} />
-          <Tooltip formatter={(value) => {
-            const v = typeof value === 'number' ? value.toFixed(1) : value;
-            return [v, ''] as const;
-          }} />
-          <Legend />
-          {active.O1 && <Line type="monotone" dataKey="O1" name="O(1)" stroke={complexityFunctions.O1.color} strokeWidth={2} dot={false} />}
-          {active.OlogN && <Line type="monotone" dataKey="OlogN" name="O(log n)" stroke={complexityFunctions.OlogN.color} strokeWidth={2} dot={false} />}
-          {active.ON && <Line type="monotone" dataKey="ON" name="O(n)" stroke={complexityFunctions.ON.color} strokeWidth={2} dot={false} />}
-          {active.ONlogN && <Line type="monotone" dataKey="ONlogN" name="O(n log n)" stroke={complexityFunctions.ONlogN.color} strokeWidth={2} dot={false} />}
-          {active.ON2 && <Line type="monotone" dataKey="ON2" name="O(n²)" stroke={complexityFunctions.ON2.color} strokeWidth={2} dot={false} />}
-        </LineChart>
-      </ResponsiveContainer>
+      {/* SVG Chart */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-2">
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 320 }}>
+          {/* Grid */}
+          {yTicks.map(t => (
+            <g key={`y-${t}`}>
+              <line x1={PAD.left} y1={scaleY(t)} x2={W - PAD.right} y2={scaleY(t)} stroke="#e5e7eb" strokeWidth={0.5} strokeDasharray="3 3" />
+              <text x={PAD.left - 8} y={scaleY(t) + 4} textAnchor="end" fontSize={10} fill="#9ca3af">{t}</text>
+            </g>
+          ))}
+          {xTicks.map(t => (
+            <g key={`x-${t}`}>
+              <line x1={scaleX(t)} y1={PAD.top} x2={scaleX(t)} y2={H - PAD.bottom} stroke="#e5e7eb" strokeWidth={0.5} strokeDasharray="3 3" />
+              <text x={scaleX(t)} y={H - PAD.bottom + 16} textAnchor="middle" fontSize={10} fill="#9ca3af">{t}</text>
+            </g>
+          ))}
+
+          {/* Axis labels */}
+          <text x={W / 2} y={H - 4} textAnchor="middle" fontSize={10} fill="#6b7280">Input Size (n)</text>
+          <text x={12} y={H / 2} textAnchor="middle" fontSize={10} fill="#6b7280" transform={`rotate(-90, 12, ${H / 2})`}>Operations</text>
+
+          {/* Curves */}
+          {Object.entries(paths).map(([key, d]) => (
+            <path key={key} d={d} fill="none" stroke={complexityFns[key].color} strokeWidth={2.5} />
+          ))}
+
+          {/* Legend */}
+          {Object.entries(complexityFns).filter(([key]) => active[key]).map(([key, { label, color }], i) => {
+            const lx = PAD.left + 10;
+            const ly = PAD.top + 15 + i * 18;
+            return (
+              <g key={`legend-${key}`}>
+                <line x1={lx} y1={ly} x2={lx + 20} y2={ly} stroke={color} strokeWidth={2.5} />
+                <text x={lx + 25} y={ly + 4} fontSize={10} fill="#374151" className="dark:fill-gray-300">{label}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
 
       <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
         📈 Toggle curves to compare growth rates. Notice how O(n²) explodes while O(log n) stays flat.
