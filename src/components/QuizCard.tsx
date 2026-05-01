@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
-import type { QuizQuestion } from '@/data/modules';
+import type { QuizQuestion } from '@/data/types';
 
 interface QuizCardProps {
   questions: QuizQuestion[];

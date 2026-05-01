@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getModuleById, modules } from '@/data/modules';
-import { ArrowLeft, ArrowRight, BookOpen, Lightbulb } from 'lucide-react';
+import { getSubjectById, subjects } from '@/data/subjects';
+import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, Settings, Target, Layers, Cpu } from 'lucide-react';
 import SpreadsheetGrid from '@/components/SpreadsheetGrid';
 import FormulaVisualizer from '@/components/FormulaVisualizer';
 import LookupAnimator from '@/components/LookupAnimator';
@@ -13,17 +13,34 @@ import FilterPanel from '@/components/FilterPanel';
 import PivotBuilder from '@/components/PivotBuilder';
 
 export function generateStaticParams() {
-  return modules.map(m => ({ id: m.id }));
+  const params: { subject: string; id: string }[] = [];
+  for (const sub of subjects) {
+    for (const mod of sub.modules) {
+      params.push({ subject: sub.id, id: mod.id });
+    }
+  }
+  return params;
 }
 
-export default async function ModulePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const mod = getModuleById(id);
+export default async function ModulePage({ params }: { params: Promise<{ subject: string; id: string }> }) {
+  const { subject, id } = await params;
+  const sub = getSubjectById(subject);
+  if (!sub) notFound();
+
+  const mod = sub.modules.find(m => m.id === id);
   if (!mod) notFound();
 
-  const idx = modules.findIndex(m => m.id === id);
-  const prev = idx > 0 ? modules[idx - 1] : null;
-  const next = idx < modules.length - 1 ? modules[idx + 1] : null;
+  const idx = sub.modules.findIndex(m => m.id === id);
+  const prev = idx > 0 ? sub.modules[idx - 1] : null;
+  const next = idx < sub.modules.length - 1 ? sub.modules[idx + 1] : null;
+
+  const colorMap: Record<string, { text: string; badge: string; bg: string; btn: string; btnHover: string }> = {
+    green: { text: 'text-green-600', badge: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300', bg: 'from-green-50 to-white dark:from-green-950/20 dark:to-gray-950', btn: 'bg-green-600', btnHover: 'hover:bg-green-700' },
+    blue: { text: 'text-blue-600', badge: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', bg: 'from-blue-50 to-white dark:from-blue-950/20 dark:to-gray-950', btn: 'bg-blue-600', btnHover: 'hover:bg-blue-700' },
+    purple: { text: 'text-purple-600', badge: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', bg: 'from-purple-50 to-white dark:from-purple-950/20 dark:to-gray-950', btn: 'bg-purple-600', btnHover: 'hover:bg-purple-700' },
+    amber: { text: 'text-amber-600', badge: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300', bg: 'from-amber-50 to-white dark:from-amber-950/20 dark:to-gray-950', btn: 'bg-amber-600', btnHover: 'hover:bg-amber-700' },
+  };
+  const colors = colorMap[sub.color] || colorMap.green;
 
   // Convert sample data to Record<string, string>[] for components
   const sampleDataRecords: Record<string, string>[] = [];
@@ -46,18 +63,20 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
       {/* Header */}
       <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+          <Link href={`/${subject}`} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            All Modules
+            {sub.shortName} Modules
           </Link>
-          <span className="text-xs text-gray-400">Module {idx + 1} of {modules.length}</span>
+          <span className="text-xs text-gray-400">Module {idx + 1} of {sub.modules.length}</span>
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Module Title */}
         <div className="mb-8">
-          <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-2">Module {idx + 1}</div>
+          <div className={`inline-flex px-2 py-0.5 ${colors.badge} rounded text-xs font-medium mb-2`}>
+            {sub.shortName} • Module {idx + 1}
+          </div>
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">{mod.title}</h1>
           <p className="text-gray-600 dark:text-gray-400">{mod.description}</p>
         </div>
@@ -68,8 +87,8 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
             <section key={lIdx} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
               <div className="p-6 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-2 mb-2">
-                  <BookOpen className="w-4 h-4 text-green-600" />
-                  <span className="text-xs font-medium text-green-600 dark:text-green-400">Lesson {lIdx + 1}</span>
+                  <BookOpen className={`w-4 h-4 ${colors.text}`} />
+                  <span className={`text-xs font-medium ${colors.text}`}>Lesson {lIdx + 1}</span>
                 </div>
                 <h2 className="text-xl font-bold mb-3">{lesson.title}</h2>
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{lesson.content}</p>
@@ -91,7 +110,7 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
                 ))}
               </div>
 
-              {/* Interactive Demo for specific modules */}
+              {/* Interactive Demo */}
               {mod.sampleData && lIdx === 0 && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Interactive Demo</h3>
@@ -105,18 +124,16 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
               )}
 
               {/* Module-specific interactive components */}
-              {id === 'lookup-functions' && lIdx >= 0 && (
+              {id === 'lookup-functions' && lIdx >= 0 && mod.sampleData?.['VLOOKUP Reference Table'] && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">VLOOKUP Animation</h3>
-                  {mod.sampleData?.['VLOOKUP Reference Table'] && (
-                    <LookupAnimator
-                      type="vlookup"
-                      lookupValue="IT"
-                      tableData={mod.sampleData['VLOOKUP Reference Table']}
-                      colOrRowIndex={2}
-                      result="8000"
-                    />
-                  )}
+                  <LookupAnimator
+                    type="vlookup"
+                    lookupValue="IT"
+                    tableData={mod.sampleData['VLOOKUP Reference Table']}
+                    colOrRowIndex={2}
+                    result="8000"
+                  />
                 </div>
               )}
 
@@ -206,17 +223,25 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
         <div className="mt-8 flex items-center justify-between">
           {prev ? (
             <Link
-              href={`/module/${prev.id}`}
-              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-green-300 dark:hover:border-green-700 transition-colors"
+              href={`/${subject}/module/${prev.id}`}
+              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               {prev.title}
             </Link>
-          ) : <div />}
+          ) : (
+            <Link
+              href={`/${subject}`}
+              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              All Modules
+            </Link>
+          )}
           {next ? (
             <Link
-              href={`/module/${next.id}`}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors"
+              href={`/${subject}/module/${next.id}`}
+              className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}
             >
               {next.title}
               <ArrowRight className="w-4 h-4" />
@@ -224,9 +249,9 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
           ) : (
             <Link
               href="/"
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors"
+              className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}
             >
-              Back to Home
+              Back to Subjects
             </Link>
           )}
         </div>
