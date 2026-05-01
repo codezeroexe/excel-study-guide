@@ -322,136 +322,237 @@ const modules: ModuleData[] = [
     description: "Learn from labeled data — predict numbers with regression and categories with classification.",
     lessons: [
       {
-        title: "Supervised Learning Foundations",
-        content: "In supervised learning, the model learns from labeled data — pairs of inputs (x) and correct outputs (y). The goal is to learn a mapping function so it can predict y for new, unseen x values.",
+        title: "What is Supervised Learning?",
+        content: "Supervised learning is the most common type of machine learning. The model learns from labeled training data — pairs of inputs (features, X) and correct outputs (labels, y). Think of it like a student learning with a teacher: the teacher provides examples with answers, and the student learns the pattern so they can answer new questions on their own.",
         formulas: [
           {
-            formula: "Regression: Predict continuous values (e.g., house price, temperature)",
-            description: "Output is a number on a continuous scale",
-            explanation: "Examples: predicting salary based on experience, stock prices, temperature. The model learns the relationship between features and a numeric target."
+            formula: "Training Data: {(x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ)}",
+            description: "Each example has an input x and a known output y",
+            explanation: "The model sees both the question (x) and the answer (y) during training. It learns the relationship between them."
           },
           {
-            formula: "Classification: Predict discrete categories (e.g., spam/not spam, disease/healthy)",
-            description: "Output is a class label from a fixed set",
-            explanation: "Examples: email spam detection, medical diagnosis, image recognition. The model learns boundaries that separate different classes."
+            formula: "Prediction: ŷ = f(x) — the learned function maps new inputs to outputs",
+            description: "After training, the model applies f() to unseen data",
+            explanation: "ŷ (y-hat) is the predicted value. The goal is to make ŷ as close to the true y as possible."
+          },
+          {
+            formula: "Two Types: Regression (predict numbers) vs Classification (predict categories)",
+            description: "The type of output determines which approach to use",
+            explanation: "Regression: house price, temperature, salary. Classification: spam/not spam, cat/dog, approve/deny loan."
           }
         ]
       },
       {
         title: "Simple Linear Regression",
-        content: "Linear regression finds the straight line that best fits the data points. It minimizes the sum of squared errors between predicted and actual values. The line is defined by slope (b₁) and intercept (b₀).",
+        content: "Linear regression finds the straight line that best fits the data. It predicts a continuous output y from a single input x using the equation y = b₁x + b₀. The model learns the best values for b₁ (slope) and b₀ (intercept) by minimizing the error between predictions and actual values.",
         formulas: [
           {
             formula: "y = b₁x + b₀",
-            description: "Linear regression equation",
-            explanation: "b₁ (slope): how much y changes when x increases by 1. b₀ (intercept): the value of y when x = 0. The model finds the best b₁ and b₀ that minimize prediction error."
+            description: "The line equation — slope and intercept define the prediction",
+            explanation: "b₁ (slope): how much y changes per unit increase in x. b₀ (intercept): the value of y when x = 0. Example: y = 5000x + 20000 means each year of experience adds $5K to a $20K base salary."
           },
           {
-            formula: "Cost Function = Σ(actual - predicted)² → Minimize this",
-            description: "The model minimizes the sum of squared errors",
-            explanation: "For each data point, calculate the difference between actual y and predicted y. Square it (to penalize large errors). Sum all squared errors. The model adjusts b₁ and b₀ to make this sum as small as possible."
+            formula: "MSE = (1/n) × Σ(yᵢ - ŷᵢ)²",
+            description: "Mean Squared Error — the cost function the model minimizes",
+            explanation: "For each data point, find the difference between actual y and predicted ŷ. Square it (penalizes large errors more). Average all squared errors. The model adjusts b₁ and b₀ to make MSE as small as possible."
           },
           {
-            formula: "Example: y = 5000x + 20000 → Experience(x)=3 → Salary(y)=35000",
-            description: "Predict salary from years of experience",
-            explanation: "b₁=5000 (each year adds $5K), b₀=20000 (base salary). For 3 years: 5000×3 + 20000 = $35,000."
+            formula: "Residual = yᵢ - ŷᵢ (actual minus predicted)",
+            description: "The error for each individual data point",
+            explanation: "Positive residual = model underpredicted. Negative = overpredicted. A good model has residuals scattered randomly around zero with no pattern."
+          },
+          {
+            formula: "R² = 1 - (SS_res / SS_tot) — how well the line explains the data",
+            description: "R-squared: proportion of variance explained by the model",
+            explanation: "R² = 1 means perfect fit. R² = 0 means the line is no better than just predicting the average. Higher is better. Values below 0.5 usually indicate a weak model."
+          }
+        ]
+      },
+      {
+        title: "Multiple Linear Regression",
+        content: "Real-world problems rarely depend on just one factor. Multiple linear regression extends simple linear regression to use multiple input features (x₁, x₂, x₃, ...) to predict the output.",
+        formulas: [
+          {
+            formula: "y = b₀ + b₁x₁ + b₂x₂ + ... + bₙxₙ",
+            description: "Each feature has its own coefficient (weight)",
+            explanation: "Example: House Price = 50000 + 3000×(sqft/100) - 2000×(age) + 10000×(bedrooms). Each coefficient shows how much that feature contributes, holding others constant."
+          },
+          {
+            formula: "Overfitting: Model memorizes training data but fails on new data",
+            description: "Too many features or too complex a model causes poor generalization",
+            explanation: "Signs: very high training accuracy but low test accuracy. Solutions: reduce features, use regularization, get more data."
           }
         ]
       },
       {
         title: "K-Nearest Neighbors (KNN)",
-        content: "KNN is a 'lazy learner' — it doesn't build a model during training. Instead, it stores all training data and makes predictions by finding the K closest data points to a new input.",
+        content: "KNN is a simple but powerful algorithm. Instead of learning a model during training, it memorizes all training data. When predicting, it finds the K closest training examples to the new input and uses them to make a decision.",
         formulas: [
           {
             formula: "Euclidean Distance: d = √((x₂-x₁)² + (y₂-y₁)²)",
-            description: "Calculate straight-line distance between two points",
-            explanation: "Step 1: Find the difference in x coordinates. Step 2: Find the difference in y coordinates. Step 3: Square both differences. Step 4: Add them. Step 5: Take the square root."
+            description: "Straight-line distance between two points in 2D space",
+            explanation: "For multi-dimensional data, extend to more terms: d = √(Σ(xᵢ - xⱼ)²). This works for any number of features."
           },
           {
-            formula: "K=5 → Find 5 nearest neighbors → Majority vote determines class",
-            description: "Classification by majority of K closest points",
-            explanation: "For a new point, calculate distance to all training points. Sort by distance. Take the top K nearest. If 3 of 5 are 'Spam' and 2 are 'Not Spam', classify as 'Spam'."
+            formula: "K=5 → Find 5 nearest → Majority vote → Predicted class",
+            description: "Classification by majority vote of closest neighbors",
+            explanation: "Example: New email arrives. KNN finds 5 most similar emails in training data. 4 are spam, 1 is not. Prediction: SPAM."
           },
           {
-            formula: "Why odd K? → Avoids ties in binary classification",
-            description: "K=1, 3, 5, 7 are preferred for binary classification",
-            explanation: "With K=2, you could get 1 vs 1 (tie). K=5 ensures a clear majority. K=1 is too sensitive to noise (one outlier changes the prediction)."
+            formula: "Choosing K: Small K (1-3) = sensitive to noise. Large K (10+) = oversmooths boundaries",
+            description: "K is a hyperparameter — you choose it before training",
+            explanation: "K=1: every outlier matters, creates jagged boundaries. K=15: smooth boundaries but may miss local patterns. Rule of thumb: K = √n (square root of training samples), rounded to nearest odd number."
+          },
+          {
+            formula: "KNN for Regression: Average the K nearest values instead of majority vote",
+            description: "Same algorithm, different aggregation for numeric output",
+            explanation: "Example: Predict house price. Find 5 nearest houses. Average their prices: ($200K + $220K + $190K + $210K + $230K) / 5 = $210K."
           }
         ]
       },
       {
         title: "Decision Trees",
-        content: "Decision trees split data using conditional logic (If-Then rules). They create a tree structure where each internal node asks a question about a feature, and each leaf node gives a prediction.",
+        content: "Decision trees learn a series of If-Then rules from data. They split the data recursively based on feature values, creating a tree structure. Each path from root to leaf represents a decision rule.",
         formulas: [
           {
-            formula: "Root Node → Internal Nodes (splits) → Leaf Nodes (decisions)",
-            description: "Tree structure from top to bottom",
-            explanation: "Root: the first split (best feature to separate data). Internal: subsequent splits on other features. Leaf: final prediction (class label or numeric value)."
+            formula: "Root → Internal Nodes (splits) → Leaf Nodes (predictions)",
+            description: "Tree structure: start at top, follow branches based on feature values",
+            explanation: "Root: the first and most important split. Internal nodes: subsequent questions. Leaves: final predictions. Example: Is Age > 30? Yes → Is Income > 50K? Yes → Approve Loan."
           },
           {
-            formula: "IF Age > 30 AND Income > 50K → Approve Loan",
-            description: "Example decision rule",
-            explanation: "The tree learns these rules from data. Each split tries to maximize the purity of resulting groups. The path from root to leaf is the decision logic."
+            formula: "Gini Impurity: Measures how 'mixed' a node is. Lower = purer = better split",
+            description: "The algorithm chooses splits that create the purest child nodes",
+            explanation: "Gini = 0 means all samples in the node belong to one class (perfect). Gini = 0.5 means a 50/50 split (worst for binary). The tree picks the feature and threshold that reduce Gini the most."
+          },
+          {
+            formula: "Overfitting Prevention: Max depth, Min samples per leaf, Pruning",
+            description: "Unlimited trees memorize data — constraints force generalization",
+            explanation: "Max depth: limit how many splits deep the tree can grow. Min samples per leaf: require at least N samples in each leaf. Pruning: remove branches that don't improve accuracy on validation data."
+          }
+        ]
+      },
+      {
+        title: "Regression vs Classification — When to Use Which",
+        content: "Choosing the right approach depends entirely on your output variable. If you're predicting a number that can take any value on a scale, use regression. If you're predicting a category or label from a fixed set, use classification.",
+        formulas: [
+          {
+            formula: "Regression Examples: Price, Temperature, Age, Salary, Distance",
+            description: "Continuous numeric output — infinite possible values",
+            explanation: "Key question: 'How much?' or 'How many?' If the answer is a number that could be 3.14, 3.15, 3.151... it's regression."
+          },
+          {
+            formula: "Classification Examples: Spam/Not, Cat/Dog, Yes/No, A/B/C/D",
+            description: "Discrete categorical output — finite set of labels",
+            explanation: "Key question: 'Which one?' or 'Is it X or Y?' Binary classification = 2 classes. Multi-class = 3+ classes."
           }
         ]
       }
     ],
     quiz: [
       {
-        question: "What is the difference between regression and classification?",
+        question: "What is the key difference between regression and classification?",
         options: [
-          "Regression predicts categories, classification predicts numbers",
+          "Regression uses more data",
           "Regression predicts continuous values, classification predicts discrete labels",
-          "They are the same thing",
-          "Regression uses neural networks, classification doesn't"
+          "Classification is always more accurate",
+          "Regression requires neural networks"
         ],
         correctIndex: 1,
-        explanation: "Regression outputs continuous numbers (price, temperature). Classification outputs discrete categories (spam/not spam, yes/no)."
+        explanation: "Regression outputs numbers on a continuous scale (price, temperature). Classification outputs categories from a fixed set (spam/not spam, yes/no)."
       },
       {
-        question: "In y = b₁x + b₀, what does b₁ represent?",
-        options: ["Intercept", "Slope", "Error", "Input"],
+        question: "In the equation y = b₁x + b₀, what does b₁ represent?",
+        options: ["The intercept", "The slope (rate of change)", "The error term", "The input variable"],
         correctIndex: 1,
-        explanation: "b₁ is the slope — how much y changes for each unit increase in x."
+        explanation: "b₁ is the slope — it tells you how much y changes for each unit increase in x."
+      },
+      {
+        question: "What does MSE (Mean Squared Error) measure?",
+        options: [
+          "How many data points there are",
+          "The average squared difference between actual and predicted values",
+          "The correlation between features",
+          "The number of features in the model"
+        ],
+        correctIndex: 1,
+        explanation: "MSE = average of (actual - predicted)². Lower MSE means predictions are closer to actual values."
       },
       {
         question: "Why is KNN called a 'lazy learner'?",
         options: [
           "It doesn't learn at all",
-          "It stores data and computes at prediction time instead of building a model during training",
-          "It's slow",
+          "It stores all training data and only computes at prediction time",
+          "It's the slowest algorithm",
           "It uses lazy evaluation"
         ],
         correctIndex: 1,
-        explanation: "KNN doesn't build a model during training. It memorizes all training data and only computes distances when making a prediction."
+        explanation: "KNN doesn't build a model during training — it just memorizes data. All computation happens when you ask for a prediction."
       },
       {
-        question: "What is the leaf node in a decision tree?",
+        question: "What does a Gini Impurity of 0 mean in a decision tree node?",
         options: [
-          "The first split",
-          "A feature used for splitting",
-          "The final prediction/decision",
-          "The root of the tree"
+          "The node is empty",
+          "All samples in the node belong to the same class (pure)",
+          "The node has maximum entropy",
+          "The split was invalid"
         ],
-        correctIndex: 2,
-        explanation: "Leaf nodes are the endpoints of the tree — they contain the final prediction (class label or numeric value)."
+        correctIndex: 1,
+        explanation: "Gini = 0 means perfect purity — every sample in that node is the same class. This is the ideal split."
+      },
+      {
+        question: "If R² = 0.85 for a regression model, what does this mean?",
+        options: [
+          "The model is 85% accurate",
+          "85% of the variance in y is explained by the model",
+          "The model has 85% error",
+          "You need 85% more data"
+        ],
+        correctIndex: 1,
+        explanation: "R² = 0.85 means the model explains 85% of the variation in the output. This is generally considered a strong fit."
+      },
+      {
+        question: "What happens if you set K=1 in KNN?",
+        options: [
+          "The model becomes very smooth",
+          "Every single outlier directly affects predictions (highly sensitive to noise)",
+          "The model can't make predictions",
+          "It becomes a regression model"
+        ],
+        correctIndex: 1,
+        explanation: "K=1 means the prediction is based on just the single nearest neighbor. One noisy or mislabeled data point can completely change the prediction."
+      },
+      {
+        question: "Which technique prevents decision tree overfitting?",
+        options: [
+          "Increasing tree depth",
+          "Setting a maximum depth limit",
+          "Using more features",
+          "Removing the root node"
+        ],
+        correctIndex: 1,
+        explanation: "Limiting max depth prevents the tree from growing too complex and memorizing training data. Other techniques include min samples per leaf and pruning."
       }
     ],
     sampleData: {
-      "Linear Regression Example": [
-        ["Experience (years)", "Salary ($)", "Predicted (y=5000x+20000)", "Error"],
-        ["1", "26000", "25000", "+1000"],
-        ["3", "34000", "35000", "-1000"],
-        ["5", "44000", "45000", "-1000"],
-        ["7", "56000", "55000", "+1000"],
+      "Linear Regression — Salary Prediction": [
+        ["Experience (yrs)", "Salary ($K)", "Predicted", "Residual"],
+        ["1", "26", "25.0", "+1.0"],
+        ["2", "34", "30.0", "+4.0"],
+        ["3", "38", "35.0", "+3.0"],
+        ["4", "42", "40.0", "+2.0"],
+        ["5", "48", "45.0", "+3.0"],
+        ["6", "52", "50.0", "+2.0"],
+        ["7", "58", "55.0", "+3.0"],
+        ["8", "62", "60.0", "+2.0"],
       ],
-      "KNN Classification": [
-        ["Point", "X", "Y", "Class"],
-        ["A", "1", "2", "Red"],
-        ["B", "2", "3", "Red"],
-        ["C", "5", "6", "Blue"],
-        ["D", "6", "7", "Blue"],
-        ["New?", "3", "3", "?"],
+      "KNN Classification — Email Spam Detection": [
+        ["Email", "Word Count", "! Count", "Link Count", "Class"],
+        ["A", "45", "0", "1", "Not Spam"],
+        ["B", "120", "5", "8", "Spam"],
+        ["C", "30", "1", "0", "Not Spam"],
+        ["D", "200", "12", "15", "Spam"],
+        ["E", "55", "2", "2", "Not Spam"],
+        ["New?", "95", "4", "6", "?"],
       ]
     }
   },
