@@ -28,6 +28,11 @@ import SortingRace from '@/components/SortingRace';
 import BSTBuilder from '@/components/BSTBuilder';
 import GraphTraversalGrid from '@/components/GraphTraversalGrid';
 
+// OS components
+import GanttChartGenerator from '@/components/GanttChartGenerator';
+import MemoryFragmentationSandbox from '@/components/MemoryFragmentationSandbox';
+import ProcessStateMachine from '@/components/ProcessStateMachine';
+
 import QuizCard from '@/components/QuizCard';
 
 export function generateStaticParams() {
@@ -74,6 +79,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
 
   const isExcel = subject === 'excel';
   const isDSA = subject === 'dsa';
+  const isOS = subject === 'os';
 
   return (
     <div className="min-h-screen">
@@ -294,6 +300,33 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
             <h2 className="text-lg font-bold mb-2">Interactive: Graph Traversal & Pathfinding</h2>
             <p className="text-sm text-gray-500 mb-4">Run DFS, BFS, or Dijkstra's algorithm on a sample graph. Step through or auto-play.</p>
             <GraphTraversalGrid />
+          </section>
+        )}
+
+        {/* OS: Process State Machine */}
+        {isOS && id === 'process-management' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Process State Machine</h2>
+            <p className="text-sm text-gray-500 mb-4">Click transitions to move a process through New → Ready → Running → Waiting → Terminated states.</p>
+            <ProcessStateMachine />
+          </section>
+        )}
+
+        {/* OS: Gantt Chart Generator */}
+        {isOS && id === 'cpu-scheduling' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: CPU Scheduling Gantt Chart</h2>
+            <p className="text-sm text-gray-500 mb-4">Enter processes with burst times and compare FCFS, SJF, and Round Robin visually.</p>
+            <GanttChartGenerator />
+          </section>
+        )}
+
+        {/* OS: Memory Fragmentation Sandbox */}
+        {isOS && id === 'memory-management' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Memory Fragmentation Sandbox</h2>
+            <p className="text-sm text-gray-500 mb-4">Allocate and free memory blocks. See how contiguous allocation causes external fragmentation while paging avoids it.</p>
+            <MemoryFragmentationSandbox />
           </section>
         )}
 

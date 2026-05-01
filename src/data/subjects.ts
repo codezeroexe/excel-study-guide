@@ -2,6 +2,7 @@ import type { SubjectData } from './types';
 import { modules as excelModules } from './excel/modules';
 import { modules as mlModules } from './ml/modules';
 import { modules as dsaModules } from './dsa/modules';
+import { modules as osModules } from './os/modules';
 
 export const subjects: SubjectData[] = [
   {
@@ -30,6 +31,15 @@ export const subjects: SubjectData[] = [
     color: 'purple',
     icon: 'Code',
     modules: dsaModules,
+  },
+  {
+    id: 'os',
+    name: 'Operating Systems',
+    shortName: 'OS',
+    description: 'Process management, CPU scheduling, memory management, and file systems',
+    color: 'amber',
+    icon: 'Monitor',
+    modules: osModules,
   },
 ];
 
