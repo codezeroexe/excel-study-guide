@@ -1,6 +1,7 @@
 import type { SubjectData } from './types';
 import { modules as excelModules } from './excel/modules';
 import { modules as mlModules } from './ml/modules';
+import { modules as dsaModules } from './dsa/modules';
 
 export const subjects: SubjectData[] = [
   {
@@ -20,6 +21,15 @@ export const subjects: SubjectData[] = [
     color: 'blue',
     icon: 'Brain',
     modules: mlModules,
+  },
+  {
+    id: 'dsa',
+    name: 'Data Structures & Algorithms',
+    shortName: 'DSA',
+    description: 'From arrays to graphs — complexity analysis, sorting, trees, and shortest path algorithms',
+    color: 'purple',
+    icon: 'Code',
+    modules: dsaModules,
   },
 ];
 

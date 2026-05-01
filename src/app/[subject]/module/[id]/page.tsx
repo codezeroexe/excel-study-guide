@@ -21,6 +21,13 @@ import ScalingSandbox from '@/components/ScalingSandbox';
 import BestFitLine from '@/components/BestFitLine';
 import NeuralNetworkViz from '@/components/NeuralNetworkViz';
 
+// DSA components
+import ComplexityGrapher from '@/components/ComplexityGrapher';
+import InfixPostfixSimulator from '@/components/InfixPostfixSimulator';
+import SortingRace from '@/components/SortingRace';
+import BSTBuilder from '@/components/BSTBuilder';
+import GraphTraversalGrid from '@/components/GraphTraversalGrid';
+
 import QuizCard from '@/components/QuizCard';
 
 export function generateStaticParams() {
@@ -66,6 +73,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
   const colors = colorMap[sub.color] || colorMap.green;
 
   const isExcel = subject === 'excel';
+  const isDSA = subject === 'dsa';
 
   return (
     <div className="min-h-screen">
@@ -108,6 +116,8 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                 <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                   {isExcel ? (
                     <><Lightbulb className="w-4 h-4 text-amber-500" />Formula Examples</>
+                  ) : isDSA ? (
+                    <><Sigma className="w-4 h-4 text-purple-500" />Key Concepts & Formulas</>
                   ) : (
                     <><Sigma className="w-4 h-4 text-blue-500" />Key Concepts & Formulas</>
                   )}
@@ -116,7 +126,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                   isExcel ? (
                     <FormulaVisualizer key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} />
                   ) : (
-                    <MathFormula key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} />
+                    <MathFormula key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} accentColor={isDSA ? 'purple' : 'blue'} />
                   )
                 )}
               </div>
@@ -125,7 +135,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
               {mod.sampleData && lIdx === 0 && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                    {isExcel ? 'Interactive Spreadsheet' : 'Example Data'}
+                    {isExcel ? 'Interactive Spreadsheet' : isDSA ? 'Example Data' : 'Example Data'}
                   </h3>
                   {Object.entries(mod.sampleData).map(([tableName, tableData]) =>
                     isExcel ? (
@@ -239,6 +249,51 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
             <h2 className="text-lg font-bold mb-2">Interactive: Neural Network Visualizer</h2>
             <p className="text-sm text-gray-500 mb-4">Hover over neurons to see layer details. Watch the training loop flow.</p>
             <NeuralNetworkViz />
+          </section>
+        )}
+
+        {/* DSA: Complexity Grapher */}
+        {isDSA && id === 'intro-dsa' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Time & Space Complexity Grapher</h2>
+            <p className="text-sm text-gray-500 mb-4">Toggle complexity curves and adjust N to see how growth rates compare.</p>
+            <ComplexityGrapher />
+          </section>
+        )}
+
+        {/* DSA: Infix to Postfix Simulator */}
+        {isDSA && id === 'linear-data-structures' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Infix to Postfix Stack Simulator</h2>
+            <p className="text-sm text-gray-500 mb-4">Enter an infix expression and watch the stack-based conversion step by step.</p>
+            <InfixPostfixSimulator />
+          </section>
+        )}
+
+        {/* DSA: Sorting Race */}
+        {isDSA && id === 'searching-sorting' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Sorting Algorithm Race</h2>
+            <p className="text-sm text-gray-500 mb-4">Watch Bubble, Selection, Insertion, and Quick sort compete side by side.</p>
+            <SortingRace />
+          </section>
+        )}
+
+        {/* DSA: BST Builder */}
+        {isDSA && id === 'trees' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Binary Search Tree Builder</h2>
+            <p className="text-sm text-gray-500 mb-4">Insert numbers and watch the BST grow. See all three traversals update live.</p>
+            <BSTBuilder />
+          </section>
+        )}
+
+        {/* DSA: Graph Traversal Grid */}
+        {isDSA && (id === 'graphs-traversals' || id === 'advanced-graphs') && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Graph Traversal & Pathfinding</h2>
+            <p className="text-sm text-gray-500 mb-4">Run DFS, BFS, or Dijkstra's algorithm on a sample graph. Step through or auto-play.</p>
+            <GraphTraversalGrid />
           </section>
         )}
 
