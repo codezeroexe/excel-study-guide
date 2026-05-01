@@ -1,16 +1,27 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getSubjectById, subjects } from '@/data/subjects';
-import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, Settings, Target, Layers, Cpu } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, Sigma } from 'lucide-react';
+
+// Excel components
 import SpreadsheetGrid from '@/components/SpreadsheetGrid';
 import FormulaVisualizer from '@/components/FormulaVisualizer';
 import LookupAnimator from '@/components/LookupAnimator';
-import QuizCard from '@/components/QuizCard';
 import ReferenceToggle from '@/components/ReferenceToggle';
 import ConditionBuilder from '@/components/ConditionBuilder';
 import ChartRenderer from '@/components/ChartRenderer';
 import FilterPanel from '@/components/FilterPanel';
 import PivotBuilder from '@/components/PivotBuilder';
+
+// ML components
+import MathFormula from '@/components/MathFormula';
+import DataTable from '@/components/DataTable';
+import ConfusionMatrixCalc from '@/components/ConfusionMatrixCalc';
+import ScalingSandbox from '@/components/ScalingSandbox';
+import BestFitLine from '@/components/BestFitLine';
+import NeuralNetworkViz from '@/components/NeuralNetworkViz';
+
+import QuizCard from '@/components/QuizCard';
 
 export function generateStaticParams() {
   const params: { subject: string; id: string }[] = [];
@@ -42,21 +53,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
   };
   const colors = colorMap[sub.color] || colorMap.green;
 
-  // Convert sample data to Record<string, string>[] for components
-  const sampleDataRecords: Record<string, string>[] = [];
-  if (mod.sampleData) {
-    const firstTable = Object.values(mod.sampleData)[0];
-    if (firstTable && firstTable.length > 1) {
-      const headers = firstTable[0];
-      for (let i = 1; i < firstTable.length; i++) {
-        const record: Record<string, string> = {};
-        headers.forEach((h, j) => {
-          record[h] = firstTable[i]?.[j] || '';
-        });
-        sampleDataRecords.push(record);
-      }
-    }
-  }
+  const isExcel = subject === 'excel';
 
   return (
     <div className="min-h-screen">
@@ -94,37 +91,63 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{lesson.content}</p>
               </div>
 
-              {/* Formula Examples */}
+              {/* Subject-specific formula/concept display */}
               <div className="p-6 space-y-3">
                 <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                  <Lightbulb className="w-4 h-4 text-amber-500" />
-                  Formula Examples
+                  {isExcel ? (
+                    <>
+                      <Lightbulb className="w-4 h-4 text-amber-500" />
+                      Formula Examples
+                    </>
+                  ) : (
+                    <>
+                      <Sigma className="w-4 h-4 text-blue-500" />
+                      Key Concepts & Formulas
+                    </>
+                  )}
                 </h3>
-                {lesson.formulas.map((f, fIdx) => (
-                  <FormulaVisualizer
-                    key={fIdx}
-                    formula={f.formula}
-                    description={f.description}
-                    explanation={f.explanation}
-                  />
-                ))}
+                {lesson.formulas.map((f, fIdx) =>
+                  isExcel ? (
+                    <FormulaVisualizer
+                      key={fIdx}
+                      formula={f.formula}
+                      description={f.description}
+                      explanation={f.explanation}
+                    />
+                  ) : (
+                    <MathFormula
+                      key={fIdx}
+                      formula={f.formula}
+                      description={f.description}
+                      explanation={f.explanation}
+                    />
+                  )
+                )}
               </div>
 
-              {/* Interactive Demo */}
+              {/* Subject-specific interactive demo */}
               {mod.sampleData && lIdx === 0 && (
                 <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Interactive Demo</h3>
-                  {Object.entries(mod.sampleData).map(([tableName, tableData]) => (
-                    <div key={tableName} className="mb-4">
-                      <span className="text-xs text-gray-500 mb-2 block">{tableName}</span>
-                      <SpreadsheetGrid data={tableData} />
-                    </div>
-                  ))}
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                    {isExcel ? 'Interactive Spreadsheet' : 'Example Data'}
+                  </h3>
+                  {Object.entries(mod.sampleData).map(([tableName, tableData]) =>
+                    isExcel ? (
+                      <div key={tableName} className="mb-4">
+                        <span className="text-xs text-gray-500 mb-2 block">{tableName}</span>
+                        <SpreadsheetGrid data={tableData} />
+                      </div>
+                    ) : (
+                      <div key={tableName} className="mb-4">
+                        <DataTable data={tableData} title={tableName} />
+                      </div>
+                    )
+                  )}
                 </div>
               )}
 
-              {/* Module-specific interactive components */}
-              {id === 'lookup-functions' && lIdx >= 0 && mod.sampleData?.['VLOOKUP Reference Table'] && (
+              {/* Excel-specific interactive components */}
+              {isExcel && id === 'lookup-functions' && lIdx >= 0 && mod.sampleData?.['VLOOKUP Reference Table'] && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">VLOOKUP Animation</h3>
                   <LookupAnimator
@@ -137,7 +160,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                 </div>
               )}
 
-              {id === 'cell-referencing' && (
+              {isExcel && id === 'cell-referencing' && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Reference Type Visualizer</h3>
                   <ReferenceToggle
@@ -147,37 +170,70 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                 </div>
               )}
 
-              {id === 'conditional-functions' && sampleDataRecords.length > 0 && (
+              {isExcel && id === 'conditional-functions' && mod.sampleData && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Condition Builder</h3>
-                  <ConditionBuilder
-                    fields={Object.keys(sampleDataRecords[0] || {})}
-                    sampleData={sampleDataRecords}
-                  />
+                  {(() => {
+                    const firstTable = Object.values(mod.sampleData!)[0];
+                    const headers = firstTable[0];
+                    const records = firstTable.slice(1).map((row: string[]) => {
+                      const record: Record<string, string> = {};
+                      headers.forEach((h: string, j: number) => { record[h] = row[j] || ''; });
+                      return record;
+                    });
+                    return (
+                      <ConditionBuilder
+                        fields={headers as string[]}
+                        sampleData={records}
+                      />
+                    );
+                  })()}
                 </div>
               )}
 
-              {id === 'filtering' && sampleDataRecords.length > 0 && (
+              {isExcel && id === 'filtering' && mod.sampleData && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Interactive Filter</h3>
-                  <FilterPanel
-                    data={sampleDataRecords}
-                    headers={Object.keys(sampleDataRecords[0] || {})}
-                  />
+                  {(() => {
+                    const firstTable = Object.values(mod.sampleData!)[0];
+                    const headers = firstTable[0];
+                    const records = firstTable.slice(1).map((row: string[]) => {
+                      const record: Record<string, string> = {};
+                      headers.forEach((h: string, j: number) => { record[h] = row[j] || ''; });
+                      return record;
+                    });
+                    return (
+                      <FilterPanel
+                        data={records}
+                        headers={headers as string[]}
+                      />
+                    );
+                  })()}
                 </div>
               )}
 
-              {id === 'pivot-tables' && sampleDataRecords.length > 0 && (
+              {isExcel && id === 'pivot-tables' && mod.sampleData && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Pivot Table Builder</h3>
-                  <PivotBuilder
-                    data={sampleDataRecords}
-                    fields={Object.keys(sampleDataRecords[0] || {})}
-                  />
+                  {(() => {
+                    const firstTable = Object.values(mod.sampleData!)[0];
+                    const headers = firstTable[0];
+                    const records = firstTable.slice(1).map((row: string[]) => {
+                      const record: Record<string, string> = {};
+                      headers.forEach((h: string, j: number) => { record[h] = row[j] || ''; });
+                      return record;
+                    });
+                    return (
+                      <PivotBuilder
+                        data={records}
+                        fields={headers as string[]}
+                      />
+                    );
+                  })()}
                 </div>
               )}
 
-              {id === 'charts' && mod.sampleData && (
+              {isExcel && id === 'charts' && mod.sampleData && (
                 <div className="px-6 pb-6 space-y-4">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Chart Examples</h3>
                   {mod.sampleData['Study Hours vs Marks'] && (
@@ -205,6 +261,39 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                       yKeys={['Revenue', 'Growth %']}
                     />
                   )}
+                </div>
+              )}
+
+              {/* ML-specific interactive components */}
+              {!isExcel && id === 'data-preprocessing' && lIdx >= 4 && (
+                <div className="px-6 pb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Scaling Sandbox</h3>
+                  <p className="text-xs text-gray-500 mb-3">Enter numbers and see Min-Max and Z-Score transformations in real-time.</p>
+                  <ScalingSandbox />
+                </div>
+              )}
+
+              {!isExcel && id === 'supervised-learning' && lIdx >= 1 && (
+                <div className="px-6 pb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Best Fit Line Adjuster</h3>
+                  <p className="text-xs text-gray-500 mb-3">Move sliders for slope (b₁) and intercept (b₀) to minimize MSE.</p>
+                  <BestFitLine />
+                </div>
+              )}
+
+              {!isExcel && id === 'evaluation-metrics' && lIdx >= 0 && (
+                <div className="px-6 pb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Confusion Matrix Calculator</h3>
+                  <p className="text-xs text-gray-500 mb-3">Enter TP, FP, TN, FN values and see all metrics update live.</p>
+                  <ConfusionMatrixCalc />
+                </div>
+              )}
+
+              {!isExcel && id === 'deep-learning-foundations' && lIdx >= 1 && (
+                <div className="px-6 pb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Neural Network Visualizer</h3>
+                  <p className="text-xs text-gray-500 mb-3">Hover over neurons to see layer details. Watch the training loop flow.</p>
+                  <NeuralNetworkViz />
                 </div>
               )}
             </section>
