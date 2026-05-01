@@ -33,6 +33,13 @@ import GanttChartGenerator from '@/components/GanttChartGenerator';
 import MemoryFragmentationSandbox from '@/components/MemoryFragmentationSandbox';
 import ProcessStateMachine from '@/components/ProcessStateMachine';
 
+// Stats components
+import CombinatoricsCalculator from '@/components/CombinatoricsCalculator';
+import BayesTheoremCalc from '@/components/BayesTheoremCalc';
+import DistributionVisualizer from '@/components/DistributionVisualizer';
+import HypothesisTestCalc from '@/components/HypothesisTestCalc';
+import WorksheetGenerator from '@/components/WorksheetGenerator';
+
 import QuizCard from '@/components/QuizCard';
 
 export function generateStaticParams() {
@@ -74,12 +81,14 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
     blue: { text: 'text-blue-600', badge: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', bg: 'from-blue-50 to-white dark:from-blue-950/20 dark:to-gray-950', btn: 'bg-blue-600', btnHover: 'hover:bg-blue-700' },
     purple: { text: 'text-purple-600', badge: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', bg: 'from-purple-50 to-white dark:from-purple-950/20 dark:to-gray-950', btn: 'bg-purple-600', btnHover: 'hover:bg-purple-700' },
     amber: { text: 'text-amber-600', badge: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300', bg: 'from-amber-50 to-white dark:from-amber-950/20 dark:to-gray-950', btn: 'bg-amber-600', btnHover: 'hover:bg-amber-700' },
+    rose: { text: 'text-rose-600', badge: 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300', bg: 'from-rose-50 to-white dark:from-rose-950/20 dark:to-gray-950', btn: 'bg-rose-600', btnHover: 'hover:bg-rose-700' },
   };
   const colors = colorMap[sub.color] || colorMap.green;
 
   const isExcel = subject === 'excel';
   const isDSA = subject === 'dsa';
   const isOS = subject === 'os';
+  const isStats = subject === 'stats';
 
   return (
     <div className="min-h-screen">
@@ -124,6 +133,8 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                     <><Lightbulb className="w-4 h-4 text-amber-500" />Formula Examples</>
                   ) : isDSA ? (
                     <><Sigma className="w-4 h-4 text-purple-500" />Key Concepts & Formulas</>
+                  ) : isStats ? (
+                    <><Sigma className="w-4 h-4 text-rose-500" />Key Concepts & Formulas</>
                   ) : (
                     <><Sigma className="w-4 h-4 text-blue-500" />Key Concepts & Formulas</>
                   )}
@@ -327,6 +338,51 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
             <h2 className="text-lg font-bold mb-2">Interactive: Memory Fragmentation Sandbox</h2>
             <p className="text-sm text-gray-500 mb-4">Allocate and free memory blocks. See how contiguous allocation causes external fragmentation while paging avoids it.</p>
             <MemoryFragmentationSandbox />
+          </section>
+        )}
+
+        {/* Stats: Combinatorics Calculator */}
+        {isStats && id === 'stats-combinatorics' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Permutation & Combination Calculator</h2>
+            <p className="text-sm text-gray-500 mb-4">Adjust n and r to see P(n,r) and C(n,r) with visual arrangements.</p>
+            <CombinatoricsCalculator />
+          </section>
+        )}
+
+        {/* Stats: Bayes Theorem Calculator */}
+        {isStats && id === 'stats-bayes-theorem' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Bayes' Theorem Calculator</h2>
+            <p className="text-sm text-gray-500 mb-4">Adjust prior, sensitivity, and false positive rate. See how the posterior updates.</p>
+            <BayesTheoremCalc />
+          </section>
+        )}
+
+        {/* Stats: Distribution Visualizer */}
+        {isStats && id === 'stats-distributions' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Probability Distribution Visualizer</h2>
+            <p className="text-sm text-gray-500 mb-4">Explore Normal, Binomial, Poisson, and Exponential distributions with adjustable parameters.</p>
+            <DistributionVisualizer />
+          </section>
+        )}
+
+        {/* Stats: Hypothesis Test Calculator */}
+        {isStats && id === 'stats-hypothesis-testing' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Hypothesis Test Calculator</h2>
+            <p className="text-sm text-gray-500 mb-4">Run Z-tests, T-tests, and Chi-Square tests with step-by-step solutions.</p>
+            <HypothesisTestCalc />
+          </section>
+        )}
+
+        {/* Stats: Worksheet Generator (all modules) */}
+        {isStats && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Practice Worksheet Generator</h2>
+            <p className="text-sm text-gray-500 mb-4">Generate randomized problems with step-by-step solutions for any topic.</p>
+            <WorksheetGenerator />
           </section>
         )}
 

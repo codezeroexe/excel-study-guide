@@ -3,6 +3,7 @@ import { modules as excelModules } from './excel/modules';
 import { modules as mlModules } from './ml/modules';
 import { modules as dsaModules } from './dsa/modules';
 import { modules as osModules } from './os/modules';
+import { modules as statsModules } from './stats/modules';
 
 export const subjects: SubjectData[] = [
   {
@@ -40,6 +41,15 @@ export const subjects: SubjectData[] = [
     color: 'amber',
     icon: 'Monitor',
     modules: osModules,
+  },
+  {
+    id: 'stats',
+    name: 'Probability & Statistics',
+    shortName: 'Stats',
+    description: 'Combinatorics, distributions, hypothesis testing, and statistical inference',
+    color: 'rose',
+    icon: 'Sigma',
+    modules: statsModules,
   },
 ];
 
