@@ -33,6 +33,18 @@ export function generateStaticParams() {
   return params;
 }
 
+// Helper to convert sampleData to records for Excel components
+function getExcelRecords(sampleData: Record<string, string[][]>) {
+  const firstTable = Object.values(sampleData)[0];
+  const headers = firstTable[0];
+  const records = firstTable.slice(1).map((row: string[]) => {
+    const record: Record<string, string> = {};
+    headers.forEach((h: string, j: number) => { record[h] = row[j] || ''; });
+    return record;
+  });
+  return { headers: headers as string[], records };
+}
+
 export default async function ModulePage({ params }: { params: Promise<{ subject: string; id: string }> }) {
   const { subject, id } = await params;
   const sub = getSubjectById(subject);
@@ -91,41 +103,25 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{lesson.content}</p>
               </div>
 
-              {/* Subject-specific formula/concept display */}
+              {/* Formulas / Concepts */}
               <div className="p-6 space-y-3">
                 <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                   {isExcel ? (
-                    <>
-                      <Lightbulb className="w-4 h-4 text-amber-500" />
-                      Formula Examples
-                    </>
+                    <><Lightbulb className="w-4 h-4 text-amber-500" />Formula Examples</>
                   ) : (
-                    <>
-                      <Sigma className="w-4 h-4 text-blue-500" />
-                      Key Concepts & Formulas
-                    </>
+                    <><Sigma className="w-4 h-4 text-blue-500" />Key Concepts & Formulas</>
                   )}
                 </h3>
                 {lesson.formulas.map((f, fIdx) =>
                   isExcel ? (
-                    <FormulaVisualizer
-                      key={fIdx}
-                      formula={f.formula}
-                      description={f.description}
-                      explanation={f.explanation}
-                    />
+                    <FormulaVisualizer key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} />
                   ) : (
-                    <MathFormula
-                      key={fIdx}
-                      formula={f.formula}
-                      description={f.description}
-                      explanation={f.explanation}
-                    />
+                    <MathFormula key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} />
                   )
                 )}
               </div>
 
-              {/* Subject-specific interactive demo */}
+              {/* Sample Data (first lesson only) */}
               {mod.sampleData && lIdx === 0 && (
                 <div className="px-6 pb-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
@@ -145,160 +141,106 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
                   )}
                 </div>
               )}
-
-              {/* Excel-specific interactive components */}
-              {isExcel && id === 'lookup-functions' && lIdx >= 0 && mod.sampleData?.['VLOOKUP Reference Table'] && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">VLOOKUP Animation</h3>
-                  <LookupAnimator
-                    type="vlookup"
-                    lookupValue="IT"
-                    tableData={mod.sampleData['VLOOKUP Reference Table']}
-                    colOrRowIndex={2}
-                    result="8000"
-                  />
-                </div>
-              )}
-
-              {isExcel && id === 'cell-referencing' && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Reference Type Visualizer</h3>
-                  <ReferenceToggle
-                    formula="=D2*$N$1"
-                    description="See how references change when dragged. Toggle between relative, absolute, and mixed modes."
-                  />
-                </div>
-              )}
-
-              {isExcel && id === 'conditional-functions' && mod.sampleData && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Condition Builder</h3>
-                  {(() => {
-                    const firstTable = Object.values(mod.sampleData!)[0];
-                    const headers = firstTable[0];
-                    const records = firstTable.slice(1).map((row: string[]) => {
-                      const record: Record<string, string> = {};
-                      headers.forEach((h: string, j: number) => { record[h] = row[j] || ''; });
-                      return record;
-                    });
-                    return (
-                      <ConditionBuilder
-                        fields={headers as string[]}
-                        sampleData={records}
-                      />
-                    );
-                  })()}
-                </div>
-              )}
-
-              {isExcel && id === 'filtering' && mod.sampleData && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Interactive Filter</h3>
-                  {(() => {
-                    const firstTable = Object.values(mod.sampleData!)[0];
-                    const headers = firstTable[0];
-                    const records = firstTable.slice(1).map((row: string[]) => {
-                      const record: Record<string, string> = {};
-                      headers.forEach((h: string, j: number) => { record[h] = row[j] || ''; });
-                      return record;
-                    });
-                    return (
-                      <FilterPanel
-                        data={records}
-                        headers={headers as string[]}
-                      />
-                    );
-                  })()}
-                </div>
-              )}
-
-              {isExcel && id === 'pivot-tables' && mod.sampleData && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Pivot Table Builder</h3>
-                  {(() => {
-                    const firstTable = Object.values(mod.sampleData!)[0];
-                    const headers = firstTable[0];
-                    const records = firstTable.slice(1).map((row: string[]) => {
-                      const record: Record<string, string> = {};
-                      headers.forEach((h: string, j: number) => { record[h] = row[j] || ''; });
-                      return record;
-                    });
-                    return (
-                      <PivotBuilder
-                        data={records}
-                        fields={headers as string[]}
-                      />
-                    );
-                  })()}
-                </div>
-              )}
-
-              {isExcel && id === 'charts' && mod.sampleData && (
-                <div className="px-6 pb-6 space-y-4">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Chart Examples</h3>
-                  {mod.sampleData['Study Hours vs Marks'] && (
-                    <ChartRenderer
-                      type="scatter"
-                      data={mod.sampleData['Study Hours vs Marks'].slice(1).map(row => ({
-                        name: row[0],
-                        value: Number(row[2]) || 0,
-                      }))}
-                      title="Study Hours vs Marks"
-                      xKey="name"
-                      yKeys={['value']}
-                    />
-                  )}
-                  {mod.sampleData['Quarterly Revenue'] && (
-                    <ChartRenderer
-                      type="combo"
-                      data={mod.sampleData['Quarterly Revenue'].slice(1).map(row => ({
-                        name: row[0],
-                        Revenue: Number(row[1]) || 0,
-                        'Growth %': Number(row[2]) || 0,
-                      }))}
-                      title="Revenue & Growth"
-                      xKey="name"
-                      yKeys={['Revenue', 'Growth %']}
-                    />
-                  )}
-                </div>
-              )}
-
-              {/* ML-specific interactive components */}
-              {!isExcel && id === 'data-preprocessing' && lIdx >= 4 && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Scaling Sandbox</h3>
-                  <p className="text-xs text-gray-500 mb-3">Enter numbers and see Min-Max and Z-Score transformations in real-time.</p>
-                  <ScalingSandbox />
-                </div>
-              )}
-
-              {!isExcel && id === 'supervised-learning' && lIdx >= 1 && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Best Fit Line Adjuster</h3>
-                  <p className="text-xs text-gray-500 mb-3">Move sliders for slope (b₁) and intercept (b₀) to minimize MSE.</p>
-                  <BestFitLine />
-                </div>
-              )}
-
-              {!isExcel && id === 'evaluation-metrics' && lIdx >= 0 && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Confusion Matrix Calculator</h3>
-                  <p className="text-xs text-gray-500 mb-3">Enter TP, FP, TN, FN values and see all metrics update live.</p>
-                  <ConfusionMatrixCalc />
-                </div>
-              )}
-
-              {!isExcel && id === 'deep-learning-foundations' && lIdx >= 1 && (
-                <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Neural Network Visualizer</h3>
-                  <p className="text-xs text-gray-500 mb-3">Hover over neurons to see layer details. Watch the training loop flow.</p>
-                  <NeuralNetworkViz />
-                </div>
-              )}
             </section>
           ))}
         </div>
+
+        {/* ===== INTERACTIVE TOOLS (rendered once per module, outside lessons) ===== */}
+
+        {/* Excel: VLOOKUP Animation */}
+        {isExcel && id === 'lookup-functions' && mod.sampleData?.['VLOOKUP Reference Table'] && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-4">Interactive: VLOOKUP Animation</h2>
+            <LookupAnimator
+              type="vlookup"
+              lookupValue="IT"
+              tableData={mod.sampleData['VLOOKUP Reference Table']}
+              colOrRowIndex={2}
+              result="8000"
+            />
+          </section>
+        )}
+
+        {/* Excel: Reference Toggle */}
+        {isExcel && id === 'cell-referencing' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-4">Interactive: Cell Reference Visualizer</h2>
+            <ReferenceToggle formula="=D2*$N$1" description="See how references change when dragged." />
+          </section>
+        )}
+
+        {/* Excel: Condition Builder */}
+        {isExcel && id === 'conditional-functions' && mod.sampleData && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-4">Interactive: Condition Builder</h2>
+            {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <ConditionBuilder fields={headers} sampleData={records} />; })()}
+          </section>
+        )}
+
+        {/* Excel: Filter Panel */}
+        {isExcel && id === 'filtering' && mod.sampleData && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-4">Interactive: Data Filter</h2>
+            {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <FilterPanel data={records} headers={headers} />; })()}
+          </section>
+        )}
+
+        {/* Excel: Pivot Builder */}
+        {isExcel && id === 'pivot-tables' && mod.sampleData && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-4">Interactive: Pivot Table Builder</h2>
+            {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <PivotBuilder data={records} fields={headers} />; })()}
+          </section>
+        )}
+
+        {/* Excel: Charts */}
+        {isExcel && id === 'charts' && mod.sampleData && (
+          <section className="mt-8 space-y-4">
+            <h2 className="text-lg font-bold">Interactive: Chart Examples</h2>
+            {mod.sampleData['Study Hours vs Marks'] && (
+              <ChartRenderer type="scatter" data={mod.sampleData['Study Hours vs Marks'].slice(1).map(row => ({ name: row[0], value: Number(row[2]) || 0 }))} title="Study Hours vs Marks" xKey="name" yKeys={['value']} />
+            )}
+            {mod.sampleData['Quarterly Revenue'] && (
+              <ChartRenderer type="combo" data={mod.sampleData['Quarterly Revenue'].slice(1).map(row => ({ name: row[0], Revenue: Number(row[1]) || 0, 'Growth %': Number(row[2]) || 0 }))} title="Revenue & Growth" xKey="name" yKeys={['Revenue', 'Growth %']} />
+            )}
+          </section>
+        )}
+
+        {/* ML: Scaling Sandbox */}
+        {!isExcel && id === 'data-preprocessing' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Scaling Sandbox</h2>
+            <p className="text-sm text-gray-500 mb-4">Enter numbers and see Min-Max Normalization and Z-Score Standardization in real-time.</p>
+            <ScalingSandbox />
+          </section>
+        )}
+
+        {/* ML: Best Fit Line */}
+        {!isExcel && id === 'supervised-learning' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Best Fit Line Adjuster</h2>
+            <p className="text-sm text-gray-500 mb-4">Adjust slope (b₁) and intercept (b₀) to minimize MSE. Find the best fit line.</p>
+            <BestFitLine />
+          </section>
+        )}
+
+        {/* ML: Confusion Matrix Calculator */}
+        {!isExcel && id === 'evaluation-metrics' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Confusion Matrix Calculator</h2>
+            <p className="text-sm text-gray-500 mb-4">Enter TP, FP, TN, FN values. Watch Accuracy, Precision, Recall, and F1 update live.</p>
+            <ConfusionMatrixCalc />
+          </section>
+        )}
+
+        {/* ML: Neural Network Visualizer */}
+        {!isExcel && id === 'deep-learning-foundations' && (
+          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Neural Network Visualizer</h2>
+            <p className="text-sm text-gray-500 mb-4">Hover over neurons to see layer details. Watch the training loop flow.</p>
+            <NeuralNetworkViz />
+          </section>
+        )}
 
         {/* Quiz */}
         {mod.quiz.length > 0 && (
@@ -311,35 +253,23 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
         {/* Navigation */}
         <div className="mt-8 flex items-center justify-between">
           {prev ? (
-            <Link
-              href={`/${subject}/module/${prev.id}`}
-              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
-            >
+            <Link href={`/${subject}/module/${prev.id}`} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               {prev.title}
             </Link>
           ) : (
-            <Link
-              href={`/${subject}`}
-              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
-            >
+            <Link href={`/${subject}`} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               All Modules
             </Link>
           )}
           {next ? (
-            <Link
-              href={`/${subject}/module/${next.id}`}
-              className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}
-            >
+            <Link href={`/${subject}/module/${next.id}`} className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}>
               {next.title}
               <ArrowRight className="w-4 h-4" />
             </Link>
           ) : (
-            <Link
-              href="/"
-              className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}
-            >
+            <Link href="/" className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}>
               Back to Subjects
             </Link>
           )}
