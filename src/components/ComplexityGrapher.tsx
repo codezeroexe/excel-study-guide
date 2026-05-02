@@ -107,7 +107,7 @@ export default function ComplexityGrapher() {
             key={key}
             onClick={() => toggle(key)}
             className={`px-3 py-1.5 text-xs font-mono font-bold rounded-full border-2 transition-all ${
-              active[key] ? 'text-white shadow-sm' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400 dark:text-neutral-500'
+              active[key] ? 'text-white shadow-sm' : 'border-border dark:border-border text-neutral-400 dark:text-neutral-500'
             }`}
             style={active[key] ? { backgroundColor: color, borderColor: color } : {}}
           >
@@ -130,7 +130,7 @@ export default function ComplexityGrapher() {
             className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
               logScale
                 ? 'bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700'
-                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border-neutral-200 dark:border-neutral-700'
+                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border-border dark:border-border'
             }`}
           >
             {logScale ? '📊 Log Scale' : '📈 Linear Scale'}
@@ -139,7 +139,7 @@ export default function ComplexityGrapher() {
       </div>
 
       {/* SVG Chart */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 320 }}>
           {/* Grid */}
           {yTicks.map(t => (

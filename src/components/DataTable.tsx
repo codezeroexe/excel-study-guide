@@ -17,9 +17,9 @@ export default function DataTable({ data, title, highlight = {} }: DataTableProp
   const rows = data.slice(1);
 
   return (
-    <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+    <div className="rounded-lg border border-border dark:border-border overflow-hidden">
       {title && (
-        <div className="px-4 py-2 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+        <div className="px-4 py-2 bg-neutral-50 dark:bg-neutral-800 border-b border-border dark:border-border">
           <span className="text-xs font-medium text-neutral-500">{title}</span>
         </div>
       )}
@@ -30,7 +30,7 @@ export default function DataTable({ data, title, highlight = {} }: DataTableProp
               {headers.map((h, i) => (
                 <th
                   key={i}
-                  className="px-3 py-2 bg-neutral-100 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-400 whitespace-nowrap"
+                  className="px-3 py-2 bg-neutral-100 dark:bg-neutral-800 border-b border-border dark:border-border text-left text-xs font-semibold text-neutral-600 dark:text-neutral-400 whitespace-nowrap"
                 >
                   {h}
                 </th>

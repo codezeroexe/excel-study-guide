@@ -91,7 +91,7 @@ export default function HypothesisTestCalc() {
       {/* Test type selector */}
       <div className="flex flex-wrap gap-2">
         {([['z', 'Z-Test'], ['t', 'T-Test'], ['chi', 'Chi-Square']] as [TestType, string][]).map(([key, label]) => (
-          <button key={key} onClick={() => setTestType(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${testType === key ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
+          <button key={key} onClick={() => setTestType(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${testType === key ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
             {label}
           </button>
         ))}
@@ -100,32 +100,32 @@ export default function HypothesisTestCalc() {
       {/* Inputs */}
       {testType !== 'chi' ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
             <div className="text-[10px] text-neutral-400 uppercase">Sample Mean (x̄)</div>
-            <input type="number" value={sampleMean} onChange={e => setSampleMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
+            <input type="number" value={sampleMean} onChange={e => setSampleMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
             <div className="text-[10px] text-neutral-400 uppercase">Pop Mean (μ)</div>
-            <input type="number" value={popMean} onChange={e => setPopMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
+            <input type="number" value={popMean} onChange={e => setPopMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
             <div className="text-[10px] text-neutral-400 uppercase">{testType === 't' ? 'Sample SD (s)' : 'Pop SD (σ)'}</div>
-            <input type="number" value={stdDev} onChange={e => setStdDev(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
+            <input type="number" value={stdDev} onChange={e => setStdDev(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
             <div className="text-[10px] text-neutral-400 uppercase">Sample Size (n)</div>
-            <input type="number" min="2" value={sampleSize} onChange={e => setSampleSize(Math.max(2, Number(e.target.value)))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
+            <input type="number" min="2" value={sampleSize} onChange={e => setSampleSize(Math.max(2, Number(e.target.value)))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-sm" />
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
             <div className="text-[10px] text-neutral-400 uppercase">Observed (comma-separated)</div>
-            <input type="text" value={observed} onChange={e => setObserved(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
+            <input type="text" value={observed} onChange={e => setObserved(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
             <div className="text-[10px] text-neutral-400 uppercase">Expected (comma-separated)</div>
-            <input type="text" value={expected} onChange={e => setExpected(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
+            <input type="text" value={expected} onChange={e => setExpected(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-sm" />
           </div>
         </div>
       )}
@@ -134,7 +134,7 @@ export default function HypothesisTestCalc() {
       <div className="flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
           <label className="text-xs text-neutral-500">α:</label>
-          <select value={alpha} onChange={e => setAlpha(Number(e.target.value))} className="px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded text-xs font-mono">
+          <select value={alpha} onChange={e => setAlpha(Number(e.target.value))} className="px-2 py-1 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded text-xs font-mono">
             <option value={0.01}>0.01</option>
             <option value={0.05}>0.05</option>
             <option value={0.10}>0.10</option>
@@ -143,7 +143,7 @@ export default function HypothesisTestCalc() {
         {testType !== 'chi' && (
           <div className="flex gap-1">
             {(['two', 'left', 'right'] as const).map(t => (
-              <button key={t} onClick={() => setTail(t)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${tail === t ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
+              <button key={t} onClick={() => setTail(t)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${tail === t ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-border dark:border-border text-neutral-400'}`}>
                 {t === 'two' ? 'Two-tailed' : t === 'left' ? 'Left' : 'Right'}
               </button>
             ))}
@@ -163,7 +163,7 @@ export default function HypothesisTestCalc() {
       </div>
 
       {/* Steps */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-4">
         <div className="text-xs font-bold text-neutral-500 mb-2">Step-by-Step Solution:</div>
         <div className="space-y-1">
           {steps.map((s, i) => (

@@ -21,7 +21,7 @@ export default function ConfusionMatrixCalc() {
     return { accuracy, precision, recall, f1, fpr, total };
   }, [tp, fp, tn, fn]);
 
-  const inputClass = "w-20 px-3 py-2 text-center text-lg font-bold border border-neutral-200 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-neutral-500 focus:border-transparent outline-none";
+  const inputClass = "w-20 px-3 py-2 text-center text-lg font-bold border border-border dark:border-border rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-neutral-500 focus:border-transparent outline-none";
 
   return (
     <div className="space-y-6">

@@ -69,7 +69,7 @@ export default function ReferenceToggle({ formula, description }: ReferenceToggl
             onClick={() => setMode(m)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 ${
               mode === m
-                ? 'bg-neutral-900 text-white'
+                ? 'bg-accent text-accent-text'
                 : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700'
             }`}
           >

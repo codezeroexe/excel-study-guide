@@ -187,7 +187,7 @@ export default function AppShell({ children, eyebrow, title, description }: AppS
                     : 'text-muted hover:bg-surface-hover'
                 }`}
               >
-                <SubjectIcon name={subject.icon} className={`h-4 w-4 ${subjectActive ? 'text-foreground' : 'text-muted'}`} />
+                <SubjectIcon name={subject.icon} className={`h-4 w-4 ${subjectActive ? tone.text : 'text-muted'}`} />
                 {!collapsed && (
                   <>
                     <span className="min-w-0 flex-1 truncate">{subject.shortName}</span>

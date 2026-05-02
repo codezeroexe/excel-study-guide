@@ -120,10 +120,10 @@ export default function GanttChartGenerator() {
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Process</th>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Arrival</th>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Burst</th>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Priority</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border">Process</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border">Arrival</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border">Burst</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border">Priority</th>
             </tr>
           </thead>
           <tbody>
@@ -131,13 +131,13 @@ export default function GanttChartGenerator() {
               <tr key={i}>
                 <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800 font-mono font-bold" style={{ color: algoColors[p.id] || '#6b7280' }}>{p.id}</td>
                 <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800">
-                  <input type="number" min="0" value={p.arrival} onChange={e => updateProc(i, 'arrival', Number(e.target.value))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
+                  <input type="number" min="0" value={p.arrival} onChange={e => updateProc(i, 'arrival', Number(e.target.value))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono" />
                 </td>
                 <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800">
-                  <input type="number" min="1" value={p.burst} onChange={e => updateProc(i, 'burst', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
+                  <input type="number" min="1" value={p.burst} onChange={e => updateProc(i, 'burst', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono" />
                 </td>
                 <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800">
-                  <input type="number" min="1" value={p.priority} onChange={e => updateProc(i, 'priority', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
+                  <input type="number" min="1" value={p.priority} onChange={e => updateProc(i, 'priority', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono" />
                 </td>
               </tr>
             ))}
@@ -153,7 +153,7 @@ export default function GanttChartGenerator() {
               key={algo}
               onClick={() => setAlgorithm(algo)}
               className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
-                algorithm === algo ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'
+                algorithm === algo ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'
               }`}
             >
               {algo}
@@ -163,13 +163,13 @@ export default function GanttChartGenerator() {
         {algorithm === 'RR' && (
           <div className="flex items-center gap-2">
             <label className="text-xs text-neutral-500">Quantum:</label>
-            <input type="number" min="1" max="20" value={quantum} onChange={e => setQuantum(Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
+            <input type="number" min="1" max="20" value={quantum} onChange={e => setQuantum(Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono" />
           </div>
         )}
       </div>
 
       {/* Gantt Chart */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 overflow-x-auto">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-4 overflow-x-auto">
         <div className="flex items-center" style={{ minWidth: result.gantt.length * blockWidth + 60 }}>
           {/* Y label */}
           <div className="text-xs font-bold text-neutral-500 w-12 flex-shrink-0 text-center">CPU</div>

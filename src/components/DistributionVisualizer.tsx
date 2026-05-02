@@ -92,7 +92,7 @@ export default function DistributionVisualizer() {
       {/* Distribution selector */}
       <div className="flex flex-wrap gap-2">
         {([['normal', 'Normal'], ['binomial', 'Binomial'], ['poisson', 'Poisson'], ['exponential', 'Exponential']] as [DistType, string][]).map(([key, label]) => (
-          <button key={key} onClick={() => setDist(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${dist === key ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
+          <button key={key} onClick={() => setDist(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${dist === key ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
             {label}
           </button>
         ))}
@@ -145,7 +145,7 @@ export default function DistributionVisualizer() {
       </div>
 
       {/* SVG Chart */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full">
           {/* Grid lines */}
           {[0, 0.25, 0.5, 0.75, 1].map(frac => {

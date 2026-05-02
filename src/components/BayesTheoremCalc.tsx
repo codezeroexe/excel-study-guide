@@ -22,7 +22,7 @@ export default function BayesTheoremCalc() {
       {/* Presets */}
       <div className="flex flex-wrap gap-2">
         {scenarios.map(s => (
-          <button key={s.name} onClick={() => { setPriorA(s.prior); setLikelihoodBA(s.sens); setLikelihoodBNotA(s.fpr); }} className="px-2 py-1 text-[10px] font-bold rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/20 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900/40 transition-colors">
+          <button key={s.name} onClick={() => { setPriorA(s.prior); setLikelihoodBA(s.sens); setLikelihoodBNotA(s.fpr); }} className="px-2 py-1 text-[10px] font-bold rounded border border-border bg-surface hover:bg-surface-hover transition-colors">
             {s.name}
           </button>
         ))}
@@ -30,19 +30,19 @@ export default function BayesTheoremCalc() {
 
       {/* Inputs */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
           <div className="text-[10px] text-neutral-400 uppercase mb-1">P(A) — Prior</div>
           <input type="range" min="0.001" max="0.99" step="0.001" value={priorA} onChange={e => setPriorA(Number(e.target.value))} className="w-full" />
           <div className="text-lg font-bold font-mono text-neutral-600">{priorA.toFixed(3)}</div>
           <div className="text-[10px] text-neutral-400">Base rate of A</div>
         </div>
-        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
           <div className="text-[10px] text-neutral-400 uppercase mb-1">P(B|A) — Sensitivity</div>
           <input type="range" min="0.01" max="1" step="0.01" value={likelihoodBA} onChange={e => setLikelihoodBA(Number(e.target.value))} className="w-full" />
           <div className="text-lg font-bold font-mono text-neutral-600">{likelihoodBA.toFixed(3)}</div>
           <div className="text-[10px] text-neutral-400">True positive rate</div>
         </div>
-        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-3">
           <div className="text-[10px] text-neutral-400 uppercase mb-1">P(B|¬A) — False Positive</div>
           <input type="range" min="0.01" max="1" step="0.01" value={likelihoodBNotA} onChange={e => setLikelihoodBNotA(Number(e.target.value))} className="w-full" />
           <div className="text-lg font-bold font-mono text-neutral-600">{likelihoodBNotA.toFixed(3)}</div>
@@ -51,7 +51,7 @@ export default function BayesTheoremCalc() {
       </div>
 
       {/* Bayes Formula */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-4">
         <div className="text-xs font-mono text-neutral-500 mb-2">Bayes&apos; Theorem:</div>
         <div className="text-sm font-mono">
           P(A|B) = <span className="text-neutral-600">{likelihoodBA.toFixed(3)}</span> × <span className="text-neutral-600">{priorA.toFixed(3)}</span> / (<span className="text-neutral-600">{likelihoodBA.toFixed(3)}</span> × <span className="text-neutral-600">{priorA.toFixed(3)}</span> + <span className="text-neutral-600">{likelihoodBNotA.toFixed(3)}</span> × <span className="text-neutral-500">{notA.toFixed(3)}</span>)

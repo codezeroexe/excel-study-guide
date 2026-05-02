@@ -163,12 +163,12 @@ export default function InfixPostfixSimulator() {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleConvert()}
-            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
+            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-neutral-800 border border-border dark:border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
             placeholder="e.g. a*(b+c)"
           />
           <button
             onClick={handleConvert}
-            className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors"
           >
             Convert
           </button>
@@ -211,7 +211,7 @@ export default function InfixPostfixSimulator() {
       {/* Result */}
       {finalResult && (
         <div className="flex items-center gap-3">
-          <div className="font-mono text-sm bg-neutral-50 dark:bg-neutral-800 px-3 py-2 rounded border border-neutral-200 dark:border-neutral-700">
+          <div className="font-mono text-sm bg-neutral-50 dark:bg-neutral-800 px-3 py-2 rounded border border-border dark:border-border">
             Infix: <span className="text-neutral-600 dark:text-neutral-400">{input}</span>
           </div>
           <span className="text-neutral-400">→</span>
@@ -227,7 +227,7 @@ export default function InfixPostfixSimulator() {
           {/* Stack */}
           <div>
             <h4 className="text-xs font-bold text-neutral-500 mb-2">Stack (Top →)</h4>
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3 min-h-[120px]">
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-border dark:border-border p-3 min-h-[120px]">
               {current.stack.length === 0 ? (
                 <span className="text-xs text-neutral-400">Empty</span>
               ) : (
@@ -252,7 +252,7 @@ export default function InfixPostfixSimulator() {
           {/* Output */}
           <div>
             <h4 className="text-xs font-bold text-neutral-500 mb-2">Output String</h4>
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3 min-h-[120px]">
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-border dark:border-border p-3 min-h-[120px]">
               <div className="font-mono text-lg font-bold text-neutral-600 dark:text-neutral-400 break-all">
                 {current.output || <span className="text-neutral-400 text-sm">Empty</span>}
               </div>

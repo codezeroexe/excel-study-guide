@@ -90,7 +90,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors flex items-center gap-1 ${
                   hasFilter
                     ? 'border-neutral-500 bg-neutral-50 dark:bg-neutral-950/20 text-neutral-700 dark:text-neutral-300'
-                    : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                    : 'border-border dark:border-border bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
                 }`}
               >
                 {header}
@@ -100,7 +100,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
               </button>
 
               {isOpen && (
-                <div className="absolute top-full left-0 mt-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg z-10 w-48 max-h-64 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded-lg shadow-lg z-10 w-48 max-h-64 overflow-y-auto">
                   <div className="p-2 border-b border-neutral-100 dark:border-neutral-700">
                     <button
                       onClick={() => clearFilter(header)}
@@ -147,7 +147,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
             <thead>
               <tr>
                 {headers.map(h => (
-                  <th key={h} className="px-2 py-1 text-left font-medium text-neutral-500 border-b border-neutral-200 dark:border-neutral-700">{h}</th>
+                  <th key={h} className="px-2 py-1 text-left font-medium text-neutral-500 border-b border-border dark:border-border">{h}</th>
                 ))}
               </tr>
             </thead>

@@ -213,7 +213,7 @@ export default function SortingRace() {
               className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
                 algorithms.includes(algo)
                   ? 'text-white border-current shadow-sm'
-                  : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'
+                  : 'border-border dark:border-border text-neutral-400'
               }`}
               style={algorithms.includes(algo) ? { backgroundColor: sortColors[algo], borderColor: sortColors[algo] } : {}}
             >
@@ -264,14 +264,14 @@ export default function SortingRace() {
           {!running ? (
             <button
               onClick={handleStart}
-              className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
+              className="px-4 py-2 text-sm font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors"
             >
               ▶ Race!
             </button>
           ) : (
             <button
               onClick={handleStop}
-              className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
+              className="px-4 py-2 text-sm font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors"
             >
               ⏹ Stop
             </button>
@@ -288,7 +288,7 @@ export default function SortingRace() {
           const maxVal = Math.max(...arr, 1);
 
           return (
-            <div key={algo} className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+            <div key={algo} className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-border dark:border-border p-3">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold" style={{ color: sortColors[algo] }}>{algo} Sort</span>
                 {result?.done && <span className="text-xs font-bold text-neutral-600">✓ Done!</span>}

@@ -198,18 +198,18 @@ export default function BSTBuilder() {
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
+            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-neutral-800 border border-border dark:border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
             placeholder="Enter a number..."
           />
           <button
             onClick={() => { if (input.trim()) { handleInsert(Number(input.trim())); setInput(''); } }}
-            className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-accent text-accent-text rounded-lg hover:bg-accent-hover transition-colors"
           >
             Insert
           </button>
           <button
             onClick={handleReset}
-            className="px-3 py-2 text-sm font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+            className="px-3 py-2 text-sm font-bold bg-surface hover:bg-surface-hover rounded-lg transition-colors"
           >
             Reset
           </button>
@@ -228,7 +228,7 @@ export default function BSTBuilder() {
       </div>
 
       {/* Tree visualization */}
-      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-border dark:border-border overflow-hidden">
         {root ? (
           <svg width="100%" height="200" viewBox="0 0 400 200" className="p-2">
             {renderTree(root)}

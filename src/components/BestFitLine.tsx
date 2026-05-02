@@ -89,7 +89,7 @@ export default function BestFitLine() {
 
       {/* Equation & Metrics */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="font-mono text-sm bg-neutral-50 dark:bg-neutral-800 px-3 py-2 rounded border border-neutral-200 dark:border-neutral-700">
+        <div className="font-mono text-sm bg-neutral-50 dark:bg-neutral-800 px-3 py-2 rounded border border-border dark:border-border">
           y = <span className="text-neutral-600 font-bold">{b1}</span>x + <span className="text-neutral-600 font-bold">{b0}</span>
         </div>
         <div className="flex gap-3 text-xs">
@@ -103,7 +103,7 @@ export default function BestFitLine() {
       </div>
 
       {/* SVG Chart */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}
           {yTicks.map(t => (
@@ -158,11 +158,11 @@ export default function BestFitLine() {
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Exp (x)</th>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Actual (y)</th>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Predicted</th>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Error</th>
-              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Error²</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border text-left font-semibold text-neutral-500">Exp (x)</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border text-left font-semibold text-neutral-500">Actual (y)</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border text-left font-semibold text-neutral-500">Predicted</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border text-left font-semibold text-neutral-500">Error</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-border dark:border-border text-left font-semibold text-neutral-500">Error²</th>
             </tr>
           </thead>
           <tbody>

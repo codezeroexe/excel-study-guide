@@ -184,25 +184,25 @@ export default function WorksheetGenerator() {
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-2">
           {(Object.entries(topicLabels) as [Topic, string][]).map(([key, label]) => (
-            <button key={key} onClick={() => setTopic(key)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${topic === key ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
+            <button key={key} onClick={() => setTopic(key)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${topic === key ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-border dark:border-border text-neutral-400'}`}>
               {label}
             </button>
           ))}
         </div>
         <div className="flex gap-1">
           {(['standard', 'advanced'] as Difficulty[]).map(d => (
-            <button key={d} onClick={() => setDifficulty(d)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${difficulty === d ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
+            <button key={d} onClick={() => setDifficulty(d)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${difficulty === d ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
               {d.charAt(0).toUpperCase() + d.slice(1)}
             </button>
           ))}
         </div>
         <div className="flex items-center gap-2">
           <label className="text-xs text-neutral-500">#:</label>
-          <select value={count} onChange={e => setCount(Number(e.target.value))} className="px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded text-xs font-mono">
+          <select value={count} onChange={e => setCount(Number(e.target.value))} className="px-2 py-1 bg-white dark:bg-neutral-800 border border-border dark:border-border rounded text-xs font-mono">
             {[1, 2, 3, 5].map(n => <option key={n} value={n}>{n}</option>)}
           </select>
         </div>
-        <button onClick={generate} className="px-3 py-1.5 text-xs font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors">
+        <button onClick={generate} className="px-3 py-1.5 text-xs font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors">
           Generate
         </button>
       </div>
@@ -211,7 +211,7 @@ export default function WorksheetGenerator() {
       {problems.length > 0 && (
         <div className="space-y-3">
           {problems.map((p, i) => (
-            <div key={i} className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+            <div key={i} className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border overflow-hidden">
               <div className="p-4">
                 <div className="flex items-start gap-2">
                   <span className="text-xs font-bold text-neutral-500 mt-0.5">Q{i + 1}.</span>

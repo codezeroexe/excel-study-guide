@@ -47,15 +47,15 @@ export default function SpreadsheetGrid({
   };
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
+    <div className="overflow-x-auto rounded-lg border border-border dark:border-border">
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
-            <th className="w-10 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-1 text-xs font-medium text-neutral-500"></th>
+            <th className="w-10 bg-neutral-100 dark:bg-neutral-800 border border-border dark:border-border p-1 text-xs font-medium text-neutral-500"></th>
             {Array.from({ length: cols }, (_, i) => (
               <th
                 key={i}
-                className="bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-1 text-xs font-medium text-neutral-500 min-w-[100px]"
+                className="bg-neutral-100 dark:bg-neutral-800 border border-border dark:border-border p-1 text-xs font-medium text-neutral-500 min-w-[100px]"
               >
                 {cellRef(0, i).replace(/\d/, '')}
               </th>
@@ -65,7 +65,7 @@ export default function SpreadsheetGrid({
         <tbody>
           {data.map((row, rowIdx) => (
             <tr key={rowIdx}>
-              <td className="bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-1 text-xs font-medium text-neutral-500 text-center">
+              <td className="bg-neutral-100 dark:bg-neutral-800 border border-border dark:border-border p-1 text-xs font-medium text-neutral-500 text-center">
                 {rowIdx + 1}
               </td>
               {row.map((cell, colIdx) => {
@@ -77,7 +77,7 @@ export default function SpreadsheetGrid({
                 return (
                   <td
                     key={colIdx}
-                    className={`border border-neutral-200 dark:border-neutral-700 p-2 min-w-[100px] max-w-[200px] truncate ${
+                    className={`border border-border dark:border-border p-2 min-w-[100px] max-w-[200px] truncate ${
                       isSelected
                         ? 'ring-2 ring-neutral-500 bg-neutral-50 dark:bg-neutral-950/20'
                         : highlight
@@ -105,7 +105,7 @@ export default function SpreadsheetGrid({
         </tbody>
       </table>
       {selectedCell && (
-        <div className="px-3 py-2 bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-700 text-xs text-neutral-500">
+        <div className="px-3 py-2 bg-neutral-50 dark:bg-neutral-800 border-t border-border dark:border-border text-xs text-neutral-500">
           Selected: <span className="font-mono font-medium">{selectedCell}</span>
           {cellValues[selectedCell] && (
             <span className="ml-2">Value: <span className="font-mono">{cellValues[selectedCell]}</span></span>

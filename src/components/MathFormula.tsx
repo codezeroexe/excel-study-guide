@@ -30,7 +30,7 @@ export default function MathFormula({
   const c = colorMap[accentColor] || colorMap.blue;
 
   return (
-    <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg overflow-hidden">
+    <div className="border border-border dark:border-border rounded-lg overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"

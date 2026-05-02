@@ -319,8 +319,8 @@ export default function GraphTraversalGrid() {
               onClick={() => { setAlgorithm(algo); handleReset(); }}
               className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
                 algorithm === algo
-                  ? 'bg-neutral-900 text-white border-neutral-600 shadow-sm'
-                  : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'
+                  ? 'bg-accent text-accent-text border-neutral-600 shadow-sm'
+                  : 'border-border dark:border-border text-neutral-400'
               }`}
             >
               {algo}
@@ -333,7 +333,7 @@ export default function GraphTraversalGrid() {
           <select
             value={startNode}
             onChange={e => { setStartNode(Number(e.target.value)); handleReset(); }}
-            className="px-2 py-1 text-sm bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded"
+            className="px-2 py-1 text-sm bg-white dark:bg-neutral-800 border border-border dark:border-border rounded"
           >
             {nodes.map(n => (
               <option key={n.id} value={n.id}>{n.label}</option>
@@ -344,7 +344,7 @@ export default function GraphTraversalGrid() {
         <div className="flex gap-2">
           <button
             onClick={handleRun}
-            className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors"
           >
             ▶ Run
           </button>
@@ -380,7 +380,7 @@ export default function GraphTraversalGrid() {
       </div>
 
       {/* Graph visualization */}
-      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-border dark:border-border overflow-hidden">
         <svg width="100%" height="280" viewBox="0 0 300 280" className="p-2">
           {/* Edges */}
           {edges.map((edge, i) => {

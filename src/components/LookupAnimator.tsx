@@ -59,7 +59,7 @@ export default function LookupAnimator({
         <button
           onClick={play}
           disabled={isPlaying}
-          className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 bg-accent text-accent-text dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isPlaying ? 'Playing...' : 'Play Animation'}
         </button>
@@ -78,7 +78,7 @@ export default function LookupAnimator({
             <tr key={rowIdx}>
               {row.map((cell, colIdx) => {
                 let bgClass = 'bg-white dark:bg-neutral-900';
-                const borderClass = 'border border-neutral-200 dark:border-neutral-700';
+                const borderClass = 'border border-border dark:border-border';
 
                 if (type === 'vlookup') {
                   // Step 1: highlight first column (search column)

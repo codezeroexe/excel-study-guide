@@ -21,20 +21,16 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
         {/* Subject header */}
         <section className="space-y-4">
-          <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-surface text-foreground">
-              <SubjectIcon name={sub.icon} className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-                {sub.name}
-              </h1>
-              <p className="mt-1 text-sm leading-6 text-muted">{sub.description}</p>
-            </div>
+          <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${tone.badge}`}>
+            <SubjectIcon name={sub.icon} className="h-5 w-5" />
+          </div>
+          <div className="max-w-3xl space-y-3">
+            <h1 className={`text-xl font-semibold tracking-tight sm:text-2xl ${tone.text}`}>{sub.name}</h1>
+            <p className="text-sm leading-6 text-muted">{sub.description}</p>
           </div>
 
           <div className="flex flex-wrap gap-2 text-xs">
-            <span className="inline-flex items-center gap-1 rounded-full bg-surface px-3 py-1 text-muted">
+            <span className={`inline-flex items-center gap-1 rounded-full ${tone.badge}`}>
               <ListOrdered className="h-3 w-3" />
               {sub.modules.length} modules
             </span>
@@ -51,9 +47,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
             <Link
               key={mod.id}
               href={`/${sub.id}/module/${mod.id}`}
-              className="group flex items-start gap-4 rounded-2xl border border-border bg-background p-4 transition-all hover:border-border-hover hover:shadow-sm"
+              className={`group flex items-start gap-4 rounded-2xl border bg-background p-4 transition-all hover:border-border-hover hover:shadow-sm ${tone.border}`}
             >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface text-xs font-semibold text-foreground">
+              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-semibold ${tone.badge}`}>
                 {idx + 1}
               </div>
               <div className="min-w-0 flex-1">

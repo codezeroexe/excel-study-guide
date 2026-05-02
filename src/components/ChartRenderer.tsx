@@ -109,7 +109,7 @@ export default function ChartRenderer({
     });
 
     return (
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+      <div className="bg-white dark:bg-neutral-900 border border-border dark:border-border rounded-xl p-4">
         {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {slices.map((s, i) => (
@@ -144,7 +144,7 @@ export default function ChartRenderer({
     const sy = (v: number) => PAD.top + plotH - (v / yRange) * plotH;
 
     return (
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+      <div className="bg-white dark:bg-neutral-900 border border-border dark:border-border rounded-xl p-4">
         {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {yTicksScatter.map(t => (
@@ -171,7 +171,7 @@ export default function ChartRenderer({
   // Column / Bar / Histogram
   if (type === 'column' || type === 'histogram') {
     return (
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+      <div className="bg-white dark:bg-neutral-900 border border-border dark:border-border rounded-xl p-4">
         {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}
@@ -221,7 +221,7 @@ export default function ChartRenderer({
   // Line chart
   if (type === 'line') {
     return (
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+      <div className="bg-white dark:bg-neutral-900 border border-border dark:border-border rounded-xl p-4">
         {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}
@@ -266,7 +266,7 @@ export default function ChartRenderer({
   // Combo chart (bar + line)
   if (type === 'combo') {
     return (
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+      <div className="bg-white dark:bg-neutral-900 border border-border dark:border-border rounded-xl p-4">
         {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}

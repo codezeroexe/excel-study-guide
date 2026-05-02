@@ -101,7 +101,7 @@ export default function ProcessStateMachine() {
   return (
     <div className="space-y-4">
       {/* State diagram */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 340 }}>
           {/* Arrows */}
           {arrowPaths.map((arrow, i) => {

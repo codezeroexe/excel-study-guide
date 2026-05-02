@@ -38,25 +38,25 @@ export default function CombinatoricsCalculator() {
       {/* Controls */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-2">
-          <button onClick={() => setMode('permutation')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'permutation' ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
+          <button onClick={() => setMode('permutation')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'permutation' ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
             Permutation (order matters)
           </button>
-          <button onClick={() => setMode('combination')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'combination' ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
+          <button onClick={() => setMode('combination')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'combination' ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
             Combination (order does not)
           </button>
         </div>
         <div className="flex items-center gap-2">
           <label className="text-xs text-neutral-500">n:</label>
-          <input type="number" min="1" max="20" value={n} onChange={e => setN(Math.min(20, Math.max(1, Number(e.target.value))))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-xs" />
+          <input type="number" min="1" max="20" value={n} onChange={e => setN(Math.min(20, Math.max(1, Number(e.target.value))))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-xs" />
         </div>
         <div className="flex items-center gap-2">
           <label className="text-xs text-neutral-500">r:</label>
-          <input type="number" min="0" max={n} value={r} onChange={e => setR(Math.min(n, Math.max(0, Number(e.target.value))))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-xs" />
+          <input type="number" min="0" max={n} value={r} onChange={e => setR(Math.min(n, Math.max(0, Number(e.target.value))))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-xs" />
         </div>
       </div>
 
       {/* Result */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-4">
         <div className="text-3xl font-bold font-mono text-neutral-600">{result.toLocaleString()}</div>
         <div className="text-xs text-neutral-500 mt-1 font-mono">{formula}</div>
         <div className="text-xs text-neutral-400 mt-2">

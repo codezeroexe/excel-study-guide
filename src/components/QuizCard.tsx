@@ -65,7 +65,7 @@ export default function QuizCard({ questions }: QuizCardProps) {
         </p>
         <button
           onClick={handleRestart}
-          className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
+          className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
         >
           Retry Quiz
         </button>
@@ -101,9 +101,9 @@ export default function QuizCard({ questions }: QuizCardProps) {
           }
           if (showResult) {
             if (idx === question.correctIndex) {
-              optionClass = 'border-neutral-500 bg-neutral-50 dark:bg-neutral-900/20 ring-1 ring-neutral-500';
+              optionClass = 'border-green-500 bg-green-50 dark:bg-green-900/20 ring-1 ring-green-500';
             } else if (selected === idx && idx !== question.correctIndex) {
-              optionClass = 'border-neutral-500 bg-neutral-50 dark:bg-neutral-900/20 ring-1 ring-neutral-500';
+              optionClass = 'border-red-500 bg-red-50 dark:bg-red-900/20 ring-1 ring-red-500';
             }
           }
 
@@ -115,10 +115,10 @@ export default function QuizCard({ questions }: QuizCardProps) {
               className={`w-full text-left p-3 rounded-lg border transition-colors flex items-center gap-3 ${optionClass}`}
             >
               {showResult && idx === question.correctIndex && (
-                <CheckCircle2 className="w-4 h-4 text-neutral-600 flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
               )}
               {showResult && selected === idx && idx !== question.correctIndex && (
-                <XCircle className="w-4 h-4 text-neutral-600 flex-shrink-0" />
+                <XCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
               )}
               {!showResult && (
                 <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${selected === idx ? 'border-neutral-900 bg-neutral-900 dark:border-neutral-100 dark:bg-neutral-100' : 'border-neutral-300 dark:border-neutral-600'}`} />
@@ -130,16 +130,16 @@ export default function QuizCard({ questions }: QuizCardProps) {
       </div>
 
       {showResult && (
-        <div className={`p-3 rounded-lg text-sm ${selected === question.correctIndex ? 'bg-neutral-50 dark:bg-neutral-900/20 text-neutral-700 dark:text-neutral-300' : 'bg-neutral-50 dark:bg-neutral-900/20 text-neutral-700 dark:text-neutral-300'}`}>
+        <div className={`p-3 rounded-lg text-sm ${selected === question.correctIndex ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300' : 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300'}`}>
           <div className="flex items-center gap-2 mb-1">
             {selected === question.correctIndex ? (
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 className="w-4 h-4 text-green-600" />
             ) : (
-              <XCircle className="w-4 h-4" />
+              <XCircle className="w-4 h-4 text-red-600" />
             )}
             <span className="font-medium">{selected === question.correctIndex ? 'Correct!' : 'Incorrect'}</span>
           </div>
-          <p className="text-neutral-600 dark:text-neutral-400">{question.explanation}</p>
+          <p className="text-green-600 dark:text-green-400">{question.explanation}</p>
         </div>
       )}
 
@@ -148,14 +148,14 @@ export default function QuizCard({ questions }: QuizCardProps) {
           <button
             onClick={handleSubmit}
             disabled={selected === null}
-            className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 bg-accent text-accent-text rounded-lg text-sm font-medium hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Check Answer
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
+            className="px-4 py-2 bg-accent text-accent-text rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
           >
             {currentQ + 1 >= questions.length ? 'See Results' : 'Next Question'}
           </button>

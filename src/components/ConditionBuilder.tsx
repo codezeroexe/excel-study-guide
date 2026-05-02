@@ -89,7 +89,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
           <select
             value={logic}
             onChange={e => setLogic(e.target.value as 'AND' | 'OR')}
-            className="px-2 py-1 text-xs border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
+            className="px-2 py-1 text-xs border border-border dark:border-border rounded bg-white dark:bg-neutral-800"
           >
             <option value="AND">AND</option>
             <option value="OR">OR</option>
@@ -111,7 +111,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
           <select
             value={rule.field}
             onChange={e => updateRule(idx, 'field', e.target.value)}
-            className="flex-1 px-2 py-1.5 text-sm border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
+            className="flex-1 px-2 py-1.5 text-sm border border-border dark:border-border rounded bg-white dark:bg-neutral-800"
           >
             {fields.map(f => (
               <option key={f} value={f}>{f}</option>
@@ -120,7 +120,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
           <select
             value={rule.operator}
             onChange={e => updateRule(idx, 'operator', e.target.value)}
-            className="w-32 px-2 py-1.5 text-sm border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
+            className="w-32 px-2 py-1.5 text-sm border border-border dark:border-border rounded bg-white dark:bg-neutral-800"
           >
             {OPERATORS.map(op => (
               <option key={op.value} value={op.value}>{op.label}</option>
@@ -131,7 +131,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
             value={rule.value}
             onChange={e => updateRule(idx, 'value', e.target.value)}
             placeholder="Value"
-            className="flex-1 px-2 py-1.5 text-sm border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
+            className="flex-1 px-2 py-1.5 text-sm border border-border dark:border-border rounded bg-white dark:bg-neutral-800"
           />
           {rules.length > 1 && (
             <button
@@ -147,7 +147,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
       <div className="flex items-center gap-2">
         <button
           onClick={evaluate}
-          className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-accent text-accent-text rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors flex items-center gap-2"
         >
           <Play className="w-3 h-3" />
           Evaluate
