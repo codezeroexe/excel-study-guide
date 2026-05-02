@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Filter, X } from 'lucide-react';
+import { Filter } from 'lucide-react';
 
 interface FilterPanelProps {
   data: Record<string, string>[];
@@ -60,10 +60,10 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filters</span>
+          <Filter className="w-4 h-4 text-neutral-500" />
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Filters</span>
           {activeFilterCount > 0 && (
-            <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-xs">
+            <span className="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-950/30 text-neutral-700 dark:text-neutral-300 rounded-full text-xs">
               {activeFilterCount} active
             </span>
           )}
@@ -71,7 +71,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
         {activeFilterCount > 0 && (
           <button
             onClick={clearAll}
-            className="text-xs text-gray-500 hover:text-red-500 transition-colors"
+            className="text-xs text-neutral-500 hover:text-neutral-500 transition-colors"
           >
             Clear All
           </button>
@@ -89,22 +89,22 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
                 onClick={() => setOpenDropdown(isOpen ? null : header)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors flex items-center gap-1 ${
                   hasFilter
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
-                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750'
+                    ? 'border-neutral-500 bg-neutral-50 dark:bg-neutral-950/20 text-neutral-700 dark:text-neutral-300'
+                    : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700'
                 }`}
               >
                 {header}
                 {hasFilter && (
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                  <span className="w-1.5 h-1.5 bg-neutral-700 rounded-full" />
                 )}
               </button>
 
               {isOpen && (
-                <div className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 w-48 max-h-64 overflow-y-auto">
-                  <div className="p-2 border-b border-gray-100 dark:border-gray-700">
+                <div className="absolute top-full left-0 mt-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg z-10 w-48 max-h-64 overflow-y-auto">
+                  <div className="p-2 border-b border-neutral-100 dark:border-neutral-700">
                     <button
                       onClick={() => clearFilter(header)}
-                      className="text-xs text-blue-600 hover:text-blue-700"
+                      className="text-xs text-neutral-600 hover:text-neutral-700"
                     >
                       Select All
                     </button>
@@ -115,10 +115,10 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
                       <button
                         key={value}
                         onClick={() => toggleValue(header, value)}
-                        className="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2"
+                        className="w-full text-left px-3 py-1.5 text-xs hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
                       >
                         <div className={`w-3 h-3 rounded border flex items-center justify-center ${
-                          isSelected ? 'bg-blue-500 border-blue-500' : 'border-gray-300 dark:border-gray-600'
+                          isSelected ? 'bg-neutral-700 border-neutral-500' : 'border-neutral-300 dark:border-neutral-600'
                         }`}>
                           {isSelected && (
                             <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -126,7 +126,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
                             </svg>
                           )}
                         </div>
-                        <span className="text-gray-700 dark:text-gray-300 truncate">{value || '(blank)'}</span>
+                        <span className="text-neutral-700 dark:text-neutral-300 truncate">{value || '(blank)'}</span>
                       </button>
                     );
                   })}
@@ -137,7 +137,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
         })}
       </div>
 
-      <div className="text-xs text-gray-500">
+      <div className="text-xs text-neutral-500">
         Showing {filteredData.length} of {data.length} rows
       </div>
 
@@ -147,7 +147,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
             <thead>
               <tr>
                 {headers.map(h => (
-                  <th key={h} className="px-2 py-1 text-left font-medium text-gray-500 border-b border-gray-200 dark:border-gray-700">{h}</th>
+                  <th key={h} className="px-2 py-1 text-left font-medium text-neutral-500 border-b border-neutral-200 dark:border-neutral-700">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -155,7 +155,7 @@ export default function FilterPanel({ data, headers }: FilterPanelProps) {
               {filteredData.map((row, i) => (
                 <tr key={i}>
                   {headers.map(h => (
-                    <td key={h} className="px-2 py-1 text-gray-700 dark:text-gray-300 border-b border-gray-100 dark:border-gray-800">{String(row[h] || '')}</td>
+                    <td key={h} className="px-2 py-1 text-neutral-700 dark:text-neutral-300 border-b border-neutral-100 dark:border-neutral-800">{String(row[h] || '')}</td>
                   ))}
                 </tr>
               ))}

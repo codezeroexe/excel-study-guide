@@ -5,7 +5,7 @@ import { useState } from 'react';
 type Block = { id: string; size: number; color: string; processId: string | null; free: boolean };
 
 const TOTAL_MEMORY = 64;
-const BLOCK_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#ec4899', '#06b6d4'];
+const BLOCK_COLORS = ['#525252', '#737373', '#a3a3a3', '#525252', '#404040', '#737373', '#a3a3a3'];
 
 const initialBlocks: Block[] = [
   { id: 'b0', size: 8, color: BLOCK_COLORS[0], processId: 'P1', free: false },
@@ -114,38 +114,38 @@ export default function MemoryFragmentationSandbox() {
       {/* Controls */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-2">
-          <button onClick={() => { setMode('contiguous'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'contiguous' ? 'bg-amber-600 text-white border-amber-600' : 'border-gray-200 dark:border-gray-700 text-gray-400'}`}>
+          <button onClick={() => { setMode('contiguous'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'contiguous' ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
             Contiguous
           </button>
-          <button onClick={() => { setMode('paging'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'paging' ? 'bg-amber-600 text-white border-amber-600' : 'border-gray-200 dark:border-gray-700 text-gray-400'}`}>
+          <button onClick={() => { setMode('paging'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'paging' ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
             Paging
           </button>
         </div>
         {mode === 'contiguous' && (
           <div className="flex gap-1">
             {(['first', 'best', 'worst'] as const).map(s => (
-              <button key={s} onClick={() => setStrategy(s)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${strategy === s ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-700 dark:text-amber-300' : 'border-gray-200 dark:border-gray-700 text-gray-400'}`}>
+              <button key={s} onClick={() => setStrategy(s)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${strategy === s ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
                 {s === 'first' ? 'First' : s === 'best' ? 'Best' : 'Worst'} Fit
               </button>
             ))}
           </div>
         )}
         <div className="flex items-center gap-2">
-          <label className="text-xs text-gray-500">Size:</label>
-          <input type="number" min="1" max={TOTAL_MEMORY} value={allocSize} onChange={e => setAllocSize(Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono text-xs" />
+          <label className="text-xs text-neutral-500">Size:</label>
+          <input type="number" min="1" max={TOTAL_MEMORY} value={allocSize} onChange={e => setAllocSize(Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-xs" />
         </div>
-        <button onClick={allocate} className="px-3 py-1.5 text-xs font-bold bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
+        <button onClick={allocate} className="px-3 py-1.5 text-xs font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors">
           Allocate
         </button>
-        <button onClick={reset} className="px-3 py-1.5 text-xs font-bold bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+        <button onClick={reset} className="px-3 py-1.5 text-xs font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
           Reset
         </button>
       </div>
 
       {/* Memory bar */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-        <div className="text-xs font-bold text-gray-500 mb-2">Memory ({TOTAL_MEMORY} units total)</div>
-        <div className="flex h-16 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
+        <div className="text-xs font-bold text-neutral-500 mb-2">Memory ({TOTAL_MEMORY} units total)</div>
+        <div className="flex h-16 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700">
           {blocks.map((block) => (
             <div
               key={block.id}
@@ -156,7 +156,7 @@ export default function MemoryFragmentationSandbox() {
               <span className="truncate px-0.5">{block.free ? 'Free' : block.processId}</span>
               <span className="text-[9px] opacity-60 ml-0.5">{block.size}</span>
               {!block.free && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-neutral-900 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                   Click to free {block.processId} ({block.size} units)
                 </div>
               )}
@@ -167,27 +167,27 @@ export default function MemoryFragmentationSandbox() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-center">
-          <div className="text-[10px] text-gray-400 uppercase">Total Free</div>
+        <div className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+          <div className="text-[10px] text-neutral-400 uppercase">Total Free</div>
           <div className="text-lg font-bold font-mono">{totalFree}</div>
         </div>
-        <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-center">
-          <div className="text-[10px] text-gray-400 uppercase">Largest Block</div>
+        <div className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+          <div className="text-[10px] text-neutral-400 uppercase">Largest Block</div>
           <div className="text-lg font-bold font-mono">{largestFree}</div>
         </div>
-        <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-center">
-          <div className="text-[10px] text-gray-400 uppercase">Free Blocks</div>
+        <div className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+          <div className="text-[10px] text-neutral-400 uppercase">Free Blocks</div>
           <div className="text-lg font-bold font-mono">{freeBlocks.length}</div>
         </div>
-        <div className={`p-2 rounded text-center ${externalFrag ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'}`}>
+        <div className={`p-2 rounded text-center ${externalFrag ? 'bg-neutral-50 dark:bg-neutral-900/20 border border-neutral-200 dark:border-neutral-800' : 'bg-neutral-50 dark:bg-neutral-900/20 border border-neutral-200 dark:border-neutral-800'}`}>
           <div className="text-[10px] uppercase font-bold">{externalFrag ? '⚠ External Frag' : '✓ Allocatable'}</div>
-          <div className="text-[10px] text-gray-500">{externalFrag ? `${totalFree} free, none ≥ ${allocSize}` : 'Can allocate'}</div>
+          <div className="text-[10px] text-neutral-500">{externalFrag ? `${totalFree} free, none ≥ ${allocSize}` : 'Can allocate'}</div>
         </div>
       </div>
 
       {/* Message */}
       {message && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800 text-xs text-blue-700 dark:text-blue-300">
+        <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800 text-xs text-neutral-700 dark:text-neutral-300">
           {message}
         </div>
       )}
@@ -203,7 +203,7 @@ export default function MemoryFragmentationSandbox() {
         </div>
       )}
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         {mode === 'contiguous'
           ? '📦 Contiguous: needs one continuous block. Free memory in fragments = external fragmentation.'
           : '📄 Paging: splits across any free frames. No external fragmentation, but may have internal fragmentation.'

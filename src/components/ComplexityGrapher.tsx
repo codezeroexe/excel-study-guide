@@ -3,11 +3,11 @@
 import { useState, useMemo } from 'react';
 
 const complexityFns: Record<string, { label: string; color: string; fn: (n: number) => number }> = {
-  O1: { label: 'O(1)', color: '#22c55e', fn: () => 1 },
-  OlogN: { label: 'O(log n)', color: '#3b82f6', fn: (n) => Math.log2(n) },
-  ON: { label: 'O(n)', color: '#f59e0b', fn: (n) => n },
-  ONlogN: { label: 'O(n log n)', color: '#8b5cf6', fn: (n) => n * Math.log2(n) },
-  ON2: { label: 'O(n²)', color: '#ef4444', fn: (n) => n * n },
+  O1: { label: 'O(1)', color: '#737373', fn: () => 1 },
+  OlogN: { label: 'O(log n)', color: '#525252', fn: (n) => Math.log2(n) },
+  ON: { label: 'O(n)', color: '#a3a3a3', fn: (n) => n },
+  ONlogN: { label: 'O(n log n)', color: '#525252', fn: (n) => n * Math.log2(n) },
+  ON2: { label: 'O(n²)', color: '#404040', fn: (n) => n * n },
 };
 
 const W = 520;
@@ -50,7 +50,7 @@ export default function ComplexityGrapher() {
   };
 
   // Generate path data for each active curve
-  const paths = useMemo(() => {
+  const paths = (() => {
     const result: Record<string, string> = {};
     const steps = Math.min(maxN, 300);
     for (const [key, { fn }] of Object.entries(complexityFns)) {
@@ -66,7 +66,7 @@ export default function ComplexityGrapher() {
       result[key] = d;
     }
     return result;
-  }, [active, maxN, maxY, logScale, logMaxY]);
+  })();
 
   // Y-axis ticks
   const yTicks = useMemo(() => {
@@ -107,7 +107,7 @@ export default function ComplexityGrapher() {
             key={key}
             onClick={() => toggle(key)}
             className={`px-3 py-1.5 text-xs font-mono font-bold rounded-full border-2 transition-all ${
-              active[key] ? 'text-white shadow-sm' : 'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500'
+              active[key] ? 'text-white shadow-sm' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400 dark:text-neutral-500'
             }`}
             style={active[key] ? { backgroundColor: color, borderColor: color } : {}}
           >
@@ -119,18 +119,18 @@ export default function ComplexityGrapher() {
       {/* Controls */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
-          <label className="text-xs font-medium text-gray-500 mb-1 block">
-            Max N: <span className="font-mono font-bold text-gray-700 dark:text-gray-300">{maxN}</span>
+          <label className="text-xs font-medium text-neutral-500 mb-1 block">
+            Max N: <span className="font-mono font-bold text-neutral-700 dark:text-neutral-300">{maxN}</span>
           </label>
-          <input type="range" min="10" max="500" step="10" value={maxN} onChange={e => setMaxN(Number(e.target.value))} className="w-full accent-purple-600" />
+          <input type="range" min="10" max="500" step="10" value={maxN} onChange={e => setMaxN(Number(e.target.value))} className="w-full accent-neutral-900" />
         </div>
         <div className="flex items-end">
           <button
             onClick={() => setLogScale(prev => !prev)}
             className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
               logScale
-                ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 border-gray-200 dark:border-gray-700'
+                ? 'bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700'
+                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border-neutral-200 dark:border-neutral-700'
             }`}
           >
             {logScale ? '📊 Log Scale' : '📈 Linear Scale'}
@@ -139,7 +139,7 @@ export default function ComplexityGrapher() {
       </div>
 
       {/* SVG Chart */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 320 }}>
           {/* Grid */}
           {yTicks.map(t => (
@@ -173,14 +173,14 @@ export default function ComplexityGrapher() {
             return (
               <g key={`legend-${key}`}>
                 <line x1={lx} y1={ly} x2={lx + 20} y2={ly} stroke={color} strokeWidth={2.5} />
-                <text x={lx + 25} y={ly + 4} fontSize={10} fill="#374151" className="dark:fill-gray-300">{label}</text>
+                <text x={lx + 25} y={ly + 4} fontSize={10} fill="#374151" className="dark:fill-neutral-300">{label}</text>
               </g>
             );
           })}
         </svg>
       </div>
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         {logScale
           ? '📊 Log scale shows ALL curves clearly. Toggle to linear to see how O(n²) dwarfs everything.'
           : '📈 Linear scale — O(n²) dominates. Toggle curves off to see smaller ones.'

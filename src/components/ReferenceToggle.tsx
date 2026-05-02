@@ -69,8 +69,8 @@ export default function ReferenceToggle({ formula, description }: ReferenceToggl
             onClick={() => setMode(m)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 ${
               mode === m
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                ? 'bg-neutral-900 text-white'
+                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700'
             }`}
           >
             {m === 'absolute' ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
@@ -79,26 +79,26 @@ export default function ReferenceToggle({ formula, description }: ReferenceToggl
         ))}
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-3">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4 space-y-3">
         <div>
-          <span className="text-xs text-gray-500">Converted Formula:</span>
-          <div className="font-mono text-sm text-blue-600 dark:text-blue-400 mt-1">{convertedFormula}</div>
+          <span className="text-xs text-neutral-500">Converted Formula:</span>
+          <div className="font-mono text-sm text-neutral-600 dark:text-neutral-400 mt-1">{convertedFormula}</div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <span className="text-xs text-gray-500">Drag Down →</span>
-            <div className="font-mono text-xs text-green-600 dark:text-green-400 mt-1">{dragResults[mode].down}</div>
+            <span className="text-xs text-neutral-500">Drag Down →</span>
+            <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400 mt-1">{dragResults[mode].down}</div>
           </div>
           <div>
-            <span className="text-xs text-gray-500">Drag Right →</span>
-            <div className="font-mono text-xs text-amber-600 dark:text-amber-400 mt-1">{dragResults[mode].right}</div>
+            <span className="text-xs text-neutral-500">Drag Right →</span>
+            <div className="font-mono text-xs text-neutral-700 dark:text-neutral-300 mt-1">{dragResults[mode].right}</div>
           </div>
         </div>
       </div>
 
       {description && (
-        <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
       )}
     </div>
   );

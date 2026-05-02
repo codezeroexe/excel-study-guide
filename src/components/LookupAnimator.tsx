@@ -25,11 +25,13 @@ export default function LookupAnimator({
 
   useEffect(() => {
     if (!isPlaying) return;
-    if (step >= totalSteps) {
-      setIsPlaying(false);
-      return;
-    }
-    const timer = setTimeout(() => setStep(s => s + 1), 1200);
+    const timer = setTimeout(() => {
+      if (step >= totalSteps) {
+        setIsPlaying(false);
+      } else {
+        setStep(s => s + 1);
+      }
+    }, 1200);
     return () => clearTimeout(timer);
   }, [step, isPlaying, totalSteps]);
 
@@ -57,17 +59,17 @@ export default function LookupAnimator({
         <button
           onClick={play}
           disabled={isPlaying}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isPlaying ? 'Playing...' : 'Play Animation'}
         </button>
         <button
           onClick={reset}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          className="px-4 py-2 bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 rounded-lg text-sm font-medium hover:bg-neutral-200 dark:hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
         >
           Reset
         </button>
-        <span className="text-xs text-gray-500 ml-2">Step {step}/{totalSteps}</span>
+        <span className="text-xs text-neutral-500 ml-2">Step {step}/{totalSteps}</span>
       </div>
 
       <div className="overflow-x-auto">
@@ -75,44 +77,44 @@ export default function LookupAnimator({
           {tableData.map((row, rowIdx) => (
             <tr key={rowIdx}>
               {row.map((cell, colIdx) => {
-                let bgClass = 'bg-white dark:bg-gray-900';
-                let borderClass = 'border border-gray-200 dark:border-gray-700';
+                let bgClass = 'bg-white dark:bg-neutral-900';
+                const borderClass = 'border border-neutral-200 dark:border-neutral-700';
 
                 if (type === 'vlookup') {
                   // Step 1: highlight first column (search column)
                   if (step >= 1 && colIdx === 0) {
-                    bgClass = 'bg-blue-100 dark:bg-blue-900/30';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-800';
                   }
                   // Step 2: highlight the matching cell
                   if (step >= 2 && rowIdx === matchRow && colIdx === 0) {
-                    bgClass = 'bg-green-200 dark:bg-green-900/40 ring-2 ring-green-500';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-500';
                   }
                   // Step 3: highlight the row from match to result column
                   if (step >= 3 && rowIdx === matchRow && colIdx <= colOrRowIndex - 1) {
-                    bgClass = 'bg-yellow-100 dark:bg-yellow-900/30';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-800';
                   }
                   // Step 4: highlight the result cell
                   if (step >= 4 && rowIdx === matchRow && colIdx === colOrRowIndex - 1) {
-                    bgClass = 'bg-green-300 dark:bg-green-800/50 ring-2 ring-green-600';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-600';
                   }
                 } else {
                   // HLOOKUP
                   if (step >= 1 && rowIdx === 0) {
-                    bgClass = 'bg-blue-100 dark:bg-blue-900/30';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-800';
                   }
                   if (step >= 2 && rowIdx === 0 && colIdx === matchCol) {
-                    bgClass = 'bg-green-200 dark:bg-green-900/40 ring-2 ring-green-500';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-500';
                   }
                   if (step >= 3 && colIdx === matchCol && rowIdx <= colOrRowIndex - 1) {
-                    bgClass = 'bg-yellow-100 dark:bg-yellow-900/30';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-800';
                   }
                   if (step >= 4 && rowIdx === colOrRowIndex - 1 && colIdx === matchCol) {
-                    bgClass = 'bg-green-300 dark:bg-green-800/50 ring-2 ring-green-600';
+                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-600';
                   }
                 }
 
                 if (rowIdx === 0) {
-                  bgClass += ' font-semibold bg-gray-50 dark:bg-gray-800/50';
+                  bgClass += ' font-semibold bg-neutral-50 dark:bg-neutral-800/50';
                 }
 
                 return (
@@ -123,7 +125,7 @@ export default function LookupAnimator({
                     <div className="flex items-center justify-center gap-1">
                       {step >= 2 && ((type === 'vlookup' && rowIdx === matchRow && colIdx === 0) ||
                         (type === 'hlookup' && rowIdx === 0 && colIdx === matchCol)) && (
-                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        <CheckCircle2 className="w-4 h-4 text-neutral-600" />
                       )}
                       {cell}
                     </div>
@@ -136,27 +138,27 @@ export default function LookupAnimator({
       </div>
 
       {/* Step description */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-2">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4 space-y-2">
         {type === 'vlookup' ? (
           <>
-            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-neutral-900 dark:text-neutral-100' : 'text-neutral-400'}`}>
               <Search className="w-4 h-4" />
               <span className="text-sm">Step 1: Search for &quot;{lookupValue}&quot; in first column</span>
             </div>
             {step >= 2 && (
-              <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Step 2: Found at row {matchRow + 1}</span>
               </div>
             )}
             {step >= 3 && (
-              <div className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400">
+              <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
                 <ArrowRight className="w-4 h-4" />
                 <span className="text-sm">Step 3: Move across to column {colOrRowIndex}</span>
               </div>
             )}
             {step >= 4 && (
-              <div className="flex items-center gap-2 text-green-600 dark:text-green-400 font-semibold">
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 font-semibold">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Step 4: Result = {result}</span>
               </div>
@@ -164,24 +166,24 @@ export default function LookupAnimator({
           </>
         ) : (
           <>
-            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-neutral-900 dark:text-neutral-100' : 'text-neutral-400'}`}>
               <Search className="w-4 h-4" />
               <span className="text-sm">Step 1: Search for &quot;{lookupValue}&quot; in first row</span>
             </div>
             {step >= 2 && (
-              <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Step 2: Found at column {matchCol + 1}</span>
               </div>
             )}
             {step >= 3 && (
-              <div className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400">
+              <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
                 <ArrowDown className="w-4 h-4" />
                 <span className="text-sm">Step 3: Move down to row {colOrRowIndex}</span>
               </div>
             )}
             {step >= 4 && (
-              <div className="flex items-center gap-2 text-green-600 dark:text-green-400 font-semibold">
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 font-semibold">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Step 4: Result = {result}</span>
               </div>

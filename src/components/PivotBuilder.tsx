@@ -94,22 +94,22 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
   };
 
   const areaColors: Record<PivotArea, string> = {
-    rows: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-    columns: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800',
-    values: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-    filters: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+    rows: 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700',
+    columns: 'bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800',
+    values: 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700',
+    filters: 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700',
   };
 
   return (
     <div className="space-y-4">
       {/* Available fields */}
       <div>
-        <span className="text-xs font-medium text-gray-500 mb-2 block">Available Fields</span>
+        <span className="text-xs font-medium text-neutral-500 mb-2 block">Available Fields</span>
         <div className="flex flex-wrap gap-2">
           {availableFields.map(field => (
             <div key={field} className="relative group">
-              <div className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1 cursor-grab">
-                <GripVertical className="w-3 h-3 text-gray-400" />
+              <div className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-1 cursor-grab">
+                <GripVertical className="w-3 h-3 text-neutral-400" />
                 {field}
               </div>
               <div className="absolute top-full left-0 mt-1 hidden group-hover:flex gap-1 z-10">
@@ -126,7 +126,7 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
             </div>
           ))}
           {availableFields.length === 0 && (
-            <span className="text-xs text-gray-400">All fields assigned</span>
+            <span className="text-xs text-neutral-400">All fields assigned</span>
           )}
         </div>
       </div>
@@ -140,7 +140,7 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
               {assignments[area].map(field => (
                 <span
                   key={field}
-                  className="px-2 py-1 bg-white/50 dark:bg-gray-800/50 rounded text-xs flex items-center gap-1"
+                  className="px-2 py-1 bg-white/50 dark:bg-neutral-800/50 rounded text-xs flex items-center gap-1"
                 >
                   {field}
                   {area === 'values' && (
@@ -158,7 +158,7 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
                   )}
                   <button
                     onClick={() => removeField(field, area)}
-                    className="ml-1 text-gray-400 hover:text-red-500"
+                    className="ml-1 text-neutral-400 hover:text-neutral-500"
                   >
                     ×
                   </button>
@@ -178,11 +178,11 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
           <table className="border-collapse text-sm">
             <thead>
               <tr>
-                <th className="px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-left text-xs font-medium text-gray-500">
+                <th className="px-3 py-2 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left text-xs font-medium text-neutral-500">
                   {assignments.rows.join(' / ')}
                 </th>
                 {pivotResult.colGroups.map(cg => (
-                  <th key={cg} className="px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500">
+                  <th key={cg} className="px-3 py-2 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs font-medium text-neutral-500">
                     {cg}
                   </th>
                 ))}
@@ -191,11 +191,11 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
             <tbody>
               {pivotResult.rowGroups.map(rg => (
                 <tr key={rg}>
-                  <td className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 font-medium text-xs">
+                  <td className="px-3 py-2 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 font-medium text-xs">
                     {rg}
                   </td>
                   {pivotResult.colGroups.map(cg => (
-                    <td key={cg} className="px-3 py-2 border border-gray-200 dark:border-gray-700 text-xs text-right">
+                    <td key={cg} className="px-3 py-2 border border-neutral-200 dark:border-neutral-700 text-xs text-right">
                       {pivotResult.result[rg]?.[cg]?.toLocaleString() ?? 0}
                     </td>
                   ))}

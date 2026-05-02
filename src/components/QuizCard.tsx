@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
+import { CheckCircle2, XCircle } from 'lucide-react';
 import type { QuizQuestion } from '@/data/types';
 
 interface QuizCardProps {
@@ -55,17 +55,17 @@ export default function QuizCard({ questions }: QuizCardProps) {
   if (completed) {
     const pct = Math.round((score / questions.length) * 100);
     return (
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 text-center space-y-4">
-        <div className="text-4xl font-bold text-blue-600">{pct}%</div>
-        <p className="text-gray-600 dark:text-gray-400">
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-6 text-center space-y-4">
+        <div className="text-4xl font-bold text-neutral-950 dark:text-neutral-50">{pct}%</div>
+        <p className="text-neutral-600 dark:text-neutral-400">
           You got {score} out of {questions.length} correct
         </p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-neutral-500">
           {pct >= 80 ? 'Great job! You understand this module.' : pct >= 50 ? 'Good effort! Review the lessons and try again.' : 'Keep studying! Review the lessons above and retry.'}
         </p>
         <button
           onClick={handleRestart}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
         >
           Retry Quiz
         </button>
@@ -74,36 +74,36 @@ export default function QuizCard({ questions }: QuizCardProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 space-y-4">
+    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-500">
+        <span className="text-sm font-medium text-neutral-500">
           Question {currentQ + 1} of {questions.length}
         </span>
-        <span className="text-sm text-green-600 dark:text-green-400">
+        <span className="text-sm text-neutral-600 dark:text-neutral-400">
           Score: {score}/{answered}
         </span>
       </div>
 
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+      <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
         <div
-          className="bg-blue-600 h-2 rounded-full transition-all"
+          className="bg-neutral-900 dark:bg-neutral-100 h-2 rounded-full transition-all"
           style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
         />
       </div>
 
-      <h4 className="font-medium text-gray-900 dark:text-gray-100">{question.question}</h4>
+      <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{question.question}</h4>
 
       <div className="space-y-2">
         {question.options.map((option, idx) => {
-          let optionClass = 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750';
+          let optionClass = 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700';
           if (selected === idx && !showResult) {
-            optionClass = 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-1 ring-blue-500';
+            optionClass = 'border-neutral-900 bg-neutral-100 dark:border-neutral-100 dark:bg-neutral-900 ring-1 ring-neutral-900 dark:ring-neutral-100';
           }
           if (showResult) {
             if (idx === question.correctIndex) {
-              optionClass = 'border-green-500 bg-green-50 dark:bg-green-900/20 ring-1 ring-green-500';
+              optionClass = 'border-neutral-500 bg-neutral-50 dark:bg-neutral-900/20 ring-1 ring-neutral-500';
             } else if (selected === idx && idx !== question.correctIndex) {
-              optionClass = 'border-red-500 bg-red-50 dark:bg-red-900/20 ring-1 ring-red-500';
+              optionClass = 'border-neutral-500 bg-neutral-50 dark:bg-neutral-900/20 ring-1 ring-neutral-500';
             }
           }
 
@@ -115,22 +115,22 @@ export default function QuizCard({ questions }: QuizCardProps) {
               className={`w-full text-left p-3 rounded-lg border transition-colors flex items-center gap-3 ${optionClass}`}
             >
               {showResult && idx === question.correctIndex && (
-                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-neutral-600 flex-shrink-0" />
               )}
               {showResult && selected === idx && idx !== question.correctIndex && (
-                <XCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                <XCircle className="w-4 h-4 text-neutral-600 flex-shrink-0" />
               )}
               {!showResult && (
-                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${selected === idx ? 'border-blue-500 bg-blue-500' : 'border-gray-300 dark:border-gray-600'}`} />
+                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${selected === idx ? 'border-neutral-900 bg-neutral-900 dark:border-neutral-100 dark:bg-neutral-100' : 'border-neutral-300 dark:border-neutral-600'}`} />
               )}
-              <span className="text-sm text-gray-900 dark:text-gray-100">{option}</span>
+              <span className="text-sm text-neutral-900 dark:text-neutral-100">{option}</span>
             </button>
           );
         })}
       </div>
 
       {showResult && (
-        <div className={`p-3 rounded-lg text-sm ${selected === question.correctIndex ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+        <div className={`p-3 rounded-lg text-sm ${selected === question.correctIndex ? 'bg-neutral-50 dark:bg-neutral-900/20 text-neutral-700 dark:text-neutral-300' : 'bg-neutral-50 dark:bg-neutral-900/20 text-neutral-700 dark:text-neutral-300'}`}>
           <div className="flex items-center gap-2 mb-1">
             {selected === question.correctIndex ? (
               <CheckCircle2 className="w-4 h-4" />
@@ -139,7 +139,7 @@ export default function QuizCard({ questions }: QuizCardProps) {
             )}
             <span className="font-medium">{selected === question.correctIndex ? 'Correct!' : 'Incorrect'}</span>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">{question.explanation}</p>
+          <p className="text-neutral-600 dark:text-neutral-400">{question.explanation}</p>
         </div>
       )}
 
@@ -148,14 +148,14 @@ export default function QuizCard({ questions }: QuizCardProps) {
           <button
             onClick={handleSubmit}
             disabled={selected === null}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Check Answer
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 rounded-lg text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
           >
             {currentQ + 1 >= questions.length ? 'See Results' : 'Next Question'}
           </button>

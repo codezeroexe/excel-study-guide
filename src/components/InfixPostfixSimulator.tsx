@@ -156,19 +156,19 @@ export default function InfixPostfixSimulator() {
     <div className="space-y-4">
       {/* Input */}
       <div className="space-y-2">
-        <label className="text-xs font-medium text-gray-500">Infix Expression</label>
+        <label className="text-xs font-medium text-neutral-500">Infix Expression</label>
         <div className="flex gap-2">
           <input
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleConvert()}
-            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
             placeholder="e.g. a*(b+c)"
           />
           <button
             onClick={handleConvert}
-            className="px-4 py-2 text-sm font-bold bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
           >
             Convert
           </button>
@@ -178,7 +178,7 @@ export default function InfixPostfixSimulator() {
             <button
               key={ex.value}
               onClick={() => { setInput(ex.value); setSteps([]); setCurrentStep(-1); }}
-              className="px-2 py-1 text-xs font-mono bg-gray-100 dark:bg-gray-800 rounded hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+              className="px-2 py-1 text-xs font-mono bg-neutral-100 dark:bg-neutral-800 rounded hover:bg-neutral-100 dark:hover:bg-neutral-900/30 transition-colors"
             >
               {ex.label}
             </button>
@@ -192,17 +192,17 @@ export default function InfixPostfixSimulator() {
           <button
             onClick={handleStep}
             disabled={currentStep >= steps.length - 1}
-            className="px-3 py-1.5 text-xs font-bold bg-gray-100 dark:bg-gray-800 rounded hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 transition-colors"
+            className="px-3 py-1.5 text-xs font-bold bg-neutral-100 dark:bg-neutral-800 rounded hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:opacity-40 transition-colors"
           >
             Step →
           </button>
           <button
             onClick={handleAutoPlay}
-            className="px-3 py-1.5 text-xs font-bold bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+            className="px-3 py-1.5 text-xs font-bold bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300 rounded hover:bg-neutral-200 dark:hover:bg-neutral-900/50 transition-colors"
           >
             {running ? '⏸ Pause' : '▶ Auto Play'}
           </button>
-          <span className="text-xs text-gray-400 self-center">
+          <span className="text-xs text-neutral-400 self-center">
             Step {currentStep + 1} / {steps.length}
           </span>
         </div>
@@ -211,12 +211,12 @@ export default function InfixPostfixSimulator() {
       {/* Result */}
       {finalResult && (
         <div className="flex items-center gap-3">
-          <div className="font-mono text-sm bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded border border-gray-200 dark:border-gray-700">
-            Infix: <span className="text-gray-600 dark:text-gray-400">{input}</span>
+          <div className="font-mono text-sm bg-neutral-50 dark:bg-neutral-800 px-3 py-2 rounded border border-neutral-200 dark:border-neutral-700">
+            Infix: <span className="text-neutral-600 dark:text-neutral-400">{input}</span>
           </div>
-          <span className="text-gray-400">→</span>
-          <div className="font-mono text-sm bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded border border-green-200 dark:border-green-800">
-            Postfix: <span className="text-green-700 dark:text-green-400 font-bold">{finalResult}</span>
+          <span className="text-neutral-400">→</span>
+          <div className="font-mono text-sm bg-neutral-50 dark:bg-neutral-900/20 px-3 py-2 rounded border border-neutral-200 dark:border-neutral-800">
+            Postfix: <span className="text-neutral-700 dark:text-neutral-400 font-bold">{finalResult}</span>
           </div>
         </div>
       )}
@@ -226,10 +226,10 @@ export default function InfixPostfixSimulator() {
         <div className="grid grid-cols-2 gap-4">
           {/* Stack */}
           <div>
-            <h4 className="text-xs font-bold text-gray-500 mb-2">Stack (Top →)</h4>
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 min-h-[120px]">
+            <h4 className="text-xs font-bold text-neutral-500 mb-2">Stack (Top →)</h4>
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3 min-h-[120px]">
               {current.stack.length === 0 ? (
-                <span className="text-xs text-gray-400">Empty</span>
+                <span className="text-xs text-neutral-400">Empty</span>
               ) : (
                 <div className="space-y-1">
                   {[...current.stack].reverse().map((item, i) => (
@@ -237,8 +237,8 @@ export default function InfixPostfixSimulator() {
                       key={i}
                       className={`px-2 py-1 text-sm font-mono font-bold rounded text-center ${
                         i === 0
-                          ? 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-700'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                          ? 'bg-neutral-100 dark:bg-neutral-900/40 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-700'
+                          : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300'
                       }`}
                     >
                       {item}
@@ -251,10 +251,10 @@ export default function InfixPostfixSimulator() {
 
           {/* Output */}
           <div>
-            <h4 className="text-xs font-bold text-gray-500 mb-2">Output String</h4>
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 min-h-[120px]">
-              <div className="font-mono text-lg font-bold text-green-600 dark:text-green-400 break-all">
-                {current.output || <span className="text-gray-400 text-sm">Empty</span>}
+            <h4 className="text-xs font-bold text-neutral-500 mb-2">Output String</h4>
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3 min-h-[120px]">
+              <div className="font-mono text-lg font-bold text-neutral-600 dark:text-neutral-400 break-all">
+                {current.output || <span className="text-neutral-400 text-sm">Empty</span>}
               </div>
             </div>
           </div>
@@ -263,14 +263,14 @@ export default function InfixPostfixSimulator() {
 
       {/* Step explanation */}
       {current && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-          <div className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">{current.action}</div>
-          <div className="text-xs text-blue-600 dark:text-blue-400">{current.explanation}</div>
+        <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800">
+          <div className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">{current.action}</div>
+          <div className="text-xs text-neutral-600 dark:text-neutral-400">{current.explanation}</div>
         </div>
       )}
 
       {/* Precedence reference */}
-      <div className="text-xs text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         <span className="font-bold">Operator Precedence:</span> + - (1) &lt; * / (2) &lt; ^ (3) &nbsp;|&nbsp; ( ) highest
       </div>
     </div>

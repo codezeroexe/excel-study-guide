@@ -19,7 +19,6 @@ export default function SpreadsheetGrid({
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [cellValues, setCellValues] = useState<Record<string, string>>({});
 
-  const rows = data.length;
   const cols = data[0]?.length || 0;
 
   const getCellValue = (row: number, col: number): string => {
@@ -48,15 +47,15 @@ export default function SpreadsheetGrid({
   };
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+    <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
-            <th className="w-10 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-1 text-xs font-medium text-gray-500"></th>
+            <th className="w-10 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-1 text-xs font-medium text-neutral-500"></th>
             {Array.from({ length: cols }, (_, i) => (
               <th
                 key={i}
-                className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-1 text-xs font-medium text-gray-500 min-w-[100px]"
+                className="bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-1 text-xs font-medium text-neutral-500 min-w-[100px]"
               >
                 {cellRef(0, i).replace(/\d/, '')}
               </th>
@@ -66,7 +65,7 @@ export default function SpreadsheetGrid({
         <tbody>
           {data.map((row, rowIdx) => (
             <tr key={rowIdx}>
-              <td className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-1 text-xs font-medium text-gray-500 text-center">
+              <td className="bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-1 text-xs font-medium text-neutral-500 text-center">
                 {rowIdx + 1}
               </td>
               {row.map((cell, colIdx) => {
@@ -78,13 +77,13 @@ export default function SpreadsheetGrid({
                 return (
                   <td
                     key={colIdx}
-                    className={`border border-gray-200 dark:border-gray-700 p-2 min-w-[100px] max-w-[200px] truncate ${
+                    className={`border border-neutral-200 dark:border-neutral-700 p-2 min-w-[100px] max-w-[200px] truncate ${
                       isSelected
-                        ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        ? 'ring-2 ring-neutral-500 bg-neutral-50 dark:bg-neutral-950/20'
                         : highlight
                           ? highlight
-                          : 'bg-white dark:bg-gray-900'
-                    } ${rowIdx === 0 ? 'font-semibold bg-gray-50 dark:bg-gray-800/50' : ''}`}
+                          : 'bg-white dark:bg-neutral-900'
+                    } ${rowIdx === 0 ? 'font-semibold bg-neutral-50 dark:bg-neutral-800/50' : ''}`}
                     onClick={() => handleCellClick(rowIdx, colIdx)}
                   >
                     {editable && isSelected ? (
@@ -96,7 +95,7 @@ export default function SpreadsheetGrid({
                         autoFocus
                       />
                     ) : (
-                      <span className="text-gray-900 dark:text-gray-100">{displayValue}</span>
+                      <span className="text-neutral-900 dark:text-neutral-100">{displayValue}</span>
                     )}
                   </td>
                 );
@@ -106,7 +105,7 @@ export default function SpreadsheetGrid({
         </tbody>
       </table>
       {selectedCell && (
-        <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-500">
+        <div className="px-3 py-2 bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-700 text-xs text-neutral-500">
           Selected: <span className="font-mono font-medium">{selectedCell}</span>
           {cellValues[selectedCell] && (
             <span className="ml-2">Value: <span className="font-mono">{cellValues[selectedCell]}</span></span>

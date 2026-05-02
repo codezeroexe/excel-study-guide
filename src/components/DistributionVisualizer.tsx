@@ -92,7 +92,7 @@ export default function DistributionVisualizer() {
       {/* Distribution selector */}
       <div className="flex flex-wrap gap-2">
         {([['normal', 'Normal'], ['binomial', 'Binomial'], ['poisson', 'Poisson'], ['exponential', 'Exponential']] as [DistType, string][]).map(([key, label]) => (
-          <button key={key} onClick={() => setDist(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${dist === key ? 'bg-rose-600 text-white border-rose-600' : 'border-gray-200 dark:border-gray-700 text-gray-400'}`}>
+          <button key={key} onClick={() => setDist(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${dist === key ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
             {label}
           </button>
         ))}
@@ -103,12 +103,12 @@ export default function DistributionVisualizer() {
         {dist === 'normal' && (
           <>
             <div className="flex items-center gap-2">
-              <label className="text-xs text-gray-500">μ:</label>
+              <label className="text-xs text-neutral-500">μ:</label>
               <input type="range" min="-5" max="5" step="0.5" value={mu} onChange={e => setMu(Number(e.target.value))} className="w-24" />
               <span className="text-xs font-mono w-8">{mu}</span>
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-xs text-gray-500">σ:</label>
+              <label className="text-xs text-neutral-500">σ:</label>
               <input type="range" min="0.5" max="4" step="0.1" value={sigma} onChange={e => setSigma(Number(e.target.value))} className="w-24" />
               <span className="text-xs font-mono w-8">{sigma}</span>
             </div>
@@ -117,12 +117,12 @@ export default function DistributionVisualizer() {
         {dist === 'binomial' && (
           <>
             <div className="flex items-center gap-2">
-              <label className="text-xs text-gray-500">n:</label>
+              <label className="text-xs text-neutral-500">n:</label>
               <input type="range" min="1" max="50" step="1" value={n} onChange={e => setN(Number(e.target.value))} className="w-24" />
               <span className="text-xs font-mono w-8">{n}</span>
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-xs text-gray-500">p:</label>
+              <label className="text-xs text-neutral-500">p:</label>
               <input type="range" min="0.05" max="0.95" step="0.05" value={p} onChange={e => setP(Number(e.target.value))} className="w-24" />
               <span className="text-xs font-mono w-8">{p}</span>
             </div>
@@ -130,14 +130,14 @@ export default function DistributionVisualizer() {
         )}
         {dist === 'poisson' && (
           <div className="flex items-center gap-2">
-            <label className="text-xs text-gray-500">λ:</label>
+            <label className="text-xs text-neutral-500">λ:</label>
             <input type="range" min="0.5" max="15" step="0.5" value={lambda} onChange={e => setLambda(Number(e.target.value))} className="w-24" />
             <span className="text-xs font-mono w-8">{lambda}</span>
           </div>
         )}
         {dist === 'exponential' && (
           <div className="flex items-center gap-2">
-            <label className="text-xs text-gray-500">λ:</label>
+            <label className="text-xs text-neutral-500">λ:</label>
             <input type="range" min="0.1" max="5" step="0.1" value={lambda} onChange={e => setLambda(Number(e.target.value))} className="w-24" />
             <span className="text-xs font-mono w-8">{lambda}</span>
           </div>
@@ -145,7 +145,7 @@ export default function DistributionVisualizer() {
       </div>
 
       {/* SVG Chart */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full">
           {/* Grid lines */}
           {[0, 0.25, 0.5, 0.75, 1].map(frac => {
@@ -176,11 +176,11 @@ export default function DistributionVisualizer() {
           ) : (
             /* Line for continuous */
             <>
-              <path d={pathD} fill="none" stroke="#f43f5e" strokeWidth="2" />
+              <path d={pathD} fill="none" stroke="#525252" strokeWidth="2" />
               {/* Mean line */}
               {dist === 'normal' && (() => {
                 const { sx } = toSvg(mu, 0);
-                return <line x1={sx} y1={PAD.top} x2={sx} y2={PAD.top + plotH} stroke="#f43f5e" strokeWidth="1" strokeDasharray="4,4" />;
+                return <line x1={sx} y1={PAD.top} x2={sx} y2={PAD.top + plotH} stroke="#525252" strokeWidth="1" strokeDasharray="4,4" />;
               })()}
             </>
           )}
@@ -194,29 +194,29 @@ export default function DistributionVisualizer() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-center">
-          <div className="text-[10px] text-gray-400 uppercase">Mean</div>
+        <div className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+          <div className="text-[10px] text-neutral-400 uppercase">Mean</div>
           <div className="text-sm font-bold font-mono">
             {dist === 'normal' ? mu : dist === 'binomial' ? (n * p).toFixed(1) : dist === 'poisson' ? lambda : (1 / lambda).toFixed(2)}
           </div>
         </div>
-        <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-center">
-          <div className="text-[10px] text-gray-400 uppercase">Variance</div>
+        <div className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+          <div className="text-[10px] text-neutral-400 uppercase">Variance</div>
           <div className="text-sm font-bold font-mono">
             {dist === 'normal' ? (sigma * sigma).toFixed(2) : dist === 'binomial' ? (n * p * (1 - p)).toFixed(2) : dist === 'poisson' ? lambda : (1 / (lambda * lambda)).toFixed(3)}
           </div>
         </div>
-        <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-center">
-          <div className="text-[10px] text-gray-400 uppercase">Type</div>
+        <div className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+          <div className="text-[10px] text-neutral-400 uppercase">Type</div>
           <div className="text-sm font-bold">{isDiscrete ? 'Discrete' : 'Continuous'}</div>
         </div>
-        <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-center">
-          <div className="text-[10px] text-gray-400 uppercase">Peak</div>
+        <div className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+          <div className="text-[10px] text-neutral-400 uppercase">Peak</div>
           <div className="text-sm font-bold font-mono">{maxY.toFixed(4)}</div>
         </div>
       </div>
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         {dist === 'normal' && '🔔 Bell-shaped, symmetric. 68-95-99.7 rule: ±1σ, ±2σ, ±3σ.'}
         {dist === 'binomial' && '📊 Fixed trials, binary outcomes. Approaches normal as n increases.'}
         {dist === 'poisson' && '📈 Rare events over fixed interval. Mean = Variance = λ.'}

@@ -90,8 +90,8 @@ const defaultProcs: Process[] = [
 ];
 
 const algoColors: Record<string, string> = {
-  P1: '#3b82f6', P2: '#10b981', P3: '#f59e0b', P4: '#8b5cf6',
-  P5: '#ef4444', P6: '#ec4899', P7: '#06b6d4', P8: '#84cc16',
+  P1: '#525252', P2: '#737373', P3: '#a3a3a3', P4: '#525252',
+  P5: '#404040', P6: '#737373', P7: '#a3a3a3', P8: '#d4d4d4',
 };
 
 export default function GanttChartGenerator() {
@@ -107,7 +107,6 @@ export default function GanttChartGenerator() {
     }
   }, [procs, algorithm, quantum]);
 
-  const totalTime = result.gantt.length > 0 ? Math.max(...result.gantt.map(b => b.end)) : 0;
   const blockWidth = Math.max(40, Math.min(120, 600 / result.gantt.length));
 
   const updateProc = (idx: number, field: keyof Process, value: number) => {
@@ -121,24 +120,24 @@ export default function GanttChartGenerator() {
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">Process</th>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">Arrival</th>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">Burst</th>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">Priority</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Process</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Arrival</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Burst</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">Priority</th>
             </tr>
           </thead>
           <tbody>
             {procs.map((p, i) => (
               <tr key={i}>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800 font-mono font-bold" style={{ color: algoColors[p.id] || '#6b7280' }}>{p.id}</td>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800">
-                  <input type="number" min="0" value={p.arrival} onChange={e => updateProc(i, 'arrival', Number(e.target.value))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono" />
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800 font-mono font-bold" style={{ color: algoColors[p.id] || '#6b7280' }}>{p.id}</td>
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800">
+                  <input type="number" min="0" value={p.arrival} onChange={e => updateProc(i, 'arrival', Number(e.target.value))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
                 </td>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800">
-                  <input type="number" min="1" value={p.burst} onChange={e => updateProc(i, 'burst', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono" />
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800">
+                  <input type="number" min="1" value={p.burst} onChange={e => updateProc(i, 'burst', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
                 </td>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800">
-                  <input type="number" min="1" value={p.priority} onChange={e => updateProc(i, 'priority', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono" />
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800">
+                  <input type="number" min="1" value={p.priority} onChange={e => updateProc(i, 'priority', Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
                 </td>
               </tr>
             ))}
@@ -154,7 +153,7 @@ export default function GanttChartGenerator() {
               key={algo}
               onClick={() => setAlgorithm(algo)}
               className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
-                algorithm === algo ? 'bg-amber-600 text-white border-amber-600' : 'border-gray-200 dark:border-gray-700 text-gray-400'
+                algorithm === algo ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'
               }`}
             >
               {algo}
@@ -163,17 +162,17 @@ export default function GanttChartGenerator() {
         </div>
         {algorithm === 'RR' && (
           <div className="flex items-center gap-2">
-            <label className="text-xs text-gray-500">Quantum:</label>
-            <input type="number" min="1" max="20" value={quantum} onChange={e => setQuantum(Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono" />
+            <label className="text-xs text-neutral-500">Quantum:</label>
+            <input type="number" min="1" max="20" value={quantum} onChange={e => setQuantum(Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono" />
           </div>
         )}
       </div>
 
       {/* Gantt Chart */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4 overflow-x-auto">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 overflow-x-auto">
         <div className="flex items-center" style={{ minWidth: result.gantt.length * blockWidth + 60 }}>
           {/* Y label */}
-          <div className="text-xs font-bold text-gray-500 w-12 flex-shrink-0 text-center">CPU</div>
+          <div className="text-xs font-bold text-neutral-500 w-12 flex-shrink-0 text-center">CPU</div>
           {/* Blocks */}
           <div className="flex">
             {result.gantt.map((block, i) => (
@@ -197,9 +196,9 @@ export default function GanttChartGenerator() {
           {result.gantt.map((block, i) => (
             <div key={i} className="flex flex-col items-center">
               <div className="flex">
-                <span className="text-[10px] text-gray-400 font-mono" style={{ width: blockWidth / 2, textAlign: 'center' }}>{block.start}</span>
+                <span className="text-[10px] text-neutral-400 font-mono" style={{ width: blockWidth / 2, textAlign: 'center' }}>{block.start}</span>
                 {i === result.gantt.length - 1 && (
-                  <span className="text-[10px] text-gray-400 font-mono" style={{ width: blockWidth / 2, textAlign: 'center' }}>{block.end}</span>
+                  <span className="text-[10px] text-neutral-400 font-mono" style={{ width: blockWidth / 2, textAlign: 'center' }}>{block.end}</span>
                 )}
               </div>
             </div>
@@ -209,17 +208,17 @@ export default function GanttChartGenerator() {
 
       {/* Metrics */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800 text-center">
-          <div className="text-[10px] text-amber-600 dark:text-amber-400 uppercase font-bold">Avg Waiting Time</div>
-          <div className="text-xl font-bold font-mono text-amber-700 dark:text-amber-300">{result.avgWait.toFixed(2)}</div>
+        <div className="p-3 bg-neutral-50 dark:bg-neutral-900/20 rounded-lg border border-neutral-200 dark:border-neutral-800 text-center">
+          <div className="text-[10px] text-neutral-600 dark:text-neutral-400 uppercase font-bold">Avg Waiting Time</div>
+          <div className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">{result.avgWait.toFixed(2)}</div>
         </div>
-        <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 text-center">
-          <div className="text-[10px] text-green-600 dark:text-green-400 uppercase font-bold">Avg Turnaround Time</div>
-          <div className="text-xl font-bold font-mono text-green-700 dark:text-green-300">{result.avgTurn.toFixed(2)}</div>
+        <div className="p-3 bg-neutral-50 dark:bg-neutral-900/20 rounded-lg border border-neutral-200 dark:border-neutral-800 text-center">
+          <div className="text-[10px] text-neutral-600 dark:text-neutral-400 uppercase font-bold">Avg Turnaround Time</div>
+          <div className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">{result.avgTurn.toFixed(2)}</div>
         </div>
       </div>
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         📊 Edit arrival/burst times and switch algorithms to compare scheduling strategies.
       </div>
     </div>

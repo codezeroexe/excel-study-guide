@@ -21,37 +21,40 @@ export default function MathFormula({
   const [expanded, setExpanded] = useState(false);
 
   const colorMap: Record<string, { icon: string; bg: string; border: string; text: string }> = {
-    blue: { icon: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-900/20', border: 'border-blue-400', text: 'text-blue-800 dark:text-blue-300' },
-    purple: { icon: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-900/20', border: 'border-purple-400', text: 'text-purple-800 dark:text-purple-300' },
+    green: { icon: 'text-neutral-500', bg: 'bg-neutral-50 dark:bg-neutral-950/20', border: 'border-neutral-400', text: 'text-neutral-800 dark:text-neutral-300' },
+    blue: { icon: 'text-neutral-500', bg: 'bg-neutral-50 dark:bg-neutral-900/20', border: 'border-neutral-400', text: 'text-neutral-800 dark:text-neutral-300' },
+    purple: { icon: 'text-neutral-500', bg: 'bg-neutral-50 dark:bg-neutral-900/20', border: 'border-neutral-400', text: 'text-neutral-800 dark:text-neutral-300' },
+    amber: { icon: 'text-neutral-500', bg: 'bg-neutral-50 dark:bg-neutral-950/20', border: 'border-neutral-400', text: 'text-neutral-800 dark:text-neutral-300' },
+    rose: { icon: 'text-neutral-500', bg: 'bg-neutral-50 dark:bg-neutral-950/20', border: 'border-neutral-400', text: 'text-neutral-800 dark:text-neutral-300' },
   };
   const c = colorMap[accentColor] || colorMap.blue;
 
   return (
-    <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+    <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
+        className="w-full flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <Sigma className={`w-4 h-4 ${c.icon} flex-shrink-0`} />
-          <span className="font-mono text-sm text-gray-900 dark:text-gray-100 truncate">{formula}</span>
+          <span className="font-mono text-sm text-neutral-900 dark:text-neutral-100 truncate">{formula}</span>
         </div>
         {expanded ? (
-          <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
+          <ChevronDown className="w-4 h-4 text-neutral-400 flex-shrink-0 ml-2" />
         ) : (
-          <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
+          <ChevronRight className="w-4 h-4 text-neutral-400 flex-shrink-0 ml-2" />
         )}
       </button>
       {expanded && (
-        <div className="p-4 space-y-3 bg-white dark:bg-gray-900">
-          <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
+        <div className="p-4 space-y-3 bg-white dark:bg-neutral-900">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
           <div className={`${c.bg} border-l-4 ${c.border} p-3 rounded-r`}>
             <p className={`text-sm ${c.text}`}>{explanation}</p>
           </div>
           {tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {tags.map((tag, i) => (
-                <span key={i} className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded text-xs font-medium">
+                <span key={i} className="px-2 py-1 bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300 rounded text-xs font-medium">
                   {tag}
                 </span>
               ))}

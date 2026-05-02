@@ -122,10 +122,10 @@ const sortGenerators: Record<string, (arr: number[]) => SortStep[]> = {
 };
 
 const sortColors: Record<string, string> = {
-  Bubble: '#ef4444',
-  Selection: '#f59e0b',
-  Insertion: '#22c55e',
-  Quick: '#8b5cf6',
+  Bubble: '#404040',
+  Selection: '#a3a3a3',
+  Insertion: '#737373',
+  Quick: '#525252',
 };
 
 export default function SortingRace() {
@@ -213,7 +213,7 @@ export default function SortingRace() {
               className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
                 algorithms.includes(algo)
                   ? 'text-white border-current shadow-sm'
-                  : 'border-gray-200 dark:border-gray-700 text-gray-400'
+                  : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'
               }`}
               style={algorithms.includes(algo) ? { backgroundColor: sortColors[algo], borderColor: sortColors[algo] } : {}}
             >
@@ -224,7 +224,7 @@ export default function SortingRace() {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs font-medium text-gray-500 mb-1 block">
+            <label className="text-xs font-medium text-neutral-500 mb-1 block">
               Array Size: <span className="font-mono font-bold">{size}</span>
             </label>
             <input
@@ -233,12 +233,12 @@ export default function SortingRace() {
               max="50"
               value={size}
               onChange={e => { setSize(Number(e.target.value)); setArrays({}); setCurrentSteps({}); setResults({}); }}
-              className="w-full accent-purple-600"
+              className="w-full accent-neutral-900"
               disabled={running}
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 mb-1 block">
+            <label className="text-xs font-medium text-neutral-500 mb-1 block">
               Speed: <span className="font-mono font-bold">{speed}ms</span>
             </label>
             <input
@@ -248,7 +248,7 @@ export default function SortingRace() {
               step="20"
               value={speed}
               onChange={e => setSpeed(Number(e.target.value))}
-              className="w-full accent-purple-600"
+              className="w-full accent-neutral-900"
             />
           </div>
         </div>
@@ -257,21 +257,21 @@ export default function SortingRace() {
           <button
             onClick={handleGenerate}
             disabled={running}
-            className="px-4 py-2 text-sm font-bold bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:opacity-40 transition-colors"
           >
             🎲 New Array
           </button>
           {!running ? (
             <button
               onClick={handleStart}
-              className="px-4 py-2 text-sm font-bold bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
             >
               ▶ Race!
             </button>
           ) : (
             <button
               onClick={handleStop}
-              className="px-4 py-2 text-sm font-bold bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
             >
               ⏹ Stop
             </button>
@@ -288,11 +288,11 @@ export default function SortingRace() {
           const maxVal = Math.max(...arr, 1);
 
           return (
-            <div key={algo} className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+            <div key={algo} className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold" style={{ color: sortColors[algo] }}>{algo} Sort</span>
-                {result?.done && <span className="text-xs font-bold text-green-600">✓ Done!</span>}
-                {result && !result.done && <span className="text-xs text-gray-400">{Object.keys(currentSteps).length > 0 ? 'Running...' : ''}</span>}
+                {result?.done && <span className="text-xs font-bold text-neutral-600">✓ Done!</span>}
+                {result && !result.done && <span className="text-xs text-neutral-400">{Object.keys(currentSteps).length > 0 ? 'Running...' : ''}</span>}
               </div>
               <div className="flex items-end gap-px h-32">
                 {arr.map((val, i) => {
@@ -301,9 +301,9 @@ export default function SortingRace() {
                   const isSwapping = step?.swapping.includes(i);
                   const isSorted = step?.sorted.includes(i);
                   let bg = sortColors[algo] + '80';
-                  if (isSwapping) bg = '#ef4444';
-                  else if (isComparing) bg = '#f59e0b';
-                  else if (isSorted) bg = '#22c55e';
+                  if (isSwapping) bg = '#404040';
+                  else if (isComparing) bg = '#a3a3a3';
+                  else if (isSorted) bg = '#737373';
 
                   return (
                     <div
@@ -323,7 +323,7 @@ export default function SortingRace() {
         })}
       </div>
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         🏁 Watch how O(n log n) algorithms (Quick) beat O(n²) algorithms (Bubble, Selection) as array size grows.
       </div>
     </div>

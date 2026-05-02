@@ -11,7 +11,7 @@ interface ChartRendererProps {
   colors?: string[];
 }
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'];
+const COLORS = ['#525252', '#737373', '#a3a3a3', '#404040', '#525252', '#737373', '#a3a3a3', '#d4d4d4'];
 
 const W = 500;
 const H = 280;
@@ -61,8 +61,8 @@ export default function ChartRenderer({
 
   if (!data.length) {
     return (
-      <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 rounded-lg">
-        <p className="text-gray-400 text-sm">No data to display</p>
+      <div className="flex items-center justify-center h-64 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+        <p className="text-neutral-400 text-sm">No data to display</p>
       </div>
     );
   }
@@ -84,15 +84,14 @@ export default function ChartRenderer({
     const cx = W / 2;
     const cy = H / 2;
     const r = Math.min(plotW, plotH) / 2 - 20;
-    let cumAngle = -Math.PI / 2;
-
     const slices = data.map((d, i) => {
       const val = Number(d[yKeys[0]]) || 0;
       const angle = (val / Math.max(total, 1)) * Math.PI * 2;
-      const startAngle = cumAngle;
-      cumAngle += angle;
-      const endAngle = cumAngle;
-      const midAngle = (startAngle + endAngle) / 2;
+      const previousTotal = data
+        .slice(0, i)
+        .reduce((sum, item) => sum + (Number(item[yKeys[0]]) || 0), 0);
+      const startAngle = -Math.PI / 2 + (previousTotal / Math.max(total, 1)) * Math.PI * 2;
+      const endAngle = startAngle + angle;
 
       const x1 = cx + r * Math.cos(startAngle);
       const y1 = cy + r * Math.sin(startAngle);
@@ -110,8 +109,8 @@ export default function ChartRenderer({
     });
 
     return (
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-        {title && <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-4">{title}</h4>}
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+        {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {slices.map((s, i) => (
             <path key={i} d={s.path} fill={s.color} stroke="white" strokeWidth={1} opacity={hoveredIdx === i ? 1 : 0.85}
@@ -135,7 +134,6 @@ export default function ChartRenderer({
     const yValues = data.map(d => Number(d[yKeys[0]]) || 0);
     const xMin = Math.min(...xValues);
     const xMax = Math.max(...xValues);
-    const yMin = Math.min(...yValues);
     const yMaxScatter = Math.max(...yValues, 1);
     const xTicksScatter = getTicks(xMin, xMax);
     const yTicksScatter = getTicks(0, yMaxScatter);
@@ -146,8 +144,8 @@ export default function ChartRenderer({
     const sy = (v: number) => PAD.top + plotH - (v / yRange) * plotH;
 
     return (
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-        {title && <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-4">{title}</h4>}
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+        {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {yTicksScatter.map(t => (
             <g key={`y-${t}`}>
@@ -173,8 +171,8 @@ export default function ChartRenderer({
   // Column / Bar / Histogram
   if (type === 'column' || type === 'histogram') {
     return (
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-        {title && <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-4">{title}</h4>}
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+        {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}
           {yTicks.map(t => (
@@ -223,8 +221,8 @@ export default function ChartRenderer({
   // Line chart
   if (type === 'line') {
     return (
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-        {title && <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-4">{title}</h4>}
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+        {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}
           {yTicks.map(t => (
@@ -268,8 +266,8 @@ export default function ChartRenderer({
   // Combo chart (bar + line)
   if (type === 'combo') {
     return (
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-        {title && <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-4">{title}</h4>}
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4">
+        {title && <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-4">{title}</h4>}
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}
           {yTicks.map(t => (

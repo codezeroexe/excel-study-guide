@@ -91,7 +91,7 @@ export default function HypothesisTestCalc() {
       {/* Test type selector */}
       <div className="flex flex-wrap gap-2">
         {([['z', 'Z-Test'], ['t', 'T-Test'], ['chi', 'Chi-Square']] as [TestType, string][]).map(([key, label]) => (
-          <button key={key} onClick={() => setTestType(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${testType === key ? 'bg-rose-600 text-white border-rose-600' : 'border-gray-200 dark:border-gray-700 text-gray-400'}`}>
+          <button key={key} onClick={() => setTestType(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${testType === key ? 'bg-neutral-900 text-white border-neutral-600' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
             {label}
           </button>
         ))}
@@ -100,32 +100,32 @@ export default function HypothesisTestCalc() {
       {/* Inputs */}
       {testType !== 'chi' ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-            <div className="text-[10px] text-gray-400 uppercase">Sample Mean (x̄)</div>
-            <input type="number" value={sampleMean} onChange={e => setSampleMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono text-sm" />
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+            <div className="text-[10px] text-neutral-400 uppercase">Sample Mean (x̄)</div>
+            <input type="number" value={sampleMean} onChange={e => setSampleMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-            <div className="text-[10px] text-gray-400 uppercase">Pop Mean (μ)</div>
-            <input type="number" value={popMean} onChange={e => setPopMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono text-sm" />
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+            <div className="text-[10px] text-neutral-400 uppercase">Pop Mean (μ)</div>
+            <input type="number" value={popMean} onChange={e => setPopMean(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-            <div className="text-[10px] text-gray-400 uppercase">{testType === 't' ? 'Sample SD (s)' : 'Pop SD (σ)'}</div>
-            <input type="number" value={stdDev} onChange={e => setStdDev(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono text-sm" />
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+            <div className="text-[10px] text-neutral-400 uppercase">{testType === 't' ? 'Sample SD (s)' : 'Pop SD (σ)'}</div>
+            <input type="number" value={stdDev} onChange={e => setStdDev(Number(e.target.value))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-            <div className="text-[10px] text-gray-400 uppercase">Sample Size (n)</div>
-            <input type="number" min="2" value={sampleSize} onChange={e => setSampleSize(Math.max(2, Number(e.target.value)))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono text-sm" />
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+            <div className="text-[10px] text-neutral-400 uppercase">Sample Size (n)</div>
+            <input type="number" min="2" value={sampleSize} onChange={e => setSampleSize(Math.max(2, Number(e.target.value)))} className="w-full mt-1 px-1 py-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-            <div className="text-[10px] text-gray-400 uppercase">Observed (comma-separated)</div>
-            <input type="text" value={observed} onChange={e => setObserved(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono text-sm" />
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+            <div className="text-[10px] text-neutral-400 uppercase">Observed (comma-separated)</div>
+            <input type="text" value={observed} onChange={e => setObserved(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-            <div className="text-[10px] text-gray-400 uppercase">Expected (comma-separated)</div>
-            <input type="text" value={expected} onChange={e => setExpected(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded font-mono text-sm" />
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3">
+            <div className="text-[10px] text-neutral-400 uppercase">Expected (comma-separated)</div>
+            <input type="text" value={expected} onChange={e => setExpected(e.target.value)} className="w-full mt-1 px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded font-mono text-sm" />
           </div>
         </div>
       )}
@@ -133,8 +133,8 @@ export default function HypothesisTestCalc() {
       {/* Alpha and tail */}
       <div className="flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
-          <label className="text-xs text-gray-500">α:</label>
-          <select value={alpha} onChange={e => setAlpha(Number(e.target.value))} className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-xs font-mono">
+          <label className="text-xs text-neutral-500">α:</label>
+          <select value={alpha} onChange={e => setAlpha(Number(e.target.value))} className="px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded text-xs font-mono">
             <option value={0.01}>0.01</option>
             <option value={0.05}>0.05</option>
             <option value={0.10}>0.10</option>
@@ -143,7 +143,7 @@ export default function HypothesisTestCalc() {
         {testType !== 'chi' && (
           <div className="flex gap-1">
             {(['two', 'left', 'right'] as const).map(t => (
-              <button key={t} onClick={() => setTail(t)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${tail === t ? 'bg-rose-100 dark:bg-rose-900/30 border-rose-400 text-rose-700 dark:text-rose-300' : 'border-gray-200 dark:border-gray-700 text-gray-400'}`}>
+              <button key={t} onClick={() => setTail(t)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${tail === t ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'}`}>
                 {t === 'two' ? 'Two-tailed' : t === 'left' ? 'Left' : 'Right'}
               </button>
             ))}
@@ -152,29 +152,29 @@ export default function HypothesisTestCalc() {
       </div>
 
       {/* Result */}
-      <div className={`rounded-lg p-4 border-2 ${reject ? 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700' : 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'}`}>
+      <div className={`rounded-lg p-4 border-2 ${reject ? 'bg-neutral-50 dark:bg-neutral-900/20 border-neutral-300 dark:border-neutral-700' : 'bg-neutral-50 dark:bg-neutral-900/20 border-neutral-300 dark:border-neutral-700'}`}>
         <div className="text-2xl font-bold font-mono">
           {testType === 'chi' ? `χ² = ${testStat.toFixed(4)}` : `${testType.toUpperCase()} = ${testStat.toFixed(4)}`}
         </div>
-        <div className={`text-lg font-bold mt-1 ${reject ? 'text-red-600' : 'text-green-600'}`}>
+        <div className={`text-lg font-bold mt-1 ${reject ? 'text-neutral-600' : 'text-neutral-600'}`}>
           {reject ? '✕ Reject H₀' : '✓ Fail to Reject H₀'}
         </div>
-        {testType !== 'chi' && <div className="text-xs text-gray-500 mt-1">p-value ≈ {pValue.toFixed(4)}</div>}
+        {testType !== 'chi' && <div className="text-xs text-neutral-500 mt-1">p-value ≈ {pValue.toFixed(4)}</div>}
       </div>
 
       {/* Steps */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-        <div className="text-xs font-bold text-gray-500 mb-2">Step-by-Step Solution:</div>
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
+        <div className="text-xs font-bold text-neutral-500 mb-2">Step-by-Step Solution:</div>
         <div className="space-y-1">
           {steps.map((s, i) => (
-            <div key={i} className="text-xs font-mono text-gray-600 dark:text-gray-400">
-              <span className="text-rose-500 font-bold">{i + 1}.</span> {s}
+            <div key={i} className="text-xs font-mono text-neutral-600 dark:text-neutral-400">
+              <span className="text-neutral-500 font-bold">{i + 1}.</span> {s}
             </div>
           ))}
         </div>
       </div>
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         {testType === 'z' && '📏 Z-Test: n > 30, σ known. Compare sample mean to population mean.'}
         {testType === 't' && '📐 T-Test: n ≤ 30, σ unknown. Uses sample SD and t-distribution.'}
         {testType === 'chi' && '📊 Chi-Square: Test if observed frequencies match expected frequencies.'}

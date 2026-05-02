@@ -6,10 +6,10 @@ type ProcessState = 'new' | 'ready' | 'running' | 'waiting' | 'terminated';
 
 const stateColors: Record<ProcessState, string> = {
   new: '#9ca3af',
-  ready: '#3b82f6',
-  running: '#22c55e',
-  waiting: '#f59e0b',
-  terminated: '#ef4444',
+  ready: '#525252',
+  running: '#737373',
+  waiting: '#a3a3a3',
+  terminated: '#404040',
 };
 
 const stateLabels: Record<ProcessState, string> = {
@@ -101,7 +101,7 @@ export default function ProcessStateMachine() {
   return (
     <div className="space-y-4">
       {/* State diagram */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 340 }}>
           {/* Arrows */}
           {arrowPaths.map((arrow, i) => {
@@ -111,7 +111,7 @@ export default function ProcessStateMachine() {
                 <path
                   d={getArrowPath(arrow.from, arrow.to)}
                   fill="none"
-                  stroke={isActive ? '#f59e0b' : '#d1d5db'}
+                  stroke={isActive ? '#a3a3a3' : '#d1d5db'}
                   strokeWidth={isActive ? 2 : 1}
                   markerEnd="url(#arrowhead)"
                 />
@@ -122,7 +122,7 @@ export default function ProcessStateMachine() {
                   const mx = (f.x + t.x) / 2;
                   const my = (f.y + t.y) / 2;
                   return (
-                    <text x={mx} y={my - 6} textAnchor="middle" fontSize={9} fill={isActive ? '#f59e0b' : '#9ca3af'} fontWeight={isActive ? 'bold' : 'normal'}>
+                    <text x={mx} y={my - 6} textAnchor="middle" fontSize={9} fill={isActive ? '#a3a3a3' : '#9ca3af'} fontWeight={isActive ? 'bold' : 'normal'}>
                       {arrow.label}
                     </text>
                   );
@@ -168,7 +168,7 @@ export default function ProcessStateMachine() {
 
       {/* Transition buttons */}
       <div className="space-y-2">
-        <div className="text-xs font-bold text-gray-500">Current State: <span style={{ color: stateColors[state] }}>{stateLabels[state]}</span></div>
+        <div className="text-xs font-bold text-neutral-500">Current State: <span style={{ color: stateColors[state] }}>{stateLabels[state]}</span></div>
         <div className="flex flex-wrap gap-2">
           {availableTransitions.map((t, i) => (
             <button
@@ -185,26 +185,26 @@ export default function ProcessStateMachine() {
             </button>
           ))}
           {availableTransitions.length === 0 && (
-            <span className="text-xs text-gray-400">Process terminated. Click Reset to start over.</span>
+            <span className="text-xs text-neutral-400">Process terminated. Click Reset to start over.</span>
           )}
         </div>
       </div>
 
       {/* Transition log */}
       {lastTransition && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-          <div className="text-xs font-bold text-blue-700 dark:text-blue-300">{lastTransition}</div>
+        <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800">
+          <div className="text-xs font-bold text-neutral-700 dark:text-neutral-300">{lastTransition}</div>
         </div>
       )}
 
       {/* History */}
       {history.length > 1 && (
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-neutral-500">
           <span className="font-bold">State History: </span>
           <span className="font-mono">
             {history.map((s, i) => (
               <span key={i}>
-                {i > 0 && <span className="text-gray-300 dark:text-gray-600"> → </span>}
+                {i > 0 && <span className="text-neutral-300 dark:text-neutral-600"> → </span>}
                 <span style={{ color: stateColors[s] }}>{stateLabels[s]}</span>
               </span>
             ))}
@@ -212,11 +212,11 @@ export default function ProcessStateMachine() {
         </div>
       )}
 
-      <button onClick={reset} className="px-3 py-1.5 text-xs font-bold bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+      <button onClick={reset} className="px-3 py-1.5 text-xs font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
         ↻ Reset
       </button>
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         🔄 Click transitions to move the process through states. Watch how I/O requests and preemption change the flow.
       </div>
     </div>

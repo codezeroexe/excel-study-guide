@@ -16,8 +16,8 @@ function Neuron({ x, y, active, label }: NeuronProps) {
         cx={x}
         cy={y}
         r="18"
-        fill={active ? '#3b82f6' : '#e5e7eb'}
-        stroke={active ? '#2563eb' : '#9ca3af'}
+        fill={active ? '#525252' : '#e5e7eb'}
+        stroke={active ? '#404040' : '#9ca3af'}
         strokeWidth="2"
         className="transition-colors"
       />
@@ -68,7 +68,7 @@ export default function NeuralNetworkViz() {
                 <line
                   key={`${li}-${ni}-${nni}`}
                   x1={x1} y1={y1} x2={x2} y2={y2}
-                  stroke={isActive ? '#93c5fd' : '#d1d5db'}
+                  stroke={isActive ? '#a3a3a3' : '#d1d5db'}
                   strokeWidth={isActive ? 1.5 : 0.8}
                   className="transition-all"
                 />
@@ -105,7 +105,7 @@ export default function NeuralNetworkViz() {
             y={height - 10}
             textAnchor="middle"
             fontSize="10"
-            fill={activeLayer === li ? '#3b82f6' : '#6b7280'}
+            fill={activeLayer === li ? '#525252' : '#6b7280'}
             fontWeight={activeLayer === li ? 'bold' : 'normal'}
           >
             {layer.name}
@@ -114,10 +114,10 @@ export default function NeuralNetworkViz() {
       </svg>
 
       {/* Info panel */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-xs text-gray-600 dark:text-gray-400">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 text-xs text-neutral-600 dark:text-neutral-400">
         {activeLayer !== null ? (
           <div>
-            <span className="font-semibold text-blue-600">{layers[activeLayer].name} Layer</span>
+            <span className="font-semibold text-neutral-600">{layers[activeLayer].name} Layer</span>
             <span className="ml-2">{layers[activeLayer].neurons} neurons</span>
             {activeNeuron && (
               <span className="ml-2 font-mono">
@@ -133,7 +133,7 @@ export default function NeuralNetworkViz() {
       {/* Training loop */}
       <div className="flex items-center justify-center gap-2 text-xs">
         {['Forward Pass', '→', 'Loss', '→', 'Backpropagation', '→', 'Update Weights'].map((step, i) => (
-          <span key={i} className={step.includes('→') ? 'text-gray-300' : 'px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded font-medium'}>
+          <span key={i} className={step.includes('→') ? 'text-neutral-300' : 'px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded font-medium'}>
             {step}
           </span>
         ))}

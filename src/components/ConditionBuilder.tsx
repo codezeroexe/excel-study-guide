@@ -84,19 +84,19 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Build Condition</span>
+        <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Build Condition</span>
         <div className="flex items-center gap-2">
           <select
             value={logic}
             onChange={e => setLogic(e.target.value as 'AND' | 'OR')}
-            className="px-2 py-1 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800"
+            className="px-2 py-1 text-xs border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
           >
             <option value="AND">AND</option>
             <option value="OR">OR</option>
           </select>
           <button
             onClick={addRule}
-            className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
+            className="p-1 text-neutral-500 hover:text-neutral-600 transition-colors"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -106,12 +106,12 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
       {rules.map((rule, idx) => (
         <div key={idx} className="flex items-center gap-2">
           {idx > 0 && (
-            <span className="text-xs font-medium text-gray-400 w-8">{logic}</span>
+            <span className="text-xs font-medium text-neutral-400 w-8">{logic}</span>
           )}
           <select
             value={rule.field}
             onChange={e => updateRule(idx, 'field', e.target.value)}
-            className="flex-1 px-2 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800"
+            className="flex-1 px-2 py-1.5 text-sm border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
           >
             {fields.map(f => (
               <option key={f} value={f}>{f}</option>
@@ -120,7 +120,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
           <select
             value={rule.operator}
             onChange={e => updateRule(idx, 'operator', e.target.value)}
-            className="w-32 px-2 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800"
+            className="w-32 px-2 py-1.5 text-sm border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
           >
             {OPERATORS.map(op => (
               <option key={op.value} value={op.value}>{op.label}</option>
@@ -131,12 +131,12 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
             value={rule.value}
             onChange={e => updateRule(idx, 'value', e.target.value)}
             placeholder="Value"
-            className="flex-1 px-2 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800"
+            className="flex-1 px-2 py-1.5 text-sm border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800"
           />
           {rules.length > 1 && (
             <button
               onClick={() => removeRule(idx)}
-              className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+              className="p-1 text-neutral-400 hover:text-neutral-500 transition-colors"
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -147,7 +147,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
       <div className="flex items-center gap-2">
         <button
           onClick={evaluate}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors flex items-center gap-2"
         >
           <Play className="w-3 h-3" />
           Evaluate
@@ -155,15 +155,15 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
       </div>
 
       {/* Formula display */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 space-y-2">
-        <div className="text-xs text-gray-500">Logic: {formulaText}</div>
-        <div className="font-mono text-xs text-blue-600 dark:text-blue-400">{excelFormula}</div>
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 space-y-2">
+        <div className="text-xs text-neutral-500">Logic: {formulaText}</div>
+        <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">{excelFormula}</div>
       </div>
 
       {/* Results */}
       {results !== null && (
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
-          <p className="text-sm text-green-700 dark:text-green-300 font-medium">
+        <div className="bg-neutral-50 dark:bg-neutral-900/20 border border-neutral-200 dark:border-neutral-800 rounded-lg p-3">
+          <p className="text-sm text-neutral-700 dark:text-neutral-300 font-medium">
             {results.length} of {sampleData.length} rows match
           </p>
           {results.length > 0 && results.length <= 10 && (
@@ -172,7 +172,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
                 <thead>
                   <tr>
                     {Object.keys(results[0]).map(key => (
-                      <th key={key} className="px-2 py-1 text-left font-medium text-green-600 dark:text-green-400">{key}</th>
+                      <th key={key} className="px-2 py-1 text-left font-medium text-neutral-600 dark:text-neutral-400">{key}</th>
                     ))}
                   </tr>
                 </thead>
@@ -180,7 +180,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
                   {results.map((row, i) => (
                     <tr key={i}>
                       {Object.values(row).map((val, j) => (
-                        <td key={j} className="px-2 py-1 text-green-800 dark:text-green-200">{val}</td>
+                        <td key={j} className="px-2 py-1 text-neutral-800 dark:text-neutral-200">{val}</td>
                       ))}
                     </tr>
                   ))}

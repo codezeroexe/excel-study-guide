@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getSubjectById, subjects } from '@/data/subjects';
 import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, Sigma } from 'lucide-react';
+import AppShell from '@/components/AppShell';
+import { getSubjectTone } from '@/lib/subject-ui';
 
 // Excel components
 import SpreadsheetGrid from '@/components/SpreadsheetGrid';
@@ -76,14 +78,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
   const prev = idx > 0 ? sub.modules[idx - 1] : null;
   const next = idx < sub.modules.length - 1 ? sub.modules[idx + 1] : null;
 
-  const colorMap: Record<string, { text: string; badge: string; bg: string; btn: string; btnHover: string }> = {
-    green: { text: 'text-green-600', badge: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300', bg: 'from-green-50 to-white dark:from-green-950/20 dark:to-gray-950', btn: 'bg-green-600', btnHover: 'hover:bg-green-700' },
-    blue: { text: 'text-blue-600', badge: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', bg: 'from-blue-50 to-white dark:from-blue-950/20 dark:to-gray-950', btn: 'bg-blue-600', btnHover: 'hover:bg-blue-700' },
-    purple: { text: 'text-purple-600', badge: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', bg: 'from-purple-50 to-white dark:from-purple-950/20 dark:to-gray-950', btn: 'bg-purple-600', btnHover: 'hover:bg-purple-700' },
-    amber: { text: 'text-amber-600', badge: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300', bg: 'from-amber-50 to-white dark:from-amber-950/20 dark:to-gray-950', btn: 'bg-amber-600', btnHover: 'hover:bg-amber-700' },
-    rose: { text: 'text-rose-600', badge: 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300', bg: 'from-rose-50 to-white dark:from-rose-950/20 dark:to-gray-950', btn: 'bg-rose-600', btnHover: 'hover:bg-rose-700' },
-  };
-  const colors = colorMap[sub.color] || colorMap.green;
+  const colors = getSubjectTone(sub.color);
 
   const isExcel = subject === 'excel';
   const isDSA = subject === 'dsa';
@@ -91,59 +86,50 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
   const isStats = subject === 'stats';
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href={`/${subject}`} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            {sub.shortName} Modules
-          </Link>
-          <span className="text-xs text-gray-400">Module {idx + 1} of {sub.modules.length}</span>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <AppShell
+      eyebrow={`${sub.shortName} module ${idx + 1} of ${sub.modules.length}`}
+      title={mod.title}
+      description={mod.description}
+    >
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Module Title */}
-        <div className="mb-8">
-          <div className={`inline-flex px-2 py-0.5 ${colors.badge} rounded text-xs font-medium mb-2`}>
+        <div className="mb-8 space-y-4">
+          <div className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${colors.badge}`}>
             {sub.shortName} • Module {idx + 1}
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">{mod.title}</h1>
-          <p className="text-gray-600 dark:text-gray-400">{mod.description}</p>
+          <div className="max-w-3xl space-y-3">
+            <h1 className="text-2xl font-semibold text-neutral-950 dark:text-neutral-50 sm:text-3xl">{mod.title}</h1>
+            <p className="text-sm leading-6 text-neutral-600 dark:text-neutral-400">{mod.description}</p>
+          </div>
         </div>
 
         {/* Lessons */}
-        <div className="space-y-8">
+        <div className="space-y-4">
           {mod.lessons.map((lesson, lIdx) => (
-            <section key={lIdx} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
-              <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+            <section key={lIdx} className="overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
+              <div className="border-b border-neutral-100 p-5 dark:border-neutral-800">
                 <div className="flex items-center gap-2 mb-2">
                   <BookOpen className={`w-4 h-4 ${colors.text}`} />
                   <span className={`text-xs font-medium ${colors.text}`}>Lesson {lIdx + 1}</span>
                 </div>
-                <h2 className="text-xl font-bold mb-3">{lesson.title}</h2>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{lesson.content}</p>
+                <h2 className="mb-3 text-lg font-semibold text-neutral-950 dark:text-neutral-50">{lesson.title}</h2>
+                <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">{lesson.content}</p>
               </div>
 
               {/* Formulas / Concepts */}
-              <div className="p-6 space-y-3">
-                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <div className="space-y-3 p-5">
+                <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
                   {isExcel ? (
-                    <><Lightbulb className="w-4 h-4 text-amber-500" />Formula Examples</>
-                  ) : isDSA ? (
-                    <><Sigma className="w-4 h-4 text-purple-500" />Key Concepts & Formulas</>
-                  ) : isStats ? (
-                    <><Sigma className="w-4 h-4 text-rose-500" />Key Concepts & Formulas</>
+                    <><Lightbulb className={`w-4 h-4 ${colors.text}`} />Formula Examples</>
                   ) : (
-                    <><Sigma className="w-4 h-4 text-blue-500" />Key Concepts & Formulas</>
+                    <><Sigma className={`w-4 h-4 ${colors.text}`} />Key Concepts & Formulas</>
                   )}
                 </h3>
                 {lesson.formulas.map((f, fIdx) =>
                   isExcel ? (
                     <FormulaVisualizer key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} />
                   ) : (
-                    <MathFormula key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} accentColor={isDSA ? 'purple' : 'blue'} />
+                    <MathFormula key={fIdx} formula={f.formula} description={f.description} explanation={f.explanation} accentColor={sub.color} />
                   )
                 )}
               </div>
@@ -151,13 +137,13 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
               {/* Sample Data (first lesson only) */}
               {mod.sampleData && lIdx === 0 && (
                 <div className="px-6 pb-6">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                  <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-3">
                     {isExcel ? 'Interactive Spreadsheet' : isDSA ? 'Example Data' : 'Example Data'}
                   </h3>
                   {Object.entries(mod.sampleData).map(([tableName, tableData]) =>
                     isExcel ? (
                       <div key={tableName} className="mb-4">
-                        <span className="text-xs text-gray-500 mb-2 block">{tableName}</span>
+                        <span className="text-xs text-neutral-500 mb-2 block">{tableName}</span>
                         <SpreadsheetGrid data={tableData} />
                       </div>
                     ) : (
@@ -176,7 +162,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
 
         {/* Excel: VLOOKUP Animation */}
         {isExcel && id === 'lookup-functions' && mod.sampleData?.['VLOOKUP Reference Table'] && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">Interactive: VLOOKUP Animation</h2>
             <LookupAnimator
               type="vlookup"
@@ -190,7 +176,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
 
         {/* Excel: Reference Toggle */}
         {isExcel && id === 'cell-referencing' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">Interactive: Cell Reference Visualizer</h2>
             <ReferenceToggle formula="=D2*$N$1" description="See how references change when dragged." />
           </section>
@@ -198,7 +184,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
 
         {/* Excel: Condition Builder */}
         {isExcel && id === 'conditional-functions' && mod.sampleData && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">Interactive: Condition Builder</h2>
             {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <ConditionBuilder fields={headers} sampleData={records} />; })()}
           </section>
@@ -206,7 +192,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
 
         {/* Excel: Filter Panel */}
         {isExcel && id === 'filtering' && mod.sampleData && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">Interactive: Data Filter</h2>
             {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <FilterPanel data={records} headers={headers} />; })()}
           </section>
@@ -214,7 +200,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
 
         {/* Excel: Pivot Builder */}
         {isExcel && id === 'pivot-tables' && mod.sampleData && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">Interactive: Pivot Table Builder</h2>
             {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <PivotBuilder data={records} fields={headers} />; })()}
           </section>
@@ -235,153 +221,153 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
 
         {/* ML: Scaling Sandbox */}
         {!isExcel && id === 'data-preprocessing' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Scaling Sandbox</h2>
-            <p className="text-sm text-gray-500 mb-4">Enter numbers and see Min-Max Normalization and Z-Score Standardization in real-time.</p>
+            <p className="text-sm text-neutral-500 mb-4">Enter numbers and see Min-Max Normalization and Z-Score Standardization in real-time.</p>
             <ScalingSandbox />
           </section>
         )}
 
         {/* ML: Best Fit Line */}
         {!isExcel && id === 'supervised-learning' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Best Fit Line Adjuster</h2>
-            <p className="text-sm text-gray-500 mb-4">Adjust slope (b₁) and intercept (b₀) to minimize MSE. Find the best fit line.</p>
+            <p className="text-sm text-neutral-500 mb-4">Adjust slope (b₁) and intercept (b₀) to minimize MSE. Find the best fit line.</p>
             <BestFitLine />
           </section>
         )}
 
         {/* ML: Confusion Matrix Calculator */}
         {!isExcel && id === 'evaluation-metrics' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Confusion Matrix Calculator</h2>
-            <p className="text-sm text-gray-500 mb-4">Enter TP, FP, TN, FN values. Watch Accuracy, Precision, Recall, and F1 update live.</p>
+            <p className="text-sm text-neutral-500 mb-4">Enter TP, FP, TN, FN values. Watch Accuracy, Precision, Recall, and F1 update live.</p>
             <ConfusionMatrixCalc />
           </section>
         )}
 
         {/* ML: Neural Network Visualizer */}
         {!isExcel && id === 'deep-learning-foundations' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Neural Network Visualizer</h2>
-            <p className="text-sm text-gray-500 mb-4">Hover over neurons to see layer details. Watch the training loop flow.</p>
+            <p className="text-sm text-neutral-500 mb-4">Hover over neurons to see layer details. Watch the training loop flow.</p>
             <NeuralNetworkViz />
           </section>
         )}
 
         {/* DSA: Complexity Grapher */}
         {isDSA && id === 'intro-dsa' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Time & Space Complexity Grapher</h2>
-            <p className="text-sm text-gray-500 mb-4">Toggle complexity curves and adjust N to see how growth rates compare.</p>
+            <p className="text-sm text-neutral-500 mb-4">Toggle complexity curves and adjust N to see how growth rates compare.</p>
             <ComplexityGrapher />
           </section>
         )}
 
         {/* DSA: Infix to Postfix Simulator */}
         {isDSA && id === 'linear-data-structures' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Infix to Postfix Stack Simulator</h2>
-            <p className="text-sm text-gray-500 mb-4">Enter an infix expression and watch the stack-based conversion step by step.</p>
+            <p className="text-sm text-neutral-500 mb-4">Enter an infix expression and watch the stack-based conversion step by step.</p>
             <InfixPostfixSimulator />
           </section>
         )}
 
         {/* DSA: Sorting Race */}
         {isDSA && id === 'searching-sorting' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Sorting Algorithm Race</h2>
-            <p className="text-sm text-gray-500 mb-4">Watch Bubble, Selection, Insertion, and Quick sort compete side by side.</p>
+            <p className="text-sm text-neutral-500 mb-4">Watch Bubble, Selection, Insertion, and Quick sort compete side by side.</p>
             <SortingRace />
           </section>
         )}
 
         {/* DSA: BST Builder */}
         {isDSA && id === 'trees' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Binary Search Tree Builder</h2>
-            <p className="text-sm text-gray-500 mb-4">Insert numbers and watch the BST grow. See all three traversals update live.</p>
+            <p className="text-sm text-neutral-500 mb-4">Insert numbers and watch the BST grow. See all three traversals update live.</p>
             <BSTBuilder />
           </section>
         )}
 
         {/* DSA: Graph Traversal Grid */}
         {isDSA && (id === 'graphs-traversals' || id === 'advanced-graphs') && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Graph Traversal & Pathfinding</h2>
-            <p className="text-sm text-gray-500 mb-4">Run DFS, BFS, or Dijkstra's algorithm on a sample graph. Step through or auto-play.</p>
+            <p className="text-sm text-neutral-500 mb-4">Run DFS, BFS, or Dijkstra&apos;s algorithm on a sample graph. Step through or auto-play.</p>
             <GraphTraversalGrid />
           </section>
         )}
 
         {/* OS: Process State Machine */}
         {isOS && id === 'process-management' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Process State Machine</h2>
-            <p className="text-sm text-gray-500 mb-4">Click transitions to move a process through New → Ready → Running → Waiting → Terminated states.</p>
+            <p className="text-sm text-neutral-500 mb-4">Click transitions to move a process through New → Ready → Running → Waiting → Terminated states.</p>
             <ProcessStateMachine />
           </section>
         )}
 
         {/* OS: Gantt Chart Generator */}
         {isOS && id === 'cpu-scheduling' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: CPU Scheduling Gantt Chart</h2>
-            <p className="text-sm text-gray-500 mb-4">Enter processes with burst times and compare FCFS, SJF, and Round Robin visually.</p>
+            <p className="text-sm text-neutral-500 mb-4">Enter processes with burst times and compare FCFS, SJF, and Round Robin visually.</p>
             <GanttChartGenerator />
           </section>
         )}
 
         {/* OS: Memory Fragmentation Sandbox */}
         {isOS && id === 'memory-management' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Memory Fragmentation Sandbox</h2>
-            <p className="text-sm text-gray-500 mb-4">Allocate and free memory blocks. See how contiguous allocation causes external fragmentation while paging avoids it.</p>
+            <p className="text-sm text-neutral-500 mb-4">Allocate and free memory blocks. See how contiguous allocation causes external fragmentation while paging avoids it.</p>
             <MemoryFragmentationSandbox />
           </section>
         )}
 
         {/* Stats: Combinatorics Calculator */}
         {isStats && id === 'stats-combinatorics' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Permutation & Combination Calculator</h2>
-            <p className="text-sm text-gray-500 mb-4">Adjust n and r to see P(n,r) and C(n,r) with visual arrangements.</p>
+            <p className="text-sm text-neutral-500 mb-4">Adjust n and r to see P(n,r) and C(n,r) with visual arrangements.</p>
             <CombinatoricsCalculator />
           </section>
         )}
 
         {/* Stats: Bayes Theorem Calculator */}
         {isStats && id === 'stats-bayes-theorem' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold mb-2">Interactive: Bayes' Theorem Calculator</h2>
-            <p className="text-sm text-gray-500 mb-4">Adjust prior, sensitivity, and false positive rate. See how the posterior updates.</p>
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
+            <h2 className="text-lg font-bold mb-2">Interactive: Bayes&apos; Theorem Calculator</h2>
+            <p className="text-sm text-neutral-500 mb-4">Adjust prior, sensitivity, and false positive rate. See how the posterior updates.</p>
             <BayesTheoremCalc />
           </section>
         )}
 
         {/* Stats: Distribution Visualizer */}
         {isStats && id === 'stats-distributions' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Probability Distribution Visualizer</h2>
-            <p className="text-sm text-gray-500 mb-4">Explore Normal, Binomial, Poisson, and Exponential distributions with adjustable parameters.</p>
+            <p className="text-sm text-neutral-500 mb-4">Explore Normal, Binomial, Poisson, and Exponential distributions with adjustable parameters.</p>
             <DistributionVisualizer />
           </section>
         )}
 
         {/* Stats: Hypothesis Test Calculator */}
         {isStats && id === 'stats-hypothesis-testing' && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Hypothesis Test Calculator</h2>
-            <p className="text-sm text-gray-500 mb-4">Run Z-tests, T-tests, and Chi-Square tests with step-by-step solutions.</p>
+            <p className="text-sm text-neutral-500 mb-4">Run Z-tests, T-tests, and Chi-Square tests with step-by-step solutions.</p>
             <HypothesisTestCalc />
           </section>
         )}
 
         {/* Stats: Worksheet Generator (all modules) */}
         {isStats && (
-          <section className="mt-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Practice Worksheet Generator</h2>
-            <p className="text-sm text-gray-500 mb-4">Generate randomized problems with step-by-step solutions for any topic.</p>
+            <p className="text-sm text-neutral-500 mb-4">Generate randomized problems with step-by-step solutions for any topic.</p>
             <WorksheetGenerator />
           </section>
         )}
@@ -395,30 +381,30 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
         )}
 
         {/* Navigation */}
-        <div className="mt-8 flex items-center justify-between">
+        <div className="mt-8 flex flex-col gap-3 border-t border-neutral-200 pt-6 dark:border-neutral-800 sm:flex-row sm:items-center sm:justify-between">
           {prev ? (
-            <Link href={`/${subject}/module/${prev.id}`} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+            <Link href={`/${subject}/module/${prev.id}`} className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-900">
               <ArrowLeft className="w-4 h-4" />
               {prev.title}
             </Link>
           ) : (
-            <Link href={`/${subject}`} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+            <Link href={`/${subject}`} className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-900">
               <ArrowLeft className="w-4 h-4" />
               All Modules
             </Link>
           )}
           {next ? (
-            <Link href={`/${subject}/module/${next.id}`} className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}>
+            <Link href={`/${subject}/module/${next.id}`} className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm text-white transition-colors ${colors.button} ${colors.buttonHover}`}>
               {next.title}
               <ArrowRight className="w-4 h-4" />
             </Link>
           ) : (
-            <Link href="/" className={`flex items-center gap-2 px-4 py-2 ${colors.btn} text-white rounded-lg text-sm ${colors.btnHover} transition-colors`}>
+            <Link href="/" className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm text-white transition-colors ${colors.button} ${colors.buttonHover}`}>
               Back to Subjects
             </Link>
           )}
         </div>
       </main>
-    </div>
+    </AppShell>
   );
 }

@@ -291,8 +291,8 @@ export default function GraphTraversalGrid() {
   const getNodeColor = (nodeId: number): string => {
     const state = nodeStates.get(nodeId);
     switch (state) {
-      case 'visiting': return '#f59e0b';
-      case 'visited': return '#22c55e';
+      case 'visiting': return '#a3a3a3';
+      case 'visited': return '#737373';
       default: return '#e5e7eb';
     }
   };
@@ -319,8 +319,8 @@ export default function GraphTraversalGrid() {
               onClick={() => { setAlgorithm(algo); handleReset(); }}
               className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
                 algorithm === algo
-                  ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                  : 'border-gray-200 dark:border-gray-700 text-gray-400'
+                  ? 'bg-neutral-900 text-white border-neutral-600 shadow-sm'
+                  : 'border-neutral-200 dark:border-neutral-700 text-neutral-400'
               }`}
             >
               {algo}
@@ -329,11 +329,11 @@ export default function GraphTraversalGrid() {
         </div>
 
         <div className="flex items-center gap-3">
-          <label className="text-xs font-medium text-gray-500">Start Node:</label>
+          <label className="text-xs font-medium text-neutral-500">Start Node:</label>
           <select
             value={startNode}
             onChange={e => { setStartNode(Number(e.target.value)); handleReset(); }}
-            className="px-2 py-1 text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded"
+            className="px-2 py-1 text-sm bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded"
           >
             {nodes.map(n => (
               <option key={n.id} value={n.id}>{n.label}</option>
@@ -344,7 +344,7 @@ export default function GraphTraversalGrid() {
         <div className="flex gap-2">
           <button
             onClick={handleRun}
-            className="px-4 py-2 text-sm font-bold bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
           >
             ▶ Run
           </button>
@@ -353,26 +353,26 @@ export default function GraphTraversalGrid() {
               <button
                 onClick={handleStep}
                 disabled={currentStep >= steps.length - 1}
-                className="px-3 py-2 text-sm font-bold bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 transition-colors"
+                className="px-3 py-2 text-sm font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:opacity-40 transition-colors"
               >
                 Step →
               </button>
               <button
                 onClick={handleAutoPlay}
-                className="px-3 py-2 text-sm font-bold bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+                className="px-3 py-2 text-sm font-bold bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300 rounded hover:bg-neutral-200 dark:hover:bg-neutral-900/50 transition-colors"
               >
                 {running ? '⏸' : '▶ Auto'}
               </button>
               <button
                 onClick={handleReset}
-                className="px-3 py-2 text-sm font-bold bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="px-3 py-2 text-sm font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
               >
                 Reset
               </button>
             </>
           )}
           {steps.length > 0 && (
-            <span className="text-xs text-gray-400 self-center">
+            <span className="text-xs text-neutral-400 self-center">
               Step {currentStep + 1} / {steps.length}
             </span>
           )}
@@ -380,7 +380,7 @@ export default function GraphTraversalGrid() {
       </div>
 
       {/* Graph visualization */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
         <svg width="100%" height="280" viewBox="0 0 300 280" className="p-2">
           {/* Edges */}
           {edges.map((edge, i) => {
@@ -401,7 +401,7 @@ export default function GraphTraversalGrid() {
                   x={(fromNode.x + toNode.x) / 2}
                   y={(fromNode.y + toNode.y) / 2 - 5}
                   textAnchor="middle"
-                  className="text-[10px] fill-gray-500 font-mono"
+                  className="text-[10px] fill-neutral-500 font-mono"
                 >
                   {edge.weight}
                 </text>
@@ -417,7 +417,7 @@ export default function GraphTraversalGrid() {
                 cy={node.y}
                 r={20}
                 fill={getNodeColor(node.id)}
-                stroke={nodeStates.get(node.id) === 'visiting' ? '#f59e0b' : nodeStates.get(node.id) === 'visited' ? '#22c55e' : '#d1d5db'}
+                stroke={nodeStates.get(node.id) === 'visiting' ? '#a3a3a3' : nodeStates.get(node.id) === 'visited' ? '#737373' : '#d1d5db'}
                 strokeWidth={nodeStates.has(node.id) ? 3 : 1.5}
                 className="transition-all duration-300"
               />
@@ -437,7 +437,7 @@ export default function GraphTraversalGrid() {
                   x={node.x}
                   y={node.y - 28}
                   textAnchor="middle"
-                  className="text-[10px] font-mono font-bold fill-purple-600 dark:fill-purple-400"
+                  className="text-[10px] font-mono font-bold fill-neutral-600 dark:fill-neutral-400"
                 >
                   {distances.get(node.id)}
                 </text>
@@ -450,33 +450,33 @@ export default function GraphTraversalGrid() {
       {/* Legend */}
       <div className="flex gap-4 text-xs">
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-gray-200 border border-gray-300" />
-          <span className="text-gray-500">Unvisited</span>
+          <div className="w-3 h-3 rounded-full bg-neutral-200 border border-neutral-300" />
+          <span className="text-neutral-500">Unvisited</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-amber-500" />
-          <span className="text-gray-500">Visiting</span>
+          <div className="w-3 h-3 rounded-full bg-neutral-700" />
+          <span className="text-neutral-500">Visiting</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-green-500" />
-          <span className="text-gray-500">Visited</span>
+          <div className="w-3 h-3 rounded-full bg-neutral-700" />
+          <span className="text-neutral-500">Visited</span>
         </div>
       </div>
 
       {/* Step explanation */}
       {currentStepInfo && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-          <div className="text-xs font-bold text-blue-700 dark:text-blue-300">{currentStepInfo.step}</div>
+        <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800">
+          <div className="text-xs font-bold text-neutral-700 dark:text-neutral-300">{currentStepInfo.step}</div>
         </div>
       )}
 
       {/* Final distances for Dijkstra */}
       {algorithm === 'Dijkstra' && currentStep >= steps.length - 1 && steps.length > 0 && (
-        <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
-          <div className="text-xs font-bold text-green-700 dark:text-green-300 mb-2">Shortest Distances from {nodes.find(n => n.id === startNode)?.label}:</div>
+        <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800">
+          <div className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-2">Shortest Distances from {nodes.find(n => n.id === startNode)?.label}:</div>
           <div className="flex flex-wrap gap-2">
             {nodes.map(node => (
-              <span key={node.id} className="font-mono text-sm text-green-600 dark:text-green-400">
+              <span key={node.id} className="font-mono text-sm text-neutral-600 dark:text-neutral-400">
                 {node.label}: {distances.get(node.id) === Infinity ? '∞' : distances.get(node.id)}
               </span>
             ))}

@@ -1,4 +1,4 @@
-import type { FormulaExample, Lesson, QuizQuestion, ModuleData } from '../types';
+import type { ModuleData } from '../types';
 
 const modules: ModuleData[] = [
   {

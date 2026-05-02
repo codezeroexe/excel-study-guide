@@ -17,10 +17,10 @@ export default function DataTable({ data, title, highlight = {} }: DataTableProp
   const rows = data.slice(1);
 
   return (
-    <div className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
       {title && (
-        <div className="px-4 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <span className="text-xs font-medium text-gray-500">{title}</span>
+        <div className="px-4 py-2 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+          <span className="text-xs font-medium text-neutral-500">{title}</span>
         </div>
       )}
       <div className="overflow-x-auto">
@@ -30,7 +30,7 @@ export default function DataTable({ data, title, highlight = {} }: DataTableProp
               {headers.map((h, i) => (
                 <th
                   key={i}
-                  className="px-3 py-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 whitespace-nowrap"
+                  className="px-3 py-2 bg-neutral-100 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 text-left text-xs font-semibold text-neutral-600 dark:text-neutral-400 whitespace-nowrap"
                 >
                   {h}
                 </th>
@@ -43,10 +43,10 @@ export default function DataTable({ data, title, highlight = {} }: DataTableProp
                 key={rowIdx}
                 className={`${
                   hoveredRow === rowIdx
-                    ? 'bg-blue-50 dark:bg-blue-900/10'
+                    ? 'bg-neutral-50 dark:bg-neutral-900/10'
                     : rowIdx % 2 === 0
-                      ? 'bg-white dark:bg-gray-900'
-                      : 'bg-gray-50/50 dark:bg-gray-800/30'
+                      ? 'bg-white dark:bg-neutral-900'
+                      : 'bg-neutral-50/50 dark:bg-neutral-800/30'
                 } transition-colors`}
                 onMouseEnter={() => setHoveredRow(rowIdx)}
                 onMouseLeave={() => setHoveredRow(null)}
@@ -57,7 +57,7 @@ export default function DataTable({ data, title, highlight = {} }: DataTableProp
                   return (
                     <td
                       key={colIdx}
-                      className={`px-3 py-2 border-b border-gray-100 dark:border-gray-800 text-gray-900 dark:text-gray-100 whitespace-nowrap ${hlClass}`}
+                      className={`px-3 py-2 border-b border-neutral-100 dark:border-neutral-800 text-neutral-900 dark:text-neutral-100 whitespace-nowrap ${hlClass}`}
                     >
                       {cell}
                     </td>

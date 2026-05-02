@@ -72,38 +72,38 @@ export default function BestFitLine() {
       {/* Sliders */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="text-xs font-medium text-gray-500 mb-1 block">
-            Slope (b₁): <span className="font-mono font-bold text-blue-600">{b1}</span>
+          <label className="text-xs font-medium text-neutral-500 mb-1 block">
+            Slope (b₁): <span className="font-mono font-bold text-neutral-600">{b1}</span>
           </label>
-          <input type="range" min="0" max="15" step="0.5" value={b1} onChange={e => setB1(Number(e.target.value))} className="w-full accent-blue-600" />
-          <div className="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>0</span><span>7.5</span><span>15</span></div>
+          <input type="range" min="0" max="15" step="0.5" value={b1} onChange={e => setB1(Number(e.target.value))} className="w-full accent-neutral-900" />
+          <div className="flex justify-between text-[10px] text-neutral-400 mt-0.5"><span>0</span><span>7.5</span><span>15</span></div>
         </div>
         <div>
-          <label className="text-xs font-medium text-gray-500 mb-1 block">
-            Intercept (b₀): <span className="font-mono font-bold text-green-600">{b0}</span>
+          <label className="text-xs font-medium text-neutral-500 mb-1 block">
+            Intercept (b₀): <span className="font-mono font-bold text-neutral-600">{b0}</span>
           </label>
-          <input type="range" min="0" max="40" step="1" value={b0} onChange={e => setB0(Number(e.target.value))} className="w-full accent-green-600" />
-          <div className="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>0</span><span>20</span><span>40</span></div>
+          <input type="range" min="0" max="40" step="1" value={b0} onChange={e => setB0(Number(e.target.value))} className="w-full accent-neutral-900" />
+          <div className="flex justify-between text-[10px] text-neutral-400 mt-0.5"><span>0</span><span>20</span><span>40</span></div>
         </div>
       </div>
 
       {/* Equation & Metrics */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="font-mono text-sm bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded border border-gray-200 dark:border-gray-700">
-          y = <span className="text-blue-600 font-bold">{b1}</span>x + <span className="text-green-600 font-bold">{b0}</span>
+        <div className="font-mono text-sm bg-neutral-50 dark:bg-neutral-800 px-3 py-2 rounded border border-neutral-200 dark:border-neutral-700">
+          y = <span className="text-neutral-600 font-bold">{b1}</span>x + <span className="text-neutral-600 font-bold">{b0}</span>
         </div>
         <div className="flex gap-3 text-xs">
-          <div className="px-2 py-1 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-800">
-            MSE: <span className="font-mono font-bold text-amber-600">{mse}</span>
+          <div className="px-2 py-1 bg-neutral-50 dark:bg-neutral-900/20 rounded border border-neutral-200 dark:border-neutral-800">
+            MSE: <span className="font-mono font-bold text-neutral-600">{mse}</span>
           </div>
-          <div className="px-2 py-1 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
-            MAE: <span className="font-mono font-bold text-purple-600">{mae}</span>
+          <div className="px-2 py-1 bg-neutral-50 dark:bg-neutral-900/20 rounded border border-neutral-200 dark:border-neutral-800">
+            MAE: <span className="font-mono font-bold text-neutral-600">{mae}</span>
           </div>
         </div>
       </div>
 
       {/* SVG Chart */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 300 }}>
           {/* Grid */}
           {yTicks.map(t => (
@@ -127,7 +127,7 @@ export default function BestFitLine() {
           <line
             x1={scaleX(lineStart.x)} y1={scaleY(Math.min(Math.max(lineStart.predicted, 0), 80))}
             x2={scaleX(lineEnd.x)} y2={scaleY(Math.min(Math.max(lineEnd.predicted, 0), 80))}
-            stroke="#ef4444" strokeWidth={2.5}
+            stroke="#404040" strokeWidth={2.5}
           />
 
           {/* Data points */}
@@ -139,13 +139,13 @@ export default function BestFitLine() {
                 <line
                   x1={scaleX(d.x)} y1={scaleY(d.y)}
                   x2={scaleX(d.x)} y2={scaleY(Math.min(Math.max(d.predicted, 0), 80))}
-                  stroke={isError ? '#ef4444' : '#93c5fd'} strokeWidth={1} strokeDasharray="2 2" opacity={0.6}
+                  stroke={isError ? '#404040' : '#a3a3a3'} strokeWidth={1} strokeDasharray="2 2" opacity={0.6}
                 />
                 {/* Point */}
                 <circle
                   cx={scaleX(d.x)} cy={scaleY(d.y)} r={5}
-                  fill={isError ? '#ef4444' : '#3b82f6'}
-                  stroke={isError ? '#dc2626' : '#2563eb'} strokeWidth={1.5}
+                  fill={isError ? '#404040' : '#525252'}
+                  stroke={isError ? '#262626' : '#404040'} strokeWidth={1.5}
                 />
               </g>
             );
@@ -158,28 +158,28 @@ export default function BestFitLine() {
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-left font-semibold text-gray-500">Exp (x)</th>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-left font-semibold text-gray-500">Actual (y)</th>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-left font-semibold text-gray-500">Predicted</th>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-left font-semibold text-gray-500">Error</th>
-              <th className="px-2 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-left font-semibold text-gray-500">Error²</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Exp (x)</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Actual (y)</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Predicted</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Error</th>
+              <th className="px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-left font-semibold text-neutral-500">Error²</th>
             </tr>
           </thead>
           <tbody>
             {chartData.map((d, i) => (
               <tr key={i}>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800 font-mono">{d.x}</td>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800 font-mono">{d.y}</td>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800 font-mono text-red-600">{d.predicted.toFixed(1)}</td>
-                <td className={`px-2 py-1.5 border border-gray-100 dark:border-gray-800 font-mono ${d.error > 0 ? 'text-green-600' : 'text-red-600'}`}>{d.error > 0 ? '+' : ''}{d.error.toFixed(1)}</td>
-                <td className="px-2 py-1.5 border border-gray-100 dark:border-gray-800 font-mono">{Math.pow(d.error, 2).toFixed(1)}</td>
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800 font-mono">{d.x}</td>
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800 font-mono">{d.y}</td>
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800 font-mono text-neutral-600">{d.predicted.toFixed(1)}</td>
+                <td className={`px-2 py-1.5 border border-neutral-100 dark:border-neutral-800 font-mono ${d.error > 0 ? 'text-neutral-600' : 'text-neutral-600'}`}>{d.error > 0 ? '+' : ''}{d.error.toFixed(1)}</td>
+                <td className="px-2 py-1.5 border border-neutral-100 dark:border-neutral-800 font-mono">{Math.pow(d.error, 2).toFixed(1)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <div className="flex items-center justify-between text-xs text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="flex items-center justify-between text-xs text-neutral-400 bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         <span>🎯 Goal: Minimize MSE by adjusting b₁ and b₀</span>
         <span>Optimal: b₁={optimal.b1}, b₀={optimal.b0}</span>
       </div>

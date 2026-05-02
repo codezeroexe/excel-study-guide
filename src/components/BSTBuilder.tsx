@@ -133,7 +133,7 @@ export default function BSTBuilder() {
           y1={node.y}
           x2={node.left.x}
           y2={node.left.y}
-          stroke={node.path && node.left.path ? '#8b5cf6' : '#d1d5db'}
+          stroke={node.path && node.left.path ? '#525252' : '#d1d5db'}
           strokeWidth={node.path && node.left.path ? 2.5 : 1.5}
         />
       );
@@ -146,7 +146,7 @@ export default function BSTBuilder() {
           y1={node.y}
           x2={node.right.x}
           y2={node.right.y}
-          stroke={node.path && node.right.path ? '#8b5cf6' : '#d1d5db'}
+          stroke={node.path && node.right.path ? '#525252' : '#d1d5db'}
           strokeWidth={node.path && node.right.path ? 2.5 : 1.5}
         />
       );
@@ -166,8 +166,8 @@ export default function BSTBuilder() {
           cx={node.x}
           cy={node.y}
           r={18}
-          fill={isHighlighted ? '#8b5cf6' : isOnPath ? '#c4b5fd' : '#ffffff'}
-          stroke={isHighlighted ? '#7c3aed' : isOnPath ? '#8b5cf6' : '#d1d5db'}
+          fill={isHighlighted ? '#525252' : isOnPath ? '#d4d4d4' : '#ffffff'}
+          stroke={isHighlighted ? '#404040' : isOnPath ? '#525252' : '#d1d5db'}
           strokeWidth={isHighlighted ? 3 : isOnPath ? 2 : 1.5}
           className="transition-all duration-300"
         />
@@ -176,7 +176,7 @@ export default function BSTBuilder() {
           y={node.y}
           textAnchor="middle"
           dominantBaseline="central"
-          className={`text-xs font-bold ${isHighlighted ? 'fill-white' : 'fill-gray-700 dark:fill-gray-200'}`}
+          className={`text-xs font-bold ${isHighlighted ? 'fill-white' : 'fill-neutral-700 dark:fill-neutral-200'}`}
           style={{ fontSize: '12px', fontWeight: 700 }}
         >
           {node.value}
@@ -191,25 +191,25 @@ export default function BSTBuilder() {
     <div className="space-y-4">
       {/* Input */}
       <div className="space-y-2">
-        <label className="text-xs font-medium text-gray-500">Insert Value</label>
+        <label className="text-xs font-medium text-neutral-500">Insert Value</label>
         <div className="flex gap-2">
           <input
             type="number"
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="flex-1 px-3 py-2 text-sm font-mono bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
             placeholder="Enter a number..."
           />
           <button
             onClick={() => { if (input.trim()) { handleInsert(Number(input.trim())); setInput(''); } }}
-            className="px-4 py-2 text-sm font-bold bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-neutral-900 text-white rounded-lg hover:bg-neutral-700 transition-colors"
           >
             Insert
           </button>
           <button
             onClick={handleReset}
-            className="px-3 py-2 text-sm font-bold bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            className="px-3 py-2 text-sm font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
           >
             Reset
           </button>
@@ -219,7 +219,7 @@ export default function BSTBuilder() {
             <button
               key={n}
               onClick={() => handleInsert(n)}
-              className="px-2 py-1 text-xs font-mono bg-gray-100 dark:bg-gray-800 rounded hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+              className="px-2 py-1 text-xs font-mono bg-neutral-100 dark:bg-neutral-800 rounded hover:bg-neutral-100 dark:hover:bg-neutral-900/30 transition-colors"
             >
               {n}
             </button>
@@ -228,13 +228,13 @@ export default function BSTBuilder() {
       </div>
 
       {/* Tree visualization */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
         {root ? (
           <svg width="100%" height="200" viewBox="0 0 400 200" className="p-2">
             {renderTree(root)}
           </svg>
         ) : (
-          <div className="h-48 flex items-center justify-center text-sm text-gray-400">
+          <div className="h-48 flex items-center justify-center text-sm text-neutral-400">
             Insert numbers to build the BST
           </div>
         )}
@@ -242,11 +242,11 @@ export default function BSTBuilder() {
 
       {/* Insertion log */}
       {insertOrder.length > 0 && (
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-neutral-500">
           <span className="font-bold">Insert order:</span>{' '}
           <span className="font-mono">{insertOrder.join(' → ')}</span>
           {lastInserted !== null && (
-            <span className="ml-2 text-purple-600 dark:text-purple-400">
+            <span className="ml-2 text-neutral-600 dark:text-neutral-400">
               Last inserted: <strong>{lastInserted}</strong>
             </span>
           )}
@@ -256,22 +256,22 @@ export default function BSTBuilder() {
       {/* Traversal results */}
       {root && (
         <div className="space-y-2">
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
-            <span className="text-xs font-bold text-green-700 dark:text-green-300">Inorder (sorted): </span>
-            <span className="font-mono text-sm text-green-600 dark:text-green-400">{inorder.join(', ')}</span>
+          <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300">Inorder (sorted): </span>
+            <span className="font-mono text-sm text-neutral-600 dark:text-neutral-400">{inorder.join(', ')}</span>
           </div>
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-            <span className="text-xs font-bold text-blue-700 dark:text-blue-300">Preorder: </span>
-            <span className="font-mono text-sm text-blue-600 dark:text-blue-400">{preorder.join(', ')}</span>
+          <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300">Preorder: </span>
+            <span className="font-mono text-sm text-neutral-600 dark:text-neutral-400">{preorder.join(', ')}</span>
           </div>
-          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
-            <span className="text-xs font-bold text-amber-700 dark:text-amber-300">Postorder: </span>
-            <span className="font-mono text-sm text-amber-600 dark:text-amber-400">{postorder.join(', ')}</span>
+          <div className="bg-neutral-50 dark:bg-neutral-900/20 rounded-lg p-3 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300">Postorder: </span>
+            <span className="font-mono text-sm text-neutral-600 dark:text-neutral-400">{postorder.join(', ')}</span>
           </div>
         </div>
       )}
 
-      <div className="text-xs text-gray-400 text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
         🌳 Left child &lt; Root ≤ Right child. Inorder traversal always gives sorted output.
       </div>
     </div>
