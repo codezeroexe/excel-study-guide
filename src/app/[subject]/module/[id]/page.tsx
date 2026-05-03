@@ -170,6 +170,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
               tableData={mod.sampleData['VLOOKUP Reference Table']}
               colOrRowIndex={2}
               result="8000"
+              subjectColor={sub.color}
             />
           </section>
         )}
@@ -178,7 +179,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
         {isExcel && id === 'cell-referencing' && (
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">Interactive: Cell Reference Visualizer</h2>
-            <ReferenceToggle formula="=D2*$N$1" description="See how references change when dragged." />
+            <ReferenceToggle formula="=D2*$N$1" description="See how references change when dragged." subjectColor={sub.color} />
           </section>
         )}
 
@@ -186,7 +187,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
         {isExcel && id === 'conditional-functions' && mod.sampleData && (
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-4">Interactive: Condition Builder</h2>
-            {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <ConditionBuilder fields={headers} sampleData={records} />; })()}
+                {(() => { const { headers, records } = getExcelRecords(mod.sampleData!); return <ConditionBuilder fields={headers} sampleData={records} subjectColor={sub.color} />; })()}
           </section>
         )}
 
@@ -211,10 +212,10 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 space-y-4">
             <h2 className="text-lg font-bold">Interactive: Chart Examples</h2>
             {mod.sampleData['Study Hours vs Marks'] && (
-              <ChartRenderer type="scatter" data={mod.sampleData['Study Hours vs Marks'].slice(1).map(row => ({ name: row[0], value: Number(row[2]) || 0 }))} title="Study Hours vs Marks" xKey="name" yKeys={['value']} />
+              <ChartRenderer type="scatter" data={mod.sampleData['Study Hours vs Marks'].slice(1).map(row => ({ name: row[0], value: Number(row[2]) || 0 }))} title="Study Hours vs Marks" xKey="name" yKeys={['value']} subjectColor={sub.color} />
             )}
             {mod.sampleData['Quarterly Revenue'] && (
-              <ChartRenderer type="combo" data={mod.sampleData['Quarterly Revenue'].slice(1).map(row => ({ name: row[0], Revenue: Number(row[1]) || 0, 'Growth %': Number(row[2]) || 0 }))} title="Revenue & Growth" xKey="name" yKeys={['Revenue', 'Growth %']} />
+              <ChartRenderer type="combo" data={mod.sampleData['Quarterly Revenue'].slice(1).map(row => ({ name: row[0], Revenue: Number(row[1]) || 0, 'Growth %': Number(row[2]) || 0 }))} title="Revenue & Growth" xKey="name" yKeys={['Revenue', 'Growth %']} subjectColor={sub.color} />
             )}
           </section>
         )}
@@ -224,7 +225,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Scaling Sandbox</h2>
             <p className="text-sm text-neutral-500 mb-4">Enter numbers and see Min-Max Normalization and Z-Score Standardization in real-time.</p>
-            <ScalingSandbox />
+            <ScalingSandbox subjectColor={sub.color} />
           </section>
         )}
 
@@ -233,7 +234,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Best Fit Line Adjuster</h2>
             <p className="text-sm text-neutral-500 mb-4">Adjust slope (b₁) and intercept (b₀) to minimize MSE. Find the best fit line.</p>
-            <BestFitLine />
+            <BestFitLine subjectColor={sub.color} />
           </section>
         )}
 
@@ -242,7 +243,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Confusion Matrix Calculator</h2>
             <p className="text-sm text-neutral-500 mb-4">Enter TP, FP, TN, FN values. Watch Accuracy, Precision, Recall, and F1 update live.</p>
-            <ConfusionMatrixCalc />
+            <ConfusionMatrixCalc subjectColor={sub.color} />
           </section>
         )}
 
@@ -251,7 +252,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Neural Network Visualizer</h2>
             <p className="text-sm text-neutral-500 mb-4">Hover over neurons to see layer details. Watch the training loop flow.</p>
-            <NeuralNetworkViz />
+            <NeuralNetworkViz subjectColor={sub.color} />
           </section>
         )}
 
@@ -260,7 +261,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Time & Space Complexity Grapher</h2>
             <p className="text-sm text-neutral-500 mb-4">Toggle complexity curves and adjust N to see how growth rates compare.</p>
-            <ComplexityGrapher />
+            <ComplexityGrapher subjectColor={sub.color} />
           </section>
         )}
 
@@ -269,7 +270,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Infix to Postfix Stack Simulator</h2>
             <p className="text-sm text-neutral-500 mb-4">Enter an infix expression and watch the stack-based conversion step by step.</p>
-            <InfixPostfixSimulator />
+            <InfixPostfixSimulator subjectColor={sub.color} />
           </section>
         )}
 
@@ -278,7 +279,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Sorting Algorithm Race</h2>
             <p className="text-sm text-neutral-500 mb-4">Watch Bubble, Selection, Insertion, and Quick sort compete side by side.</p>
-            <SortingRace />
+            <SortingRace subjectColor={sub.color} />
           </section>
         )}
 
@@ -287,7 +288,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Binary Search Tree Builder</h2>
             <p className="text-sm text-neutral-500 mb-4">Insert numbers and watch the BST grow. See all three traversals update live.</p>
-            <BSTBuilder />
+            <BSTBuilder subjectColor={sub.color} />
           </section>
         )}
 
@@ -296,7 +297,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
           <section className="mt-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6">
             <h2 className="text-lg font-bold mb-2">Interactive: Graph Traversal & Pathfinding</h2>
             <p className="text-sm text-neutral-500 mb-4">Run DFS, BFS, or Dijkstra&apos;s algorithm on a sample graph. Step through or auto-play.</p>
-            <GraphTraversalGrid />
+            <GraphTraversalGrid subjectColor={sub.color} />
           </section>
         )}
 
@@ -376,7 +377,7 @@ export default async function ModulePage({ params }: { params: Promise<{ subject
         {mod.quiz.length > 0 && (
           <section className="mt-8">
             <h2 className="text-xl font-bold mb-4">Practice Quiz</h2>
-            <QuizCard questions={mod.quiz} />
+            <QuizCard questions={mod.quiz} subjectColor={sub.color} />
           </section>
         )}
 

@@ -6,9 +6,16 @@ import { Lock, Unlock } from 'lucide-react';
 interface ReferenceToggleProps {
   formula: string;
   description?: string;
+  subjectColor?: string;
 }
 
-export default function ReferenceToggle({ formula, description }: ReferenceToggleProps) {
+export default function ReferenceToggle({ formula, description, subjectColor = 'accent' }: ReferenceToggleProps) {
+  const colorClass = subjectColor === 'green' ? 'bg-green-600 text-white' :
+    subjectColor === 'blue' ? 'bg-blue-600 text-white' :
+    subjectColor === 'purple' ? 'bg-purple-600 text-white' :
+    subjectColor === 'amber' ? 'bg-amber-600 text-white' :
+    subjectColor === 'rose' ? 'bg-rose-600 text-white' :
+    'bg-accent text-accent-text';
   const [mode, setMode] = useState<'relative' | 'absolute' | 'mixed-col' | 'mixed-row'>('relative');
 
   const convertRef = (ref: string): string => {
@@ -69,7 +76,7 @@ export default function ReferenceToggle({ formula, description }: ReferenceToggl
             onClick={() => setMode(m)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 ${
               mode === m
-                ? 'bg-accent text-accent-text'
+                ? colorClass
                 : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700'
             }`}
           >

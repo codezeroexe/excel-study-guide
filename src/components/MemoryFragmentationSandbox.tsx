@@ -17,7 +17,20 @@ const initialBlocks: Block[] = [
   { id: 'b6', size: 16, color: BLOCK_COLORS[3], processId: 'P4', free: false },
 ];
 
-export default function MemoryFragmentationSandbox() {
+interface MemoryFragmentationSandboxProps {
+  subjectColor?: string;
+}
+
+export default function MemoryFragmentationSandbox({ subjectColor = 'accent' }: MemoryFragmentationSandboxProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [mode, setMode] = useState<'contiguous' | 'paging'>('contiguous');
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
   const [nextProc, setNextProc] = useState(5);
@@ -52,7 +65,7 @@ export default function MemoryFragmentationSandbox() {
       setBlocks(prev => {
         const newBlocks = [...prev];
         const block = newBlocks[idx];
-        const color = BLOCK_COLORS[(nextProc - 1) % BLOCK_COLORS.length];
+        const color = subjectColorValue;
         if (block.size === allocSize) {
           newBlocks[idx] = { ...block, processId: `P${nextProc}`, free: false, color };
         } else {
@@ -75,7 +88,7 @@ export default function MemoryFragmentationSandbox() {
       setBlocks(prev => {
         const newBlocks = [...prev];
         let remaining = pagesNeeded;
-        const color = BLOCK_COLORS[(nextProc - 1) % BLOCK_COLORS.length];
+        const color = subjectColorValue;
         for (let i = 0; i < newBlocks.length && remaining > 0; i++) {
           if (newBlocks[i].free) {
             const pagesInBlock = Math.floor(newBlocks[i].size / pageSize);
@@ -114,17 +127,17 @@ export default function MemoryFragmentationSandbox() {
       {/* Controls */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-2">
-          <button onClick={() => { setMode('contiguous'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'contiguous' ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
+          <button onClick={() => { setMode('contiguous'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'contiguous' ? 'text-white border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`} style={mode === 'contiguous' ? { backgroundColor: subjectColorValue } : {}}>
             Contiguous
           </button>
-          <button onClick={() => { setMode('paging'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'paging' ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
+          <button onClick={() => { setMode('paging'); setMessage(''); }} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'paging' ? 'text-white border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`} style={mode === 'paging' ? { backgroundColor: subjectColorValue } : {}}>
             Paging
           </button>
         </div>
         {mode === 'contiguous' && (
           <div className="flex gap-1">
             {(['first', 'best', 'worst'] as const).map(s => (
-              <button key={s} onClick={() => setStrategy(s)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${strategy === s ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-border dark:border-border text-neutral-400'}`}>
+              <button key={s} onClick={() => setStrategy(s)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${strategy === s ? 'border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-border dark:border-border text-neutral-400'}`} style={strategy === s ? { backgroundColor: subjectColorValue + '20' } : {}}>
                 {s === 'first' ? 'First' : s === 'best' ? 'Best' : 'Worst'} Fit
               </button>
             ))}
@@ -134,7 +147,7 @@ export default function MemoryFragmentationSandbox() {
           <label className="text-xs text-neutral-500">Size:</label>
           <input type="number" min="1" max={TOTAL_MEMORY} value={allocSize} onChange={e => setAllocSize(Math.max(1, Number(e.target.value)))} className="w-14 px-1 py-0.5 text-center bg-white dark:bg-neutral-800 border border-border dark:border-border rounded font-mono text-xs" />
         </div>
-        <button onClick={allocate} className="px-3 py-1.5 text-xs font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors">
+        <button onClick={allocate} className="px-3 py-1.5 text-xs font-bold text-white rounded-lg hover:opacity-90 transition-colors" style={{ backgroundColor: subjectColorValue }}>
           Allocate
         </button>
         <button onClick={reset} className="px-3 py-1.5 text-xs font-bold bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
@@ -156,9 +169,9 @@ export default function MemoryFragmentationSandbox() {
               <span className="truncate px-0.5">{block.free ? 'Free' : block.processId}</span>
               <span className="text-[9px] opacity-60 ml-0.5">{block.size}</span>
               {!block.free && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-accent text-accent-text text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                  Click to free {block.processId} ({block.size} units)
-                </div>
+                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10" style={{ backgroundColor: subjectColorValue, color: 'white' }}>
+                   Click to free {block.processId} ({block.size} units)
+                 </div>
               )}
             </div>
           ))}

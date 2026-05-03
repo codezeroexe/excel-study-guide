@@ -2,21 +2,34 @@
 
 import { useState, useMemo } from 'react';
 
-const complexityFns: Record<string, { label: string; color: string; fn: (n: number) => number }> = {
-  O1: { label: 'O(1)', color: '#737373', fn: () => 1 },
-  OlogN: { label: 'O(log n)', color: '#525252', fn: (n) => Math.log2(n) },
-  ON: { label: 'O(n)', color: '#a3a3a3', fn: (n) => n },
-  ONlogN: { label: 'O(n log n)', color: '#525252', fn: (n) => n * Math.log2(n) },
-  ON2: { label: 'O(n²)', color: '#404040', fn: (n) => n * n },
-};
-
 const W = 520;
 const H = 300;
 const PAD = { top: 20, right: 20, bottom: 40, left: 55 };
 const plotW = W - PAD.left - PAD.right;
 const plotH = H - PAD.top - PAD.bottom;
 
-export default function ComplexityGrapher() {
+interface ComplexityGrapherProps {
+  subjectColor?: string;
+}
+
+export default function ComplexityGrapher({ subjectColor = 'accent' }: ComplexityGrapherProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
+  const complexityFns: Record<string, { label: string; color: string; fn: (n: number) => number }> = {
+    O1: { label: 'O(1)', color: subjectColorValue, fn: () => 1 },
+    OlogN: { label: 'O(log n)', color: subjectColorValue, fn: (n) => Math.log2(n) },
+    ON: { label: 'O(n)', color: subjectColorValue, fn: (n) => n },
+    ONlogN: { label: 'O(n log n)', color: subjectColorValue, fn: (n) => n * Math.log2(n) },
+    ON2: { label: 'O(n²)', color: subjectColorValue, fn: (n) => n * n },
+  };
+
   const [active, setActive] = useState<Record<string, boolean>>({
     O1: true, OlogN: true, ON: true, ONlogN: true, ON2: true,
   });
@@ -25,7 +38,6 @@ export default function ComplexityGrapher() {
 
   const toggle = (key: string) => setActive(prev => ({ ...prev, [key]: !prev[key] }));
 
-  // Compute max Y for scaling
   const maxY = useMemo(() => {
     let max = 1;
     for (const [key, { fn }] of Object.entries(complexityFns)) {
@@ -49,142 +61,87 @@ export default function ComplexityGrapher() {
     return PAD.top + plotH - (v / maxY) * plotH;
   };
 
-  // Generate path data for each active curve
-  const paths = (() => {
-    const result: Record<string, string> = {};
-    const steps = Math.min(maxN, 300);
-    for (const [key, { fn }] of Object.entries(complexityFns)) {
-      if (!active[key]) continue;
-      let d = '';
-      for (let i = 0; i <= steps; i++) {
-        const n = Math.max((i / steps) * maxN, 0.5);
-        const v = fn(n);
-        const x = scaleX(n);
-        const y = scaleY(v);
-        d += (i === 0 ? 'M' : 'L') + `${x},${y}`;
-      }
-      result[key] = d;
+  const generatePath = (fn: (n: number) => number) => {
+    const points: string[] = [];
+    for (let i = 0; i <= 100; i++) {
+      const n = (i / 100) * maxN;
+      const x = scaleX(n);
+      const y = scaleY(fn(n));
+      points.push(`${i === 0 ? 'M' : 'L'} ${x} ${y}`);
     }
-    return result;
-  })();
-
-  // Y-axis ticks
-  const yTicks = useMemo(() => {
-    if (logScale) {
-      const ticks: number[] = [];
-      for (let p = 0; p <= logMaxY; p++) {
-        ticks.push(Math.pow(10, p));
-      }
-      return ticks;
-    }
-    const ticks: number[] = [];
-    const step = maxY <= 50 ? 10 : maxY <= 500 ? 50 : maxY <= 5000 ? 500 : 5000;
-    for (let t = 0; t <= maxY; t += step) ticks.push(t);
-    return ticks;
-  }, [maxY, logScale, logMaxY]);
-
-  // X-axis ticks
-  const xTicks = useMemo(() => {
-    const ticks: number[] = [];
-    const step = maxN <= 50 ? 10 : maxN <= 200 ? 50 : 100;
-    for (let t = 0; t <= maxN; t += step) ticks.push(t);
-    return ticks;
-  }, [maxN]);
-
-  const formatY = (v: number) => {
-    if (logScale && v >= 1000) return `10^${Math.round(Math.log10(v))}`;
-    if (v >= 1000000) return `${(v / 1000000).toFixed(0)}M`;
-    if (v >= 1000) return `${(v / 1000).toFixed(0)}K`;
-    return v.toFixed(0);
+    return points.join(' ');
   };
 
   return (
     <div className="space-y-4">
-      {/* Toggle buttons */}
-      <div className="flex flex-wrap gap-2">
-        {Object.entries(complexityFns).map(([key, { label, color }]) => (
-          <button
-            key={key}
-            onClick={() => toggle(key)}
-            className={`px-3 py-1.5 text-xs font-mono font-bold rounded-full border-2 transition-all ${
-              active[key] ? 'text-white shadow-sm' : 'border-border dark:border-border text-neutral-400 dark:text-neutral-500'
-            }`}
-            style={active[key] ? { backgroundColor: color, borderColor: color } : {}}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
       {/* Controls */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <label className="text-xs font-medium text-neutral-500 mb-1 block">
-            Max N: <span className="font-mono font-bold text-neutral-700 dark:text-neutral-300">{maxN}</span>
-          </label>
-          <input type="range" min="10" max="500" step="10" value={maxN} onChange={e => setMaxN(Number(e.target.value))} className="w-full accent-neutral-900" />
+      <div className="flex flex-wrap gap-3 items-center">
+        <div className="flex gap-1.5">
+          {Object.entries(complexityFns).map(([key, { label }]) => (
+            <button
+              key={key}
+              onClick={() => toggle(key)}
+              className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${active[key] ? '' : 'opacity-30'}`}
+              style={active[key] ? { backgroundColor: subjectColorValue + '20', borderColor: subjectColorValue, color: subjectColorValue } : {}}
+            >
+              {label}
+            </button>
+          ))}
         </div>
-        <div className="flex items-end">
-          <button
-            onClick={() => setLogScale(prev => !prev)}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
-              logScale
-                ? 'bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700'
-                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border-border dark:border-border'
-            }`}
-          >
-            {logScale ? '📊 Log Scale' : '📈 Linear Scale'}
-          </button>
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-neutral-500">Max N:</label>
+          <input
+            type="range" min="10" max="500" value={maxN}
+            onChange={e => setMaxN(Number(e.target.value))}
+            className="w-24"
+          />
+          <span className="text-xs font-mono w-8">{maxN}</span>
         </div>
+        <button
+          onClick={() => setLogScale(!logScale)}
+          className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${logScale ? '' : 'opacity-50'}`}
+          style={logScale ? { backgroundColor: subjectColorValue + '20', borderColor: subjectColorValue, color: subjectColorValue } : {}}
+        >
+          Log Scale
+        </button>
       </div>
 
       {/* SVG Chart */}
       <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-2">
-        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 320 }}>
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full">
           {/* Grid */}
-          {yTicks.map(t => (
-            <g key={`y-${t}`}>
-              <line x1={PAD.left} y1={scaleY(t)} x2={W - PAD.right} y2={scaleY(t)} stroke="#e5e7eb" strokeWidth={0.5} strokeDasharray="3 3" />
-              <text x={PAD.left - 8} y={scaleY(t) + 4} textAnchor="end" fontSize={9} fill="#9ca3af">{formatY(t)}</text>
-            </g>
-          ))}
-          {xTicks.map(t => (
-            <g key={`x-${t}`}>
-              <line x1={scaleX(t)} y1={PAD.top} x2={scaleX(t)} y2={H - PAD.bottom} stroke="#e5e7eb" strokeWidth={0.5} strokeDasharray="3 3" />
-              <text x={scaleX(t)} y={H - PAD.bottom + 16} textAnchor="middle" fontSize={10} fill="#9ca3af">{t}</text>
-            </g>
-          ))}
-
-          {/* Axis labels */}
-          <text x={W / 2} y={H - 4} textAnchor="middle" fontSize={10} fill="#6b7280">Input Size (n)</text>
-          <text x={12} y={H / 2} textAnchor="middle" fontSize={10} fill="#6b7280" transform={`rotate(-90, 12, ${H / 2})`}>
-            Operations {logScale ? '(log scale)' : ''}
-          </text>
-
-          {/* Curves */}
-          {Object.entries(paths).map(([key, d]) => (
-            <path key={key} d={d} fill="none" stroke={complexityFns[key].color} strokeWidth={2.5} />
-          ))}
-
-          {/* Legend */}
-          {Object.entries(complexityFns).filter(([key]) => active[key]).map(([key, { label, color }], i) => {
-            const lx = PAD.left + 10;
-            const ly = PAD.top + 15 + i * 18;
+          {[0, 0.25, 0.5, 0.75, 1].map(frac => {
+            const y = PAD.top + plotH * (1 - frac);
             return (
-              <g key={`legend-${key}`}>
-                <line x1={lx} y1={ly} x2={lx + 20} y2={ly} stroke={color} strokeWidth={2.5} />
-                <text x={lx + 25} y={ly + 4} fontSize={10} fill="#374151" className="dark:fill-neutral-300">{label}</text>
+              <g key={frac}>
+                <line x1={PAD.left} y1={y} x2={PAD.left + plotW} y2={y} stroke="#e5e7eb" strokeWidth="0.5" />
+                <text x={PAD.left - 4} y={y + 3} textAnchor="end" fontSize={8} fill="#9ca3af">
+                  {logScale ? Math.pow(10, frac * logMaxY).toFixed(0) : (maxY * frac).toFixed(0)}
+                </text>
               </g>
             );
           })}
+
+          {/* Lines */}
+          {Object.entries(complexityFns).filter(([key]) => active[key]).map(([key, { fn }]) => (
+            <path
+              key={key}
+              d={generatePath(fn)}
+              fill="none"
+              stroke={subjectColorValue}
+              strokeWidth="2"
+              strokeDasharray={key === 'O1' ? '4,4' : key === 'OlogN' ? '8,4' : key === 'ON' ? '' : key === 'ONlogN' ? '12,4' : '2,2'}
+            />
+          ))}
+
+          {/* Axes */}
+          <line x1={PAD.left} y1={PAD.top + plotH} x2={PAD.left + plotW} y2={PAD.top + plotH} stroke="#d1d5db" strokeWidth="1" />
+          <line x1={PAD.left} y1={PAD.top} x2={PAD.left} y2={PAD.top + plotH} stroke="#d1d5db" strokeWidth="1" />
         </svg>
       </div>
 
       <div className="text-xs text-neutral-400 text-center bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3">
-        {logScale
-          ? '📊 Log scale shows ALL curves clearly. Toggle to linear to see how O(n²) dwarfs everything.'
-          : '📈 Linear scale — O(n²) dominates. Toggle curves off to see smaller ones.'
-        }
+        📈 Toggle functions on/off. O(1) = constant, O(n²) = quadratic. Log scale helps compare exponential growth.
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ interface LookupAnimatorProps {
   tableData: string[][];
   colOrRowIndex: number;
   result: string;
+  subjectColor?: string;
 }
 
 export default function LookupAnimator({
@@ -17,7 +18,14 @@ export default function LookupAnimator({
   tableData,
   colOrRowIndex,
   result,
+  subjectColor = 'accent',
 }: LookupAnimatorProps) {
+  const colorClass = subjectColor === 'green' ? 'ring-green-500 bg-green-50 dark:bg-green-950/30' :
+    subjectColor === 'blue' ? 'ring-blue-500 bg-blue-50 dark:bg-blue-950/30' :
+    subjectColor === 'purple' ? 'ring-purple-500 bg-purple-50 dark:bg-purple-950/30' :
+    subjectColor === 'amber' ? 'ring-amber-500 bg-amber-50 dark:bg-amber-950/30' :
+    subjectColor === 'rose' ? 'ring-rose-500 bg-rose-50 dark:bg-rose-950/30' :
+    'ring-neutral-500 bg-neutral-50 dark:bg-neutral-950/30';
   const [step, setStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -87,7 +95,7 @@ export default function LookupAnimator({
                   }
                   // Step 2: highlight the matching cell
                   if (step >= 2 && rowIdx === matchRow && colIdx === 0) {
-                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-500';
+                    bgClass = `${colorClass} ring-2`;
                   }
                   // Step 3: highlight the row from match to result column
                   if (step >= 3 && rowIdx === matchRow && colIdx <= colOrRowIndex - 1) {
@@ -95,7 +103,7 @@ export default function LookupAnimator({
                   }
                   // Step 4: highlight the result cell
                   if (step >= 4 && rowIdx === matchRow && colIdx === colOrRowIndex - 1) {
-                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-600';
+                    bgClass = `${colorClass} ring-2`;
                   }
                 } else {
                   // HLOOKUP
@@ -103,13 +111,13 @@ export default function LookupAnimator({
                     bgClass = 'bg-neutral-100 dark:bg-neutral-800';
                   }
                   if (step >= 2 && rowIdx === 0 && colIdx === matchCol) {
-                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-500';
+                    bgClass = `${colorClass} ring-2`;
                   }
                   if (step >= 3 && colIdx === matchCol && rowIdx <= colOrRowIndex - 1) {
                     bgClass = 'bg-neutral-100 dark:bg-neutral-800';
                   }
                   if (step >= 4 && rowIdx === colOrRowIndex - 1 && colIdx === matchCol) {
-                    bgClass = 'bg-neutral-100 dark:bg-neutral-950/30 ring-2 ring-neutral-600';
+                    bgClass = `${colorClass} ring-2`;
                   }
                 }
 

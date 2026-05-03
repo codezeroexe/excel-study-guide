@@ -1,16 +1,17 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { GripVertical } from 'lucide-react';
+import { useState, useMemo, useRef, useCallback } from 'react';
+import { GripVertical, Trash2 } from 'lucide-react';
 
 interface PivotBuilderProps {
   data: Record<string, string>[];
   fields: string[];
+  subjectColor?: string;
 }
 
 type PivotArea = 'rows' | 'columns' | 'values' | 'filters';
 
-export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
+export default function PivotBuilder({ data, fields, subjectColor = 'accent' }: PivotBuilderProps) {
   const [assignments, setAssignments] = useState<Record<PivotArea, string[]>>({
     rows: [],
     columns: [],
@@ -19,6 +20,10 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
   });
 
   const [valueAggregation, setValueAggregation] = useState<Record<string, 'SUM' | 'COUNT' | 'AVERAGE' | 'MAX' | 'MIN'>>({});
+
+  const [draggedField, setDraggedField] = useState<string | null>(null);
+  const [dragOverArea, setDragOverArea] = useState<PivotArea | null>(null);
+  const dragRef = useRef<string | null>(null);
 
   const availableFields = fields.filter(f =>
     !assignments.rows.includes(f) &&
@@ -43,6 +48,36 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
       [area]: prev[area].filter(f => f !== field),
     }));
   };
+
+  const handleDragStart = useCallback((e: React.DragEvent, field: string) => {
+    dragRef.current = field;
+    setDraggedField(field);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', field);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, area: PivotArea) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverArea(area);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent, area: PivotArea) => {
+    e.preventDefault();
+    const field = dragRef.current;
+    if (field) {
+      assignField(field, area);
+      setDraggedField(null);
+      setDragOverArea(null);
+      dragRef.current = null;
+    }
+  }, [assignField]);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggedField(null);
+    setDragOverArea(null);
+    dragRef.current = null;
+  }, []);
 
   const pivotResult = useMemo(() => {
     if (!assignments.rows.length || !assignments.values.length) return null;
@@ -108,7 +143,12 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
         <div className="flex flex-wrap gap-2">
           {availableFields.map(field => (
             <div key={field} className="relative group">
-              <div className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 border border-border dark:border-border rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-1 cursor-grab">
+              <div
+                draggable
+                onDragStart={e => handleDragStart(e, field)}
+                onDragEnd={handleDragEnd}
+                className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 border border-border dark:border-border rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-1 cursor-grab hover:border-neutral-400"
+              >
                 <GripVertical className="w-3 h-3 text-neutral-400" />
                 {field}
               </div>
@@ -134,7 +174,12 @@ export default function PivotBuilder({ data, fields }: PivotBuilderProps) {
       {/* Assigned areas */}
       <div className="grid grid-cols-2 gap-3">
         {(Object.keys(areaLabels) as PivotArea[]).map(area => (
-          <div key={area} className={`rounded-lg border p-3 min-h-[60px] ${areaColors[area]}`}>
+          <div
+            key={area}
+            onDragOver={e => handleDragOver(e, area)}
+            onDrop={e => handleDrop(e, area)}
+            className={`rounded-lg border p-3 min-h-[60px] ${areaColors[area]} ${dragOverArea === area ? 'border-2 border-dashed' : ''}`}
+          >
             <span className="text-xs font-medium block mb-2">{areaLabels[area]}</span>
             <div className="flex flex-wrap gap-1">
               {assignments[area].map(field => (

@@ -33,7 +33,20 @@ const PAD = { top: 20, right: 20, bottom: 30, left: 40 };
 const plotW = W - PAD.left - PAD.right;
 const plotH = H - PAD.top - PAD.bottom;
 
-export default function DistributionVisualizer() {
+interface DistributionVisualizerProps {
+  subjectColor?: string;
+}
+
+export default function DistributionVisualizer({ subjectColor = 'accent' }: DistributionVisualizerProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [dist, setDist] = useState<DistType>('normal');
   const [mu, setMu] = useState(0);
   const [sigma, setSigma] = useState(1);
@@ -92,7 +105,7 @@ export default function DistributionVisualizer() {
       {/* Distribution selector */}
       <div className="flex flex-wrap gap-2">
         {([['normal', 'Normal'], ['binomial', 'Binomial'], ['poisson', 'Poisson'], ['exponential', 'Exponential']] as [DistType, string][]).map(([key, label]) => (
-          <button key={key} onClick={() => setDist(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${dist === key ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
+          <button key={key} onClick={() => setDist(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${dist === key ? 'text-white border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`} style={dist === key ? { backgroundColor: subjectColorValue } : {}}>
             {label}
           </button>
         ))}
@@ -159,7 +172,7 @@ export default function DistributionVisualizer() {
           })}
 
           {/* Area fill */}
-          <path d={areaD} fill="rgba(244,63,94,0.1)" />
+           <path d={areaD} fill={subjectColorValue + '20'} />
 
           {isDiscrete ? (
             /* Bar chart for discrete */
@@ -168,7 +181,7 @@ export default function DistributionVisualizer() {
               const barW = Math.max(2, plotW / data.length - 1);
               return (
                 <g key={i}>
-                  <rect x={sx - barW / 2} y={sy} width={barW} height={PAD.top + plotH - sy} fill="rgba(244,63,94,0.6)" rx="1" />
+                   <rect x={sx - barW / 2} y={sy} width={barW} height={PAD.top + plotH - sy} fill={subjectColorValue + '80'} rx="1" />
                   <text x={sx} y={PAD.top + plotH + 12} textAnchor="middle" fontSize={7} fill="#9ca3af">{d.x}</text>
                 </g>
               );
@@ -176,11 +189,11 @@ export default function DistributionVisualizer() {
           ) : (
             /* Line for continuous */
             <>
-              <path d={pathD} fill="none" stroke="#525252" strokeWidth="2" />
+               <path d={pathD} fill="none" stroke={subjectColorValue} strokeWidth="2" />
               {/* Mean line */}
               {dist === 'normal' && (() => {
                 const { sx } = toSvg(mu, 0);
-                return <line x1={sx} y1={PAD.top} x2={sx} y2={PAD.top + plotH} stroke="#525252" strokeWidth="1" strokeDasharray="4,4" />;
+                 return <line x1={sx} y1={PAD.top} x2={sx} y2={PAD.top + plotH} stroke={subjectColorValue} strokeWidth="1" strokeDasharray="4,4" />;
               })()}
             </>
           )}

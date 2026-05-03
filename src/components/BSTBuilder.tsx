@@ -76,7 +76,20 @@ function postorderTraversal(node: TreeNode | null): number[] {
   return [...postorderTraversal(node.left), ...postorderTraversal(node.right), node.value];
 }
 
-export default function BSTBuilder() {
+interface BSTBuilderProps {
+  subjectColor?: string;
+}
+
+export default function BSTBuilder({ subjectColor = 'accent' }: BSTBuilderProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [root, setRoot] = useState<TreeNode | null>(null);
   const [input, setInput] = useState('');
   const [insertOrder, setInsertOrder] = useState<number[]>([]);
@@ -166,8 +179,8 @@ export default function BSTBuilder() {
           cx={node.x}
           cy={node.y}
           r={18}
-          fill={isHighlighted ? '#525252' : isOnPath ? '#d4d4d4' : '#ffffff'}
-          stroke={isHighlighted ? '#404040' : isOnPath ? '#525252' : '#d1d5db'}
+           fill={isHighlighted ? subjectColorValue : isOnPath ? '#d4d4d4' : '#ffffff'}
+           stroke={isHighlighted ? subjectColorValue : isOnPath ? subjectColorValue : '#d1d5db'}
           strokeWidth={isHighlighted ? 3 : isOnPath ? 2 : 1.5}
           className="transition-all duration-300"
         />
@@ -203,7 +216,8 @@ export default function BSTBuilder() {
           />
           <button
             onClick={() => { if (input.trim()) { handleInsert(Number(input.trim())); setInput(''); } }}
-            className="px-4 py-2 text-sm font-bold bg-accent text-accent-text rounded-lg hover:bg-accent-hover transition-colors"
+            className="px-4 py-2 text-sm font-bold text-white rounded-lg transition-colors"
+            style={{ backgroundColor: subjectColorValue }}
           >
             Insert
           </button>

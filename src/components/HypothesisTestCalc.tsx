@@ -20,7 +20,20 @@ function chiSquareCritical(df: number, alpha: number): number {
   return df * Math.pow(1 - 2 / (9 * df) + z * Math.sqrt(2 / (9 * df)), 3);
 }
 
-export default function HypothesisTestCalc() {
+interface HypothesisTestCalcProps {
+  subjectColor?: string;
+}
+
+export default function HypothesisTestCalc({ subjectColor = 'accent' }: HypothesisTestCalcProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [testType, setTestType] = useState<TestType>('z');
   const [sampleMean, setSampleMean] = useState(75);
   const [popMean, setPopMean] = useState(70);
@@ -91,7 +104,7 @@ export default function HypothesisTestCalc() {
       {/* Test type selector */}
       <div className="flex flex-wrap gap-2">
         {([['z', 'Z-Test'], ['t', 'T-Test'], ['chi', 'Chi-Square']] as [TestType, string][]).map(([key, label]) => (
-          <button key={key} onClick={() => setTestType(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${testType === key ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
+          <button key={key} onClick={() => setTestType(key)} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${testType === key ? 'text-white border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`} style={testType === key ? { backgroundColor: subjectColorValue } : {}}>
             {label}
           </button>
         ))}
@@ -143,7 +156,7 @@ export default function HypothesisTestCalc() {
         {testType !== 'chi' && (
           <div className="flex gap-1">
             {(['two', 'left', 'right'] as const).map(t => (
-              <button key={t} onClick={() => setTail(t)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${tail === t ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-border dark:border-border text-neutral-400'}`}>
+          <button key={t} onClick={() => setTail(t)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${tail === t ? '' : 'border-border dark:border-border text-neutral-400'}`} style={tail === t ? { backgroundColor: subjectColorValue + '20', borderColor: subjectColorValue, color: subjectColorValue } : {}}>
                 {t === 'two' ? 'Two-tailed' : t === 'left' ? 'Left' : 'Right'}
               </button>
             ))}
@@ -152,11 +165,11 @@ export default function HypothesisTestCalc() {
       </div>
 
       {/* Result */}
-      <div className={`rounded-lg p-4 border-2 ${reject ? 'bg-neutral-50 dark:bg-neutral-900/20 border-neutral-300 dark:border-neutral-700' : 'bg-neutral-50 dark:bg-neutral-900/20 border-neutral-300 dark:border-neutral-700'}`}>
-        <div className="text-2xl font-bold font-mono">
+        <div className="rounded-lg p-4 border-2" style={{ backgroundColor: subjectColorValue + '10', borderColor: subjectColorValue + '40' }}>
+          <div className="text-2xl font-bold font-mono" style={{ color: subjectColorValue }}>
           {testType === 'chi' ? `χ² = ${testStat.toFixed(4)}` : `${testType.toUpperCase()} = ${testStat.toFixed(4)}`}
         </div>
-        <div className={`text-lg font-bold mt-1 ${reject ? 'text-neutral-600' : 'text-neutral-600'}`}>
+          <div className="text-lg font-bold mt-1" style={{ color: subjectColorValue }}>
           {reject ? '✕ Reject H₀' : '✓ Fail to Reject H₀'}
         </div>
         {testType !== 'chi' && <div className="text-xs text-neutral-500 mt-1">p-value ≈ {pValue.toFixed(4)}</div>}
@@ -167,8 +180,8 @@ export default function HypothesisTestCalc() {
         <div className="text-xs font-bold text-neutral-500 mb-2">Step-by-Step Solution:</div>
         <div className="space-y-1">
           {steps.map((s, i) => (
-            <div key={i} className="text-xs font-mono text-neutral-600 dark:text-neutral-400">
-              <span className="text-neutral-500 font-bold">{i + 1}.</span> {s}
+            <div key={i} className="text-xs font-mono" style={{ color: subjectColorValue + 'cc' }}>
+              <span className="font-bold" style={{ color: subjectColorValue }}>{i + 1}.</span> {s}
             </div>
           ))}
         </div>

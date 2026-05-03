@@ -9,6 +9,7 @@ interface ChartRendererProps {
   xKey?: string;
   yKeys?: string[];
   colors?: string[];
+  subjectColor?: string;
 }
 
 const COLORS = ['#525252', '#737373', '#a3a3a3', '#404040', '#525252', '#737373', '#a3a3a3', '#d4d4d4'];
@@ -56,8 +57,19 @@ export default function ChartRenderer({
   xKey = 'name',
   yKeys = ['value'],
   colors = COLORS,
+  subjectColor = 'accent',
 }: ChartRendererProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const subjectColorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = subjectColorMap[subjectColor] || colors[0];
+  const effectiveColors = [subjectColorValue, ...colors.slice(1)];
 
   if (!data.length) {
     return (

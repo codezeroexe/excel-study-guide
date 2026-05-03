@@ -12,6 +12,7 @@ interface ConditionRule {
 interface ConditionBuilderProps {
   fields: string[];
   sampleData: Record<string, string>[];
+  subjectColor?: string;
 }
 
 const OPERATORS = [
@@ -24,7 +25,13 @@ const OPERATORS = [
   { value: 'contains', label: 'contains' },
 ];
 
-export default function ConditionBuilder({ fields, sampleData }: ConditionBuilderProps) {
+export default function ConditionBuilder({ fields, sampleData, subjectColor = 'accent' }: ConditionBuilderProps) {
+  const colorClass = subjectColor === 'green' ? 'bg-green-600 hover:bg-green-700' :
+    subjectColor === 'blue' ? 'bg-blue-600 hover:bg-blue-700' :
+    subjectColor === 'purple' ? 'bg-purple-600 hover:bg-purple-700' :
+    subjectColor === 'amber' ? 'bg-amber-600 hover:bg-amber-700' :
+    subjectColor === 'rose' ? 'bg-rose-600 hover:bg-rose-700' :
+    'bg-accent hover:bg-accent-hover';
   const [rules, setRules] = useState<ConditionRule[]>([
     { field: fields[0] || '', operator: '=', value: '' },
   ]);
@@ -147,7 +154,7 @@ export default function ConditionBuilder({ fields, sampleData }: ConditionBuilde
       <div className="flex items-center gap-2">
         <button
           onClick={evaluate}
-          className="px-4 py-2 bg-accent text-accent-text rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors flex items-center gap-2"
+          className={`px-4 py-2 ${colorClass} text-accent-text rounded-lg text-sm font-medium hover:opacity-90 transition-colors flex items-center gap-2`}
         >
           <Play className="w-3 h-3" />
           Evaluate

@@ -109,7 +109,21 @@ const examples = [
   { label: 'a^b+c*d', value: 'a^b+c*d' },
 ];
 
-export default function InfixPostfixSimulator() {
+interface InfixPostfixSimulatorProps {
+  subjectColor?: string;
+}
+
+export default function InfixPostfixSimulator({ subjectColor = 'accent' }: InfixPostfixSimulatorProps) {
+  const convertBtnClass = `px-3 py-1.5 text-xs font-bold text-white rounded-lg hover:opacity-90 transition-colors`;
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [input, setInput] = useState('a*(b+c)');
   const [steps, setSteps] = useState<Step[]>([]);
   const [currentStep, setCurrentStep] = useState(-1);
@@ -168,7 +182,8 @@ export default function InfixPostfixSimulator() {
           />
           <button
             onClick={handleConvert}
-            className="px-4 py-2 text-sm font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors"
+            className={`px-4 py-2 text-sm font-bold text-white rounded-lg transition-colors`}
+            style={{ backgroundColor: subjectColorValue }}
           >
             Convert
           </button>

@@ -152,7 +152,20 @@ const generators: Record<Topic, (d: Difficulty) => Problem> = {
   hypothesis: generateHypothesis,
 };
 
-export default function WorksheetGenerator() {
+interface WorksheetGeneratorProps {
+  subjectColor?: string;
+}
+
+export default function WorksheetGenerator({ subjectColor = 'accent' }: WorksheetGeneratorProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [topic, setTopic] = useState<Topic>('combinatorics');
   const [difficulty, setDifficulty] = useState<Difficulty>('standard');
   const [problems, setProblems] = useState<(Problem & { show: boolean })[]>([]);
@@ -184,14 +197,14 @@ export default function WorksheetGenerator() {
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-2">
           {(Object.entries(topicLabels) as [Topic, string][]).map(([key, label]) => (
-            <button key={key} onClick={() => setTopic(key)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${topic === key ? 'bg-neutral-100 dark:bg-neutral-900/30 border-neutral-400 text-neutral-700 dark:text-neutral-300' : 'border-border dark:border-border text-neutral-400'}`}>
+             <button key={key} onClick={() => setTopic(key)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${topic === key ? '' : 'border-border dark:border-border text-neutral-400'}`} style={topic === key ? { backgroundColor: subjectColorValue + '20', borderColor: subjectColorValue, color: subjectColorValue } : {}}>
               {label}
             </button>
           ))}
         </div>
         <div className="flex gap-1">
           {(['standard', 'advanced'] as Difficulty[]).map(d => (
-            <button key={d} onClick={() => setDifficulty(d)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${difficulty === d ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
+            <button key={d} onClick={() => setDifficulty(d)} className={`px-2 py-1 text-[10px] font-bold rounded border transition-all ${difficulty === d ? 'text-white border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`} style={difficulty === d ? { backgroundColor: subjectColorValue } : {}}>
               {d.charAt(0).toUpperCase() + d.slice(1)}
             </button>
           ))}
@@ -202,7 +215,7 @@ export default function WorksheetGenerator() {
             {[1, 2, 3, 5].map(n => <option key={n} value={n}>{n}</option>)}
           </select>
         </div>
-        <button onClick={generate} className="px-3 py-1.5 text-xs font-bold bg-accent text-accent-text rounded-lg hover:bg-neutral-700 transition-colors">
+        <button onClick={generate} className="px-3 py-1.5 text-xs font-bold text-white rounded-lg hover:opacity-90 transition-colors" style={{ backgroundColor: subjectColorValue }}>
           Generate
         </button>
       </div>
@@ -218,10 +231,10 @@ export default function WorksheetGenerator() {
                   <p className="text-sm text-neutral-700 dark:text-neutral-300">{p.question}</p>
                 </div>
                 <div className="mt-2 text-xs font-mono text-neutral-500">
-                  Answer: <span className="text-neutral-600 font-bold">{p.answer}</span>
+                  Answer: <span className="font-bold" style={{ color: subjectColorValue }}>{p.answer}</span>
                 </div>
               </div>
-              <button onClick={() => toggleSolution(i)} className="w-full px-4 py-2 text-xs font-bold bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors text-left">
+               <button onClick={() => toggleSolution(i)} className="w-full px-4 py-2 text-xs font-bold hover:opacity-80 transition-colors text-left" style={{ backgroundColor: subjectColorValue + '10', color: subjectColorValue }}>
                 {p.show ? '▲ Hide Solution' : '▼ Show Solution'}
               </button>
               {p.show && (

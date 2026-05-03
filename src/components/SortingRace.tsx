@@ -121,14 +121,27 @@ const sortGenerators: Record<string, (arr: number[]) => SortStep[]> = {
   Quick: quickSortSteps,
 };
 
-const sortColors: Record<string, string> = {
-  Bubble: '#404040',
-  Selection: '#a3a3a3',
-  Insertion: '#737373',
-  Quick: '#525252',
-};
+interface SortingRaceProps {
+  subjectColor?: string;
+}
 
-export default function SortingRace() {
+export default function SortingRace({ subjectColor = 'accent' }: SortingRaceProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
+  const sortColors: Record<string, string> = {
+    Bubble: subjectColorValue,
+    Selection: subjectColorValue,
+    Insertion: subjectColorValue,
+    Quick: subjectColorValue,
+  };
+
   const [size, setSize] = useState(20);
   const [speed, setSpeed] = useState(100);
   const [algorithms, setAlgorithms] = useState<string[]>(['Bubble', 'Insertion', 'Quick']);

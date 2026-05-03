@@ -206,7 +206,19 @@ function runDijkstra(nodes: Node[], edges: Edge[], startId: number): Array<{ nod
   return steps;
 }
 
-export default function GraphTraversalGrid() {
+interface GraphTraversalGridProps {
+  subjectColor?: string;
+}
+
+export default function GraphTraversalGrid({ subjectColor = 'accent' }: GraphTraversalGridProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
   const [nodes] = useState<Node[]>(defaultNodes);
   const [edges] = useState<Edge[]>(defaultEdges);
   const [startNode, setStartNode] = useState(0);
@@ -288,23 +300,23 @@ export default function GraphTraversalGrid() {
     setRunning(false);
   };
 
-  const getNodeColor = (nodeId: number): string => {
-    const state = nodeStates.get(nodeId);
-    switch (state) {
-      case 'visiting': return '#a3a3a3';
-      case 'visited': return '#737373';
-      default: return '#e5e7eb';
-    }
-  };
+    const getNodeColor = (nodeId: number): string => {
+      const state = nodeStates.get(nodeId);
+      switch (state) {
+        case 'visiting': return subjectColorValue;
+        case 'visited': return '#737373';
+        default: return '#e5e7eb';
+      }
+    };
 
-  const getNodeTextColor = (nodeId: number): string => {
-    const state = nodeStates.get(nodeId);
-    switch (state) {
-      case 'visiting': return '#ffffff';
-      case 'visited': return '#ffffff';
-      default: return '#374151';
-    }
-  };
+    const getNodeTextColor = (nodeId: number): string => {
+      const state = nodeStates.get(nodeId);
+      switch (state) {
+        case 'visiting': return '#ffffff';
+        case 'visited': return '#ffffff';
+        default: return '#374151';
+      }
+    };
 
   const currentStepInfo = currentStep >= 0 && currentStep < steps.length ? steps[currentStep] : null;
 
@@ -417,7 +429,7 @@ export default function GraphTraversalGrid() {
                 cy={node.y}
                 r={20}
                 fill={getNodeColor(node.id)}
-                stroke={nodeStates.get(node.id) === 'visiting' ? '#a3a3a3' : nodeStates.get(node.id) === 'visited' ? '#737373' : '#d1d5db'}
+                  stroke={nodeStates.get(node.id) === 'visiting' ? subjectColorValue : nodeStates.get(node.id) === 'visited' ? '#737373' : '#d1d5db'}
                 strokeWidth={nodeStates.has(node.id) ? 3 : 1.5}
                 className="transition-all duration-300"
               />

@@ -19,7 +19,20 @@ function nCr(n: number, r: number): number {
   return factorial(n) / (factorial(r) * factorial(n - r));
 }
 
-export default function CombinatoricsCalculator() {
+interface CombinatoricsCalculatorProps {
+  subjectColor?: string;
+}
+
+export default function CombinatoricsCalculator({ subjectColor = 'accent' }: CombinatoricsCalculatorProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [n, setN] = useState(5);
   const [r, setR] = useState(3);
   const [mode, setMode] = useState<'permutation' | 'combination'>('permutation');
@@ -38,10 +51,10 @@ export default function CombinatoricsCalculator() {
       {/* Controls */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-2">
-          <button onClick={() => setMode('permutation')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'permutation' ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
+          <button onClick={() => setMode('permutation')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'permutation' ? 'border-neutral-600 text-white' : 'border-border dark:border-border text-neutral-400'}`} style={mode === 'permutation' ? { backgroundColor: subjectColorValue } : {}}>
             Permutation (order matters)
           </button>
-          <button onClick={() => setMode('combination')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'combination' ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'}`}>
+          <button onClick={() => setMode('combination')} className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${mode === 'combination' ? 'border-neutral-600 text-white' : 'border-border dark:border-border text-neutral-400'}`} style={mode === 'combination' ? { backgroundColor: subjectColorValue } : {}}>
             Combination (order does not)
           </button>
         </div>
@@ -57,7 +70,7 @@ export default function CombinatoricsCalculator() {
 
       {/* Result */}
       <div className="bg-white dark:bg-neutral-900 rounded-lg border border-border dark:border-border p-4">
-        <div className="text-3xl font-bold font-mono text-neutral-600">{result.toLocaleString()}</div>
+        <div className="text-3xl font-bold font-mono" style={{ color: subjectColorValue }}>{result.toLocaleString()}</div>
         <div className="text-xs text-neutral-500 mt-1 font-mono">{formula}</div>
         <div className="text-xs text-neutral-400 mt-2">
           {mode === 'permutation'
@@ -87,11 +100,11 @@ export default function CombinatoricsCalculator() {
       <div className="grid grid-cols-2 gap-2">
         <div className="p-2 bg-neutral-50 dark:bg-neutral-900/20 rounded text-center">
           <div className="text-[10px] text-neutral-400 uppercase">P(n,r)</div>
-          <div className="text-lg font-bold font-mono text-neutral-600">{nPr(n, r).toLocaleString()}</div>
+          <div className="text-lg font-bold font-mono" style={{ color: subjectColorValue }}>{nPr(n, r).toLocaleString()}</div>
         </div>
         <div className="p-2 bg-neutral-50 dark:bg-neutral-900/20 rounded text-center">
           <div className="text-[10px] text-neutral-400 uppercase">C(n,r)</div>
-          <div className="text-lg font-bold font-mono text-neutral-600">{nCr(n, r).toLocaleString()}</div>
+          <div className="text-lg font-bold font-mono" style={{ color: subjectColorValue }}>{nCr(n, r).toLocaleString()}</div>
         </div>
       </div>
 

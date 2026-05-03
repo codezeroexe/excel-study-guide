@@ -43,7 +43,27 @@ const statePositions: Record<ProcessState, { x: number; y: number }> = {
 const W = 600;
 const H = 320;
 
-export default function ProcessStateMachine() {
+interface ProcessStateMachineProps {
+  subjectColor?: string;
+}
+
+export default function ProcessStateMachine({ subjectColor = 'accent' }: ProcessStateMachineProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
+  const stateColors: Record<ProcessState, string> = {
+    new: '#9ca3af',
+    ready: subjectColorValue,
+    running: '#737373',
+    waiting: '#a3a3a3',
+    terminated: '#404040',
+  };
   const [state, setState] = useState<ProcessState>('new');
   const [history, setHistory] = useState<ProcessState[]>(['new']);
   const [lastTransition, setLastTransition] = useState<string>('');
@@ -111,7 +131,7 @@ export default function ProcessStateMachine() {
                 <path
                   d={getArrowPath(arrow.from, arrow.to)}
                   fill="none"
-                  stroke={isActive ? '#a3a3a3' : '#d1d5db'}
+                  stroke={isActive ? subjectColorValue : '#d1d5db'}
                   strokeWidth={isActive ? 2 : 1}
                   markerEnd="url(#arrowhead)"
                 />
@@ -122,7 +142,7 @@ export default function ProcessStateMachine() {
                   const mx = (f.x + t.x) / 2;
                   const my = (f.y + t.y) / 2;
                   return (
-                    <text x={mx} y={my - 6} textAnchor="middle" fontSize={9} fill={isActive ? '#a3a3a3' : '#9ca3af'} fontWeight={isActive ? 'bold' : 'normal'}>
+                    <text x={mx} y={my - 6} textAnchor="middle" fontSize={9}                     fill={isActive ? subjectColorValue : '#9ca3af'} fontWeight={isActive ? 'bold' : 'normal'}>
                       {arrow.label}
                     </text>
                   );

@@ -26,7 +26,19 @@ function scaleY(v: number) {
   return PAD.top + plotH - ((v - 0) / (80 - 0)) * plotH;
 }
 
-export default function BestFitLine() {
+interface BestFitLineProps {
+  subjectColor?: string;
+}
+
+export default function BestFitLine({ subjectColor = 'accent' }: BestFitLineProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#525252';
   const [b1, setB1] = useState(5);
   const [b0, setB0] = useState(20);
 
@@ -127,7 +139,7 @@ export default function BestFitLine() {
           <line
             x1={scaleX(lineStart.x)} y1={scaleY(Math.min(Math.max(lineStart.predicted, 0), 80))}
             x2={scaleX(lineEnd.x)} y2={scaleY(Math.min(Math.max(lineEnd.predicted, 0), 80))}
-            stroke="#404040" strokeWidth={2.5}
+            stroke={subjectColorValue} strokeWidth={2.5}
           />
 
           {/* Data points */}
@@ -136,17 +148,17 @@ export default function BestFitLine() {
             return (
               <g key={i}>
                 {/* Error line */}
-                <line
-                  x1={scaleX(d.x)} y1={scaleY(d.y)}
-                  x2={scaleX(d.x)} y2={scaleY(Math.min(Math.max(d.predicted, 0), 80))}
-                  stroke={isError ? '#404040' : '#a3a3a3'} strokeWidth={1} strokeDasharray="2 2" opacity={0.6}
-                />
+                 <line
+                   x1={scaleX(d.x)} y1={scaleY(d.y)}
+                   x2={scaleX(d.x)} y2={scaleY(Math.min(Math.max(d.predicted, 0), 80))}
+                   stroke={subjectColorValue} strokeWidth={1} strokeDasharray="2 2" opacity={0.6}
+                 />
                 {/* Point */}
-                <circle
-                  cx={scaleX(d.x)} cy={scaleY(d.y)} r={5}
-                  fill={isError ? '#404040' : '#525252'}
-                  stroke={isError ? '#262626' : '#404040'} strokeWidth={1.5}
-                />
+                 <circle
+                   cx={scaleX(d.x)} cy={scaleY(d.y)} r={5}
+                   fill={isError ? subjectColorValue : subjectColorValue} opacity={0.8}
+                   stroke={isError ? subjectColorValue : subjectColorValue} strokeWidth={1.5}
+                 />
               </g>
             );
           })}

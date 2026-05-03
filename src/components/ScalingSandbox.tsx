@@ -2,7 +2,17 @@
 
 import { useState, useMemo } from 'react';
 
-export default function ScalingSandbox() {
+interface ScalingSandboxProps {
+  subjectColor?: string;
+}
+
+export default function ScalingSandbox({ subjectColor = 'accent' }: ScalingSandboxProps) {
+  const colorClass = subjectColor === 'green' ? 'text-green-600 dark:text-green-400' :
+    subjectColor === 'blue' ? 'text-blue-600 dark:text-blue-400' :
+    subjectColor === 'purple' ? 'text-purple-600 dark:text-purple-400' :
+    subjectColor === 'amber' ? 'text-amber-600 dark:text-amber-400' :
+    subjectColor === 'rose' ? 'text-rose-600 dark:text-rose-400' :
+    'text-neutral-600 dark:text-neutral-400';
   const [input, setInput] = useState('10, 20, 30, 40, 50');
 
   const numbers = useMemo(() => {
@@ -41,19 +51,19 @@ export default function ScalingSandbox() {
       {results && (
         <>
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-            {[
-              { label: 'Min', value: results.min.toFixed(2) },
-              { label: 'Max', value: results.max.toFixed(2) },
-              { label: 'Mean', value: results.mean.toFixed(2) },
-              { label: 'Std Dev', value: results.std.toFixed(2) },
-              { label: 'Range', value: results.range.toFixed(2) },
-            ].map(s => (
-              <div key={s.label} className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
-                <div className="text-[10px] text-neutral-400 uppercase">{s.label}</div>
-                <div className="text-sm font-bold font-mono">{s.value}</div>
-              </div>
-            ))}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              {[
+                { label: 'Min', value: results.min.toFixed(2) },
+                { label: 'Max', value: results.max.toFixed(2) },
+                { label: 'Mean', value: results.mean.toFixed(2) },
+                { label: 'Std Dev', value: results.std.toFixed(2) },
+                { label: 'Range', value: results.range.toFixed(2) },
+              ].map(s => (
+                <div key={s.label} className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded text-center">
+                  <div className={`text-[10px] uppercase ${colorClass}`}>{s.label}</div>
+                  <div className="text-sm font-bold font-mono">{s.value}</div>
+                </div>
+              ))}
           </div>
 
           {/* Results Table */}

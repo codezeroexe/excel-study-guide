@@ -6,9 +6,16 @@ import type { QuizQuestion } from '@/data/types';
 
 interface QuizCardProps {
   questions: QuizQuestion[];
+  subjectColor?: string;
 }
 
-export default function QuizCard({ questions }: QuizCardProps) {
+export default function QuizCard({ questions, subjectColor = 'accent' }: QuizCardProps) {
+  const colorClass = subjectColor === 'green' ? 'bg-green-600 hover:bg-green-700' :
+    subjectColor === 'blue' ? 'bg-blue-600 hover:bg-blue-700' :
+    subjectColor === 'purple' ? 'bg-purple-600 hover:bg-purple-700' :
+    subjectColor === 'amber' ? 'bg-amber-600 hover:bg-amber-700' :
+    subjectColor === 'rose' ? 'bg-rose-600 hover:bg-rose-700' :
+    'bg-accent hover:bg-accent-hover';
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -148,14 +155,14 @@ export default function QuizCard({ questions }: QuizCardProps) {
           <button
             onClick={handleSubmit}
             disabled={selected === null}
-            className="px-4 py-2 bg-accent text-accent-text rounded-lg text-sm font-medium hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className={`px-4 py-2 ${colorClass} text-accent-text rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
           >
             Check Answer
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="px-4 py-2 bg-accent text-accent-text rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
+            className={`px-4 py-2 ${colorClass} text-accent-text rounded-lg text-sm font-medium hover:opacity-90 transition-colors`}
           >
             {currentQ + 1 >= questions.length ? 'See Results' : 'Next Question'}
           </button>

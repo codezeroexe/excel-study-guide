@@ -94,7 +94,20 @@ const algoColors: Record<string, string> = {
   P5: '#404040', P6: '#737373', P7: '#a3a3a3', P8: '#d4d4d4',
 };
 
-export default function GanttChartGenerator() {
+interface GanttChartGeneratorProps {
+  subjectColor?: string;
+}
+
+export default function GanttChartGenerator({ subjectColor = 'accent' }: GanttChartGeneratorProps) {
+  const colorMap: Record<string, string> = {
+    green: '#22c55e',
+    blue: '#3b82f6',
+    purple: '#a855f7',
+    amber: '#f59e0b',
+    rose: '#f43f5e',
+  };
+  const subjectColorValue = colorMap[subjectColor] || '#a3a3a3';
+
   const [procs, setProcs] = useState<Process[]>(defaultProcs);
   const [algorithm, setAlgorithm] = useState<'FCFS' | 'SJF' | 'RR'>('FCFS');
   const [quantum, setQuantum] = useState(2);
@@ -152,9 +165,10 @@ export default function GanttChartGenerator() {
             <button
               key={algo}
               onClick={() => setAlgorithm(algo)}
-              className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
-                algorithm === algo ? 'bg-accent text-accent-text border-neutral-600' : 'border-border dark:border-border text-neutral-400'
-              }`}
+               className={`px-3 py-1.5 text-xs font-bold rounded-full border-2 transition-all ${
+                 algorithm === algo ? 'text-white border-neutral-600' : 'border-border dark:border-border text-neutral-400'
+               }`}
+               style={algorithm === algo ? { backgroundColor: subjectColorValue } : {}}
             >
               {algo}
             </button>
@@ -182,7 +196,7 @@ export default function GanttChartGenerator() {
                   style={{
                     width: blockWidth,
                     height: 40,
-                    backgroundColor: algoColors[block.id] || '#6b7280',
+                     backgroundColor: subjectColorValue,
                   }}
                 >
                   {block.id}

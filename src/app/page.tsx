@@ -38,10 +38,10 @@ export default function Home() {
               <Link
                 key={subject.id}
                 href={`/${subject.id}`}
-                className="group block rounded-2xl border border-border bg-background p-5 transition-all hover:border-border-hover hover:shadow-sm"
+                className={`group block rounded-2xl border border-border bg-background p-5 transition-all hover:border-border-hover hover:shadow-sm border-l-4 ${tone.border}`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface text-foreground">
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${tone.bg} ${tone.text}`}>
                     <SubjectIcon name={subject.icon} className="h-5 w-5" />
                   </div>
                   <div className="min-w-0 flex-1">
